@@ -79,3 +79,12 @@ When parallelizing content fills:
 **Draft:** accurate Overview + main Details; ≥1 wiki-relative link; ≥1 upstream Reference; frontmatter `status: draft`.
 
 **Complete:** verified minimal example (or version-noted); no uncited absolute claims; coverage TODO updated; frontmatter `status: complete`.
+
+## Cursor Cloud specific instructions
+
+This repo is a **plain-Markdown Obsidian vault** — there is no build system, package manager, automated test suite, or CI, and this is intentional (site generator deferred; see [meta/conventions.md](meta/conventions.md) "What does not belong yet"). Nothing needs installing to work here; Node 22 and Python 3.12 are preinstalled.
+
+- **Lint/test (the real quality gate):** the tracked invariant is "0 broken relative `.md` links" (see [README.md](README.md)). Validate by confirming every inline Markdown link whose target ends in `.md` resolves to an existing file, and that every `.md` starts with `status:` frontmatter. A stdlib-only Python script (no dependencies) can scan all `.md` files for this; there is intentionally no committed checker.
+  - Known false positives: the [glossary.md](glossary.md) uses bold-term pseudo-anchors like `#cppnix`/`#lix`/`#tvix`/`#snix` that are not real headings. A strict heading-anchor checker flags ~8 of these, but they are **not** broken relative `.md` links and must not be "fixed" (out of scope).
+- **Build/run (preview):** there is no site generator. To preview rendered pages, render Markdown to HTML ad hoc (e.g. `pip install --break-system-packages markdown`, rewrite relative `.md` links to `.html`) and serve with `python3 -m http.server`, or open the folder as an Obsidian vault (see [meta/obsidian.md](meta/obsidian.md)). Do **not** commit a generator (MkDocs/mdBook/Hugo) or its config into the repo — see the "Do not" section above.
+- **Authoring:** the core workflow is editing interlinked leaf `.md` files with relative links; after edits, re-run the relative-link check to keep the invariant at zero broken links.
