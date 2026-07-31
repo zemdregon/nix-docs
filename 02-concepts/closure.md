@@ -10,6 +10,23 @@ A **closure** is a [store path](store-path.md) plus every path reachable from it
 
 Which root you choose matters. The closure of a [derivation](derivation.md) (`.drv`) is the **build-time** dependency set; the closure of an **output** path is the **runtime** set. Deploying or caching software almost always means transferring an output closure.
 
+```mermaid
+flowchart TB
+  subgraph build["Build-time closure (.drv root)"]
+    drv[Package .drv]
+    compiler[Compiler .drv]
+    fetcher[Source FOD .drv]
+    drv --> compiler
+    drv --> fetcher
+  end
+  subgraph runtime["Runtime closure (output root)"]
+    out[hello binary path]
+    libc[libc path]
+    out --> libc
+  end
+  drv -.->|"realize"| out
+```
+
 ## Details
 
 **How it is computed.** Each store object records its references: other store paths it depends on. Nix walks those edges transitively—starting from declared refs in derivations and build outputs, plus any paths discovered when scanning for embedded `/nix/store` strings—to produce the closure as a set of paths. The glossary term for a member of that set is a **requisite**.
@@ -19,6 +36,12 @@ Which root you choose matters. The closure of a [derivation](derivation.md) (`.d
 **What it is for.** Remote builds, binary-cache substitution, `nix copy`, and profile activation all operate on closures. Substitution fetches every missing member; deployment copies the same set so the root can execute with no undeclared host dependencies. A path is **valid** only when its whole closure is readable in the store.
 
 **Disk and GC.** Every profile, generation, and build result holds its closure alive by reference. That is why `/nix/store` grows with side-by-side versions and why [garbage collection](../04-store-and-build/garbage-collection.md) only removes paths unreachable from any root—understanding closures explains both footprint and what you must keep pinned. Path identity and why dependency bumps enlarge closures are covered in [hashing and inputs](../04-store-and-build/hashing-and-inputs.md).
+
+### Boundaries (what this page is not)
+
+- **Not deployment tooling** — copying closures to remote hosts is [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md) and [remote deploy](../09-nixos/operations/remote-deploy.md).
+- **Not Docker/OCI images** — container image layers are a different packaging model; see [containers and OCI](../11-development/containers-oci.md).
+- **Not “reverse dependencies”** — Nix records forward references from a path to its requisites, not which paths depend on a given root.
 
 ## Examples
 

@@ -141,6 +141,8 @@ Adapt section names and keys from the [ensureProfiles option example](https://ni
 
 ### nftables backend with allowed ports and custom input rule
 
+Fixture (not evaluated in-repo): [networking-nftables-minimal.nix](../../meta/examples/networking-nftables-minimal.nix).
+
 ```nix
 {
   networking.nftables.enable = true;

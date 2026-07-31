@@ -18,3 +18,6 @@ Snippets are invented minimal fixtures—not copied host configs. They are **not
 - [minimal-configuration.nix](minimal-configuration.nix) — tiny NixOS module entry shape (`imports`, boot, user, `stateVersion`)
 - [simple-package.nix](simple-package.nix) — `callPackage`-shaped recipe wrapping `hello` (no fake fetch hash)
 - [fod-fetchurl.nix](fod-fetchurl.nix) — `fetchurl` FOD with obviously placeholder `hash`
+- [networking-nftables-minimal.nix](networking-nftables-minimal.nix) — nftables backend + firewall holes + `extraInputRules`
+- [impure-vs-pure-flake/broken-flake.nix](impure-vs-pure-flake/broken-flake.nix) / [fixed-flake.nix](impure-vs-pure-flake/fixed-flake.nix) — `<nixpkgs>` anti-pattern vs locked input
+- [systemd-oneshot-service.nix](systemd-oneshot-service.nix) — declarative `systemd.services` oneshot unit

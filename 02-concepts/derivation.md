@@ -10,6 +10,17 @@ A **derivation** is a build recipe: declared inputs (sources, dependencies, buil
 
 Derivations are **input-addressed** by default: the hash in an output path is determined by the derivation’s inputs, not by inspecting the built contents alone. That model differs from [fixed-output derivations](fixed-output-derivation.md) and [content-addressed](content-addressed-store.md) storage, where output identity follows a declared hash or content. See [hashing and inputs](../04-store-and-build/hashing-and-inputs.md).
 
+```mermaid
+flowchart LR
+  expr[Nix expression]
+  drv[".drv in store"]
+  build[Realization / substitute]
+  out["Output store path(s)"]
+  expr -->|"instantiate"| drv
+  drv --> build
+  build --> out
+```
+
 ## Details
 
 **Expression → store derivation → realization.** A *derivation expression* in the Nix language describes a build. **Instantiation** registers it as a *store derivation*—a `.drv` file under `/nix/store`. **Realization** then ensures each output path is valid: build in a sandbox, substitute from a binary cache, or fetch from a remote builder. Evaluation alone does not run the builder.
@@ -24,9 +35,15 @@ Derivations are **input-addressed** by default: the hash in an output path is de
 
 **Relation to closures.** Installed or deployed software refers to store paths. The [closure](closure.md) of a *derivation path* is the build-time dependency set; the closure of an *output path* is the runtime set. Derivations are the nodes; closures are the graphs they induce once realized.
 
+### Boundaries (what this page is not)
+
+- **Not a packaging tutorial** — `stdenv.mkDerivation`, phases, and tests live under [nixpkgs architecture](../06-nixpkgs/architecture/mkDerivation.md) and [simple package](../06-nixpkgs/packaging/simple-package.md).
+- **Not store layout or GC** — path shape, references, and garbage collection are [store path](store-path.md) and [garbage collection](../04-store-and-build/garbage-collection.md) topics.
+- **Not flake outputs** — declaring packages in `flake.nix` is [packages, apps, and devShells](../07-flakes/workflows/packages-apps-devShells.md); this page is evaluator/store vocabulary.
+
 ## Examples
 
-**From an expression.** Evaluating `stdenv.mkDerivation { name = "hello"; src = ./.; ... }` yields a derivation attribute set. It does not run the build until the derivation is realized (e.g. `nix build`, `nix-build`, or `nix-store --realise`).
+**From an expression.** Evaluating `stdenv.mkDerivation { name = "hello"; src = ./.; ... }` yields a derivation attribute set. It does not run the build until the derivation is realized (e.g. `nix build`, `nix-build`, or `nix-store --realise`). Minimal recipe shape (not evaluated in-repo): [simple-package.nix](../meta/examples/simple-package.nix).
 
 **Inspect a `.drv`.** A derivation’s store path ends in `.drv`. `nix-store --query --deriver` on an output path points back to the `.drv` that produced it. With the `nix-command` experimental feature, `nix derivation show` lists inputs and output paths as JSON.
 
