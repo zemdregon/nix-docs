@@ -6,26 +6,27 @@ status: complete
 
 ## Overview
 
-When a module can detect a bad or surprising configuration at evaluation time, prefer the module system’s `assertions` and `warnings` over `builtins.abort` / `builtins.trace`. They give clearer feedback during `nixos-rebuild`, and assertions stop a broken system before it builds.
-
-Both are ordinary options that modules append to (lists merge). Use them for impossible combinations, missing required settings when `enable = true`, and deprecation notices. See [Writing a module](writing-a-module.md) and [Module system](../architecture/module-system.md).
+NixOS modules can detect bad or surprising configuration during evaluation—before a system build starts. For that, prefer the module system’s `assertions` and `warnings` options over ad hoc `builtins.abort` or `builtins.trace`. Both are first-class list options: any module can append entries, lists merge like other `listOf` options, and feedback appears in the familiar `nixos-rebuild` output. Assertions fail evaluation with a clear message; warnings print advice and let the build continue. See [Writing a module](writing-a-module.md) and the [Module system](../architecture/module-system.md).
 
 ## Details
 
-**Warnings.** `warnings = [ "…" … ]` — strings printed during evaluation. They do not fail the build. Good for soft guidance: deprecated option usage, known sharp edges, or “you enabled X; expect Y.”
+**Warnings.** Set `warnings = [ "…" … ]` to emit strings during evaluation. Warnings never fail the build. Use them for deprecations, known sharp edges, or advisory notes (“you enabled X; expect Y”). They are appropriate when the configuration is valid but suboptimal or likely to surprise the operator.
 
-**Assertions.** `assertions = [ { assertion = bool; message = "…"; } … ]` — if `assertion` is `false`, evaluation fails with `message`. Use this when the configuration cannot produce a working system (conflicting daemons, mutually exclusive backends, required companion options unset).
+**Assertions.** Set `assertions = [ { assertion = bool; message = "…"; } … ]`. When any `assertion` evaluates to `false`, evaluation stops and Nix prints the corresponding `message`. Use assertions when the configuration cannot produce a working system: conflicting daemons, mutually exclusive backends, or required companion options left unset while a service is enabled.
 
-**Why not `abort` / `trace`.** Those builtins work anywhere in Nix, but they are awkward inside modules: feedback is less structured, and they do not participate in the module merge the way `warnings` / `assertions` do. The NixOS manual recommends the module options for config problems.
+**List merge.** Both options are ordinary module options with list types. Each module contributes zero or more entries; the module system concatenates them during merge—the same pattern as other append-only lists. Multiple unrelated modules can each add checks without coordinating imports. How list options merge is covered in [Options and types](../architecture/options-and-types.md).
 
-**Typical placement.** Gate with `lib.mkIf cfg.enable` so checks run only when the module is active. Assert conflicts (for example syslogd vs rsyslogd) or exclusive backends inside that block. Multiple modules can each contribute entries; the lists concatenate like other `listOf` options—see [options and types](../architecture/options-and-types.md) and [mkIf / mkMerge / mkOrder](mkIf-mkMerge-mkOrder.md).
+**Gating with `mkIf`.** Place checks inside `lib.mkIf cfg.enable { … }` so they run only when the module (or feature) is active. Assert syslogd vs rsyslogd conflicts only when syslogd is enabled; warn about a risky sub-option only when the parent service is on. Conditional definitions and merge helpers are described in [mkIf / mkMerge / mkOrder](mkIf-mkMerge-mkOrder.md).
 
-**What belongs where.**
+**Assertions vs option types.** Option types enforce shape: a string where an integer is declared fails at merge time with a type error. Assertions enforce semantics: values may be well-typed yet still incompatible (two syslog daemons enabled, or a backend selected without its required package). Use types for “this must be a path or null”; use assertions for “these two flags cannot both be true.” Neither replaces the other.
+
+**Why not `abort` / `trace`.** Those builtins work anywhere in Nix, but inside modules they produce less structured feedback and do not participate in list merge. The NixOS manual recommends `warnings` and `assertions` for configuration problems discoverable at eval time.
 
 | Mechanism | Fails eval? | Use for |
 |-----------|-------------|---------|
+| Option types | Yes (type mismatch) | Wrong type or shape |
 | `warnings` | No | Deprecations, advisory notes |
-| `assertions` | Yes | Impossible or incomplete configs |
+| `assertions` | Yes (false assertion) | Impossible or incomplete configs |
 
 ## Examples
 
@@ -65,7 +66,7 @@ Warning pattern from the manual (advisory; does not fail eval):
 }
 ```
 
-Equivalent compact form using `lib.optional` is fine for a single conditional string.
+A single conditional string can also be written with `lib.optional`.
 
 ## References
 
@@ -77,4 +78,5 @@ Equivalent compact form using `lib.optional` is fine for a single conditional st
 - [Writing a module](writing-a-module.md)
 - [mkIf / mkMerge / mkOrder](mkIf-mkMerge-mkOrder.md)
 - [Module system](../architecture/module-system.md)
+- [Module system internals](../architecture/module-system-internals.md)
 - [Options and types](../architecture/options-and-types.md)

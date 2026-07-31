@@ -32,6 +32,8 @@ FODs are how Nix brings upstream sources and other remote artifacts into the sto
 
 **URL change, same content.** Mirror or redirect changes that serve bit-identical content leave the FOD output path unchanged, because path identity follows the declared hash, not the URL string.
 
+**Illustrative snippet.** [fod-fetchurl.nix](../meta/examples/fod-fetchurl.nix) shows a `fetchurl` FOD with an obviously placeholder `hash`—replace after a real prefetch; not evaluated in this vault.
+
 ## References
 
 - [Nix reference manual — advanced attributes](https://nix.dev/manual/nix/stable/language/advanced-attributes.html) — `outputHash`, `outputHashAlgo`, `outputHashMode`, and derivation kinds
@@ -45,3 +47,4 @@ FODs are how Nix brings upstream sources and other remote artifacts into the sto
 - [Content-addressed store](content-addressed-store.md) — floating CA outputs (experimental)
 - [Hermetic builds](../01-philosophy/hermetic-builds.md) — sandboxing and controlled fetches
 - [Purity and reproducibility](../01-philosophy/purity-and-reproducibility.md) — why FODs exist
+- [Example corpus](../meta/examples/README.md) — `fod-fetchurl.nix`

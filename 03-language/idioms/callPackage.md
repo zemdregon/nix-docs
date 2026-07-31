@@ -110,6 +110,8 @@ packages
 - [Import and fetch](../builtins/import-and-fetch.md)
 - [mkDerivation](../../06-nixpkgs/architecture/mkDerivation.md)
 - [Rec and Fixed Points](rec-and-fixed-points.md)
+- [simple-package.nix](../../meta/examples/simple-package.nix) — callPackage-shaped wrapper fixture
+- [Example corpus](../../meta/examples/README.md)
 
 ## References
 

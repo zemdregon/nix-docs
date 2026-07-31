@@ -114,7 +114,7 @@ stdenv.mkDerivation {
 }
 ```
 
-For a worked end-to-end build (GNU Hello + fixing the hash), follow the nix.dev tutorial in References.
+For a worked end-to-end build (GNU Hello + fixing the hash), follow the nix.dev tutorial in References. Shared vault fixtures (not evaluated here): [simple-package.nix](../../meta/examples/simple-package.nix) (`callPackage` wrapper shape) and [fod-fetchurl.nix](../../meta/examples/fod-fetchurl.nix) (placeholder FOD hash).
 
 ## References
 
@@ -134,3 +134,4 @@ For a worked end-to-end build (GNU Hello + fixing the hash), follow the nix.dev 
 - [Build phases](../../04-store-and-build/build-phases.md) — default phase order
 - [Multiple outputs](multiple-outputs.md) — splitting bin/lib/dev outputs
 - [Patches and overrides](patches-and-overrides.md) — fixing upstream without forking
+- [Example corpus](../../meta/examples/README.md) — `simple-package.nix`, `fod-fetchurl.nix`

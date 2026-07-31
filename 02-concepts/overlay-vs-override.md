@@ -80,3 +80,7 @@ final: prev: {
 - [Functional Package Management](../01-philosophy/functional-package-management.md)
 - [Writing Overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md)
 - [Overlays Pattern](../03-language/idioms/overlays-pattern.md)
+- [callPackage](../03-language/idioms/callPackage.md)
+- [packageOverrides](../06-nixpkgs/overlays-and-overrides/packageOverrides.md)
+- [overlay-snippet.nix](../meta/examples/overlay-snippet.nix) — corpus fixture
+- [Example corpus](../meta/examples/README.md)

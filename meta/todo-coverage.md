@@ -189,7 +189,24 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 
 1. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) (design note, not a shipped tool; intentional `draft`); living [sources.md](sources.md) URL table (intentional living `draft`).
 2. **Cadence (ongoing)** — re-run Phase 5.1 refresh each future Nix/NixOS release (experimental tracking, release-cited leaves, Clan APIs, adjacent tools). Site generator remains optional Phase 5.2.
-3. **Further quality (optional)** — more gold-page outliers beyond this batch; example corpus can gain more shared fixtures under [examples/](examples/README.md).
+3. **Further quality (optional)** — more gold-page outliers beyond this batch if needed (e.g. thin philosophy leftovers, FAQ thicken, Phase 3 leaf polish).
+
+### Landed (2026-07-31 installer/store/frontend gold)
+
+3i. **Installer / store / frontend gold (done 2026-07-31)** — graphical-installer, firmware-and-microcode, content-addressed-store, nixos-rebuild frontend; evaluator README maturity table (Snix ≠ Tvix).
+
+### Landed (2026-07-31 experimental/contributor gold)
+
+3h. **Experimental/contributor gold (done 2026-07-31)** — cgroups, auto-allocate-uids, maintainers-and-teams, flake-parts, custom-options; named-args pitfall + Digga/Hive vs mesh disambiguation on flake-parts.
+
+### Landed (2026-07-31 operator/module gold)
+
+3g. **Operator/module/HM gold (done 2026-07-31)** — declarative-containers, assertions-and-warnings, writing-hm-modules, manual-install, nixpkgs `lib.md`; overlay-vs-override See also mesh.
+
+### Landed (2026-07-31 further gold + corpus)
+
+3e. **Beginner-concept gold (done 2026-07-31)** — profile, generation, channel, overlay, configuration-nix deepened toward derivation density; cousin links + CLI stamps.
+3f. **Example corpus expand (done 2026-07-31)** — [minimal-configuration.nix](examples/minimal-configuration.nix), [simple-package.nix](examples/simple-package.nix), [fod-fetchurl.nix](examples/fod-fetchurl.nix); linked from configuration-nix, callPackage, simple-package, fixed-output-derivation, overlay.
 
 ### Landed (2026-07-31 post-v1 cadence / gold / corpus)
 
@@ -263,7 +280,7 @@ broken.forEach(b=>console.log(" ",b.join(" -> ")));
 '
 ```
 
-Last run (2026-07-31, post Phase 1/2 polish): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 47 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
+Last run (2026-07-31, post installer/store/frontend gold): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 48 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
 
 ## Definition of done (per article)
 

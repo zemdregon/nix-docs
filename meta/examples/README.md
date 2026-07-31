@@ -15,3 +15,6 @@ Snippets are invented minimal fixtures—not copied host configs. They are **not
 - [overlay-snippet.nix](overlay-snippet.nix) — `final: prev:` overlay shape
 - [shell.nix](shell.nix) — classic `mkShell` for `nix-shell` / direnv `use nix`
 - [minimal-module.nix](minimal-module.nix) — tiny NixOS module with `mkEnableOption` + `lib.mkIf`
+- [minimal-configuration.nix](minimal-configuration.nix) — tiny NixOS module entry shape (`imports`, boot, user, `stateVersion`)
+- [simple-package.nix](simple-package.nix) — `callPackage`-shaped recipe wrapping `hello` (no fake fetch hash)
+- [fod-fetchurl.nix](fod-fetchurl.nix) — `fetchurl` FOD with obviously placeholder `hash`

@@ -65,8 +65,10 @@ Prefer the stable/channel manuals unless documenting a version-specific feature;
 | `nix flake update` | https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-flake-update.html |
 | `nix flake prefetch-inputs` | https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-flake-prefetch-inputs.html |
 | `nix profile` | https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-profile.html |
+| Profiles (filesystem layout) | https://nix.dev/manual/nix/stable/command-ref/files/profiles.html |
 | `nix store` | https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-store.html |
 | `nix-channel` | https://nix.dev/manual/nix/stable/command-ref/nix-channel.html |
+| Channels (on-disk layout) | https://nix.dev/manual/nix/stable/command-ref/files/channels.html |
 | `nix-env` | https://nix.dev/manual/nix/stable/command-ref/nix-env.html |
 | `nix-build` | https://nix.dev/manual/nix/stable/command-ref/nix-build.html |
 | `nix develop` | https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-develop.html |
@@ -83,6 +85,7 @@ Prefer the stable/channel manuals unless documenting a version-specific feature;
 | Nix language operators (incl. pipe) | https://nix.dev/manual/nix/stable/language/operators.html |
 | Advanced attrs (`__contentAddressed`) | https://nix.dev/manual/nix/stable/language/advanced-attributes.html |
 | Content-addressed derivation outputs | https://nix.dev/manual/nix/stable/store/derivation/outputs/content-address.html |
+| Experimental feature: `ca-derivations` | https://nix.dev/manual/nix/stable/development/experimental-features.html#xp-feature-ca-derivations |
 | Command reference | https://nix.dev/manual/nix/stable/command-ref/ |
 | Nix release notes | https://nix.dev/manual/nix/stable/release-notes/ |
 | CppNix source | https://github.com/NixOS/nix |
@@ -163,6 +166,7 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Changing the configuration | https://nixos.org/manual/nixos/stable/index.html#sec-changing-config |
 | Modularity | https://nixos.org/manual/nixos/stable/index.html#ch-modularity |
 | Writing NixOS Modules | https://nixos.org/manual/nixos/stable/index.html#sec-writing-modules |
+| Option Declarations | https://nixos.org/manual/nixos/stable/index.html#sec-option-declarations |
 | Option definitions (`mkIf` / priorities / `mkMerge`) | https://nixos.org/manual/nixos/stable/index.html#sec-option-definitions |
 | Warnings and assertions | https://nixos.org/manual/nixos/stable/index.html#sec-assertions |
 | Activation script | https://nixos.org/manual/nixos/stable/index.html#sec-activation-script |
@@ -265,6 +269,8 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | nixd configuration | https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md |
 | vscode-nix-ide | https://github.com/nix-community/vscode-nix-ide |
 | flake-parts | https://flake.parts/ |
+| flake-parts — getting started | https://flake.parts/getting-started |
+| flake-parts — module arguments | https://flake.parts/module-arguments |
 | Snowfall Lib | https://snowfall.org/guides/lib/quickstart/ |
 | snowfallorg/lib | https://github.com/snowfallorg/lib |
 | numtide/blueprint | https://github.com/numtide/blueprint |
