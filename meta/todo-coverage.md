@@ -282,7 +282,7 @@ broken.forEach(b=>console.log(" ",b.join(" -> ")));
 
 Last run (2026-07-31, post installer/store/frontend gold): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 48 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
 
-**Quality audit (Phase 6+):** `node meta/audit/quality-audit.mjs` — thin Examples, missing See also / Boundaries on concept+ops leaves, orphan inbound links, stale `last-checked`. See [quality-checklist.md](quality-checklist.md) Complete+ bar.
+**Quality audit (Phase 6+):** `node meta/audit/quality-audit.mjs` — thin Examples, missing See also / Boundaries on concept+ops leaves, orphan inbound links, stale `last-checked`. See [quality-checklist.md](quality-checklist.md) Complete+ bar. Last quality audit run: 2026-07-31 — `no_boundaries=0` after concept + NixOS ops boundaries pass.
 
 ## Definition of done (per article)
 

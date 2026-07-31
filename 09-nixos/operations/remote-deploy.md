@@ -64,6 +64,12 @@ Use `--no-reexec` to keep the current `nixos-rebuild` binary. `--fast` remains a
 
 For first-time remote installation (not ongoing rebuilds), use [nixos-anywhere](../installation/nixos-anywhere.md). SSH/Nix trust and activation failures: [troubleshooting](troubleshooting.md).
 
+### Boundaries (what this page is not)
+
+- Fleet tools [Colmena](../../12-deployment-and-infra/colmena.md) and [deploy-rs](../../12-deployment-and-infra/deploy-rs.md)—multi-node orchestration.
+- First-time install via [nixos-anywhere](../installation/nixos-anywhere.md)—not ongoing switch/deploy.
+- [Inter-machine trust](../../14-security-and-trust/inter-machine-trust.md) theory—SSH keys, builders, and cache ACLs.
+
 ## Examples
 
 Activate on a remote host as a non-root user (elevation via sudo):

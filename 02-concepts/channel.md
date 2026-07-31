@@ -77,6 +77,12 @@ Each channels profile [generation](generation.md) is registered as a [GC root](.
 
 Pruning old channel generations (via `nix-env -p …/channels --delete-generations` or broader GC with `--delete-old`) frees disk space but removes rollback targets for deleted generations.
 
+### Boundaries (what this page is not)
+
+- **Not flake inputs or lockfiles** — pinned project deps are [flake](flake.md) / [lockfile](../07-flakes/anatomy/lockfile.md) territory.
+- **Not the `nix-channel` CLI reference** — flags and subcommands live on [`nix-channel`](../05-cli-and-tooling/classic-cli/nix-channel.md).
+- **Not reproducible pinning without flakes** — hash-pinned fetches and helper tools are [pinning](../06-nixpkgs/overlays-and-overrides/pinning.md).
+
 ## Examples
 
 ```bash

@@ -34,6 +34,12 @@ Declare mounts with `fsType = "btrfs"` and mount `options` such as `subvol=…` 
 
 Block-device LUKS unlock (`boot.initrd.luks.devices`, TPM enrollment via systemd-cryptenroll, Lanzaboote measured boot) is a different stack from ZFS native encryption or Btrfs native encryption. Lanzaboote’s measured-boot documentation states it does **not** support filesystem-level encryption integration for ZFS or Btrfs—you would wire that yourself. See [Secure Boot and Lanzaboote](secure-boot-and-lanzaboote.md) for the LUKS-oriented path.
 
+### Boundaries (what this page is not)
+
+- [disko recipes](disko-recipes.md)—declarative partition tables and install templates.
+- LUKS, [Secure Boot](secure-boot-and-lanzaboote.md), and [measured boot](tpm-and-measured-boot.md) boot-trust stack.
+- [hardware-configuration.nix](hardware-configuration.md) generator output for detected mounts.
+
 ## Examples
 
 Illustrative ZFS root dataset (legacy mountpoint) plus auto-scrub—not an install guide:

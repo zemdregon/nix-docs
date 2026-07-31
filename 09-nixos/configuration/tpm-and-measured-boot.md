@@ -35,6 +35,12 @@ Anything other than `yes` means Lanzaboote measured boot will not work on that h
 
 **Separate path: Clevis.** NixOS also ships `boot.initrd.clevis` ([clevis.nix](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/clevis.nix)): set `enable`, map `devices.<name>.secretFile` to a Clevis JWE, and optionally `useTang` (requires initrd networking for Tang pins). Unlock uses TPM2, Tang, or SSS pins via JWE. That is orthogonal to Lanzaboote measured boot / pcrlock. Soft edge: Clevis wires JWE material into the initrd secret tree; anything that changes initrd content can interact badly with PCR4-style sealing of the stub/initrd chain—treat combining Clevis-in-initrd with PCR4 policies as a sharp edge and verify against current Lanzaboote/systemd docs rather than assuming they compose. Disk unlock is not a substitute for application [secrets strategies](secrets-strategies.md).
 
+### Boundaries (what this page is not)
+
+- [Lanzaboote Secure Boot setup](secure-boot-and-lanzaboote.md)—signed UKI/stub chain and `sbctl` enrollment.
+- Application [secrets strategies](secrets-strategies.md)—service credentials after boot.
+- [ZFS encryption](zfs-and-btrfs.md)—native dataset encryption vs block-device LUKS.
+
 ## Examples
 
 Minimal options fragment after Lanzaboote Secure Boot is already working (not a full host config). Enroll LUKS with `systemd-cryptenroll` separately against the real block device—do not invent device paths into the Nix config.

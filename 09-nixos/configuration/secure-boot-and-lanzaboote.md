@@ -22,6 +22,12 @@ NixOS does **not** ship turnkey UEFI Secure Boot in core modules. [Partitioning 
 
 **Operational caveats.** Lanzaboote does not replace understanding ESP size, generation limits, or recovery when the machine will not boot. Keep a recovery plan ([Troubleshooting](../operations/troubleshooting.md)). Pin the Lanzaboote release and re-read release notes when upgrading.
 
+### Boundaries (what this page is not)
+
+- Generic [EFI partitioning](partitioning-and-bootloaders.md)—ESP size, mount points, and bootloader choice.
+- [TPM Clevis and measured boot](tpm-and-measured-boot.md)—pcrlock policy and initrd unlock paths.
+- [Firmware and microcode](firmware-and-microcode.md)—CPU errata and `/lib/firmware` blobs.
+
 ## Examples
 
 Illustrative flake fragment (not a full host config). Follow current Lanzaboote docs for key creation, enrollment, and firmware setup after the first rebuild.

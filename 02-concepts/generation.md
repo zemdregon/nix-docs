@@ -31,6 +31,12 @@ Classic `nix-env` and modern `nix profile` both append generations to the same u
 
 **Garbage collection.** Each kept generation is a [GC root](../04-store-and-build/garbage-collection.md): the profile version symlink keeps that generation’s entire closure reachable. Deleting generations with `nix-env --delete-generations` (or profile-aware `nix-collect-garbage --delete-old` / `--delete-older-than`) removes those roots; a subsequent `nix-collect-garbage` or `nix-store --gc` can then delete store paths nothing references anymore. Pruning frees disk but removes rollback targets for deleted numbers—balance retention against space, especially on `/nix/store` and `/boot`.
 
+### Boundaries (what this page is not)
+
+- **Not profile layout** — symlink farms and manifests are [profile](profile.md).
+- **Not bootloader internals** — menu entries and `/run/current-system` are [generations and boot](../09-nixos/architecture/generations-and-boot.md).
+- **Not specialisation variants** — sibling closures on one generation are [specialisations](../09-nixos/configuration/specialisations.md).
+
 ## Examples
 
 User profile: inspect history, jump to a specific generation, or step back one step.

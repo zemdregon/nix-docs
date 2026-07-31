@@ -20,6 +20,12 @@ status: complete
 
 **Not the same as nixos-hardware.** [nixos-hardware](nixos-hardware.md) is a separate collection of optional NixOS modules for specific machines. It is not what `nixos-generate-config` writes; you import a profile yourself when you want vendor- or model-specific tweaks, alongside this generated file.
 
+### Boundaries (what this page is not)
+
+- [nixos-hardware](nixos-hardware.md) optional modules—community profiles you import separately.
+- [Partitioning recipes](disko-recipes.md) or declarative disk layouts.
+- A [configuration.nix](configuration-nix.md) tutorial—the main host config entry point.
+
 ## Examples
 
 Typical import in the entry module (from generated `configuration.nix`):

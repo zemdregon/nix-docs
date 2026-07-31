@@ -44,6 +44,12 @@ Use this table to pick an approach before wiring modules. “What lands in eval 
 
 **Operational rules.** Never commit raw secrets. Prefer narrow permissions and root-only paths for decrypted material. Rotate by updating ciphertext or deploy-time files, then rebuilding—do not edit secrets in place inside the store.
 
+### Boundaries (what this page is not)
+
+- [agenix and sops-nix CLI tutorials](../../12-deployment-and-infra/agenix-sops-nix.md)—tool-specific commands and file formats.
+- [Enterprise identity](enterprise-identity.md)—LDAP/SSSD and directory-backed login.
+- [Impermanence](impermanence.md) disk layout—ephemeral root and persist volume bind mounts.
+
 ## Examples
 
 **Avoid — plaintext in evaluated config.** The string is copied into the store and readable to any local user:

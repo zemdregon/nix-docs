@@ -91,6 +91,7 @@ After channels/concepts click, learn the flake surface.
 3. [Inputs and outputs](../07-flakes/anatomy/inputs-and-outputs.md)
 4. [Lockfile](../07-flakes/anatomy/lockfile.md)
 5. Optional: [NixOS configurations workflow](../07-flakes/workflows/nixos-configurations.md)
+6. Optional skim: [import from derivation](../02-concepts/import-from-derivation.md) — why flake checks sometimes trigger builds during eval
 
 ### 7. Cheatsheets
 

@@ -46,6 +46,12 @@ $ ls -l /nix/var/nix/profiles/system-*-link
 
 **Prefer `test` before making a risky change the boot default.** `nixos-rebuild test` activates the new config in the running system but does **not** change the boot default—so a lockup or misconfiguration is often fixable with a reboot into the previous default. That is the preventive counterpart to rollback; details of `switch` / `boot` / `test` are in [rebuild switch / boot / test](rebuild-switch-boot-test.md). If you still cannot recover, see [Troubleshooting](troubleshooting.md).
 
+### Boundaries (what this page is not)
+
+- [Garbage collection](../../04-store-and-build/garbage-collection.md) and generation pruning policy.
+- [Upgrades](upgrades.md)—how new generations are produced.
+- [Troubleshooting](troubleshooting.md) symptom tables—broader failure diagnosis.
+
 ## Examples
 
 ```bash

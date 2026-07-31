@@ -62,6 +62,12 @@ User, channels, and system profiles evolve independently. Updating a channel gen
 
 Prefer `nix profile` for flake-friendly installs and JSON-oriented tooling; `nix-env` remains common on older workflows and in docs that assume channels. Neither edits store paths in place—both only advance or rewind the profile pointer.
 
+### Boundaries (what this page is not)
+
+- **Not generation mechanics** — numbered snapshots and rollback semantics are [generation](generation.md).
+- **Not the store model** — path identity and immutability are [store path](store-path.md).
+- **Not NixOS system profiles** — boot entries and `nixos-rebuild` are [generations and boot](../09-nixos/architecture/generations-and-boot.md).
+
 ## Examples
 
 ```bash

@@ -51,6 +51,12 @@ Do not invent option names: confirm against [NixOS option search](https://search
 - Opening SSH / cache HTTP on the public Internet “because the overlay exists”—bind or firewall so only the fabric (or intentional public endpoints) can reach them.
 - Running two overlays on the same hosts without a clear which-address policy for builders and deploy URIs.
 
+### Boundaries (what this page is not)
+
+- Host [firewall and interface policy](networking.md)—`networking.firewall` and static addressing.
+- The [machine mesh](../../02-concepts/machine-mesh.md) concept alone—trust and topology without overlay tooling.
+- [Remote deploy](../operations/remote-deploy.md)—SSH `nixos-rebuild` and activation on peers.
+
 ## Examples
 
 **Tailscale client** (enable daemon; open UDP; optionally trust the interface for inbound mesh traffic):

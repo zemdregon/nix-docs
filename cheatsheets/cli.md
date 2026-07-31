@@ -190,6 +190,7 @@ Adjacent UX: [nh / nvd](../05-cli-and-tooling/adjacent-tools/nh-nvd-nixos-rebuil
 - [NixOS operations](../09-nixos/operations/README.md)
 - [FAQ: Common Errors](faq-common-errors.md)
 - [nix-command](../08-experimental-features/nix-command.md) · [flakes](../08-experimental-features/flakes.md)
+- [nix-index / comma](../05-cli-and-tooling/adjacent-tools/nix-index-comma.md) — locate packages by binary name; one-shot `,` runs
 
 ## References
 

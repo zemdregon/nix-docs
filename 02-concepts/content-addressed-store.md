@@ -38,6 +38,12 @@ Derivations that produce floating CA outputs also require the `ca-derivations` *
 
 **Relation to the `.drv` file.** The derivation file itself remains input-addressed at its own `.drv` path. Output paths use related but distinct rules depending on output type; query tools such as `nix derivation show` and `nix-store --query --deriver` connect realized outputs back to their `.drv` and input graph.
 
+### Boundaries (what this page is not)
+
+- **Not FOD fetch helpers** — stabilized fixed CA is [fixed-output derivation](fixed-output-derivation.md).
+- **Not store path basics** — default input-addressed paths are [store path](store-path.md).
+- **Not experimental flag details** — `ca-derivations` behavior is [ca-derivations](../08-experimental-features/ca-derivations.md).
+
 ## Examples
 
 **Fixed CA in production: `fetchurl`.** A `fetchurl` result lives at a path determined by its declared `outputHash`, not by the fetch URL or builder string. That is fixed content-addressing—the stabilized form in wide use today. [fod-fetchurl.nix](../meta/examples/fod-fetchurl.nix) shows the attribute shape (placeholder hash; not evaluated in this vault).

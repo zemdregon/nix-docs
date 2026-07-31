@@ -32,6 +32,12 @@ Shared overlay fixture: [overlay-snippet.nix](../meta/examples/overlay-snippet.n
 
 **Legacy note.** `packageOverrides` is an older, less flexible hook equivalent to an overlay with only `prev`. Prefer overlays for anything you might share or layer.
 
+### Boundaries (what this page is not)
+
+- **Not overlay composition theory** — stacking order and shallow merge are [overlay](overlay.md) and [overlays pattern](../03-language/idioms/overlays-pattern.md).
+- **Not `callPackage` mechanics** — argument threading is [callPackage](../03-language/idioms/callPackage.md).
+- **Not legacy `packageOverrides` migration** — see [packageOverrides](../06-nixpkgs/overlays-and-overrides/packageOverrides.md).
+
 ## Examples
 
 **Override — local patch to one package.**

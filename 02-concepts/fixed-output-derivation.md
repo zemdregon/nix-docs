@@ -24,6 +24,12 @@ FODs are how Nix brings upstream sources and other remote artifacts into the sto
 
 **Single output.** FODs produce a single output. Fetch helpers wrap `builtins.derivation` (or equivalent) with the required `outputHash*` attributes and a builder that downloads or copies the fixed content.
 
+### Boundaries (what this page is not)
+
+- **Not ordinary derivations** — input-addressed recipes are [derivation](derivation.md).
+- **Not floating CA** — experimental post-build content addressing is [content-addressed store](content-addressed-store.md).
+- **Not IFD** — reading build outputs during eval is [import from derivation](import-from-derivation.md).
+
 ## Examples
 
 **Pinned tarball fetch.** A `fetchurl` call declares `url`, `outputHash`, and related fields. Nix downloads the file, stores it under `/nix/store/<hash>-<name>`, and later build steps consume that path without further network access.

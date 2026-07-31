@@ -31,6 +31,12 @@ Example path: `<nixos-hardware/lenovo/thinkpad/x220>`. The path form mirrors the
 
 **Contributing.** To add a new device profile, follow the upstream [CONTRIBUTING](https://github.com/NixOS/nixos-hardware/blob/master/CONTRIBUTING.md) guidance linked from the README.
 
+### Boundaries (what this page is not)
+
+- [hardware-configuration.nix](hardware-configuration.md) from `nixos-generate-config`.
+- [Firmware and microcode](firmware-and-microcode.md) flags in isolation—CPU and `/lib/firmware` policy.
+- [disko recipes](disko-recipes.md)—declarative partitioning and install templates.
+
 ## Examples
 
 Flake: hardware input plus a model module, keeping generated hardware config:

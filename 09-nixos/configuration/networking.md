@@ -89,6 +89,12 @@ Do not let two managers fight over the same interface. `networking.useNetworkd` 
 
 IPv6 is enabled by default (`networking.enableIPv6` defaults to `true`): SLAAC, privacy/temporary addresses (`networking.tempAddresses`), and the usual dual-stack firewall behavior. Disable globally with `networking.enableIPv6 = false` only when you intend a v4-only host. See the manual IPv6 section for per-interface tuning.
 
+### Boundaries (what this page is not)
+
+- **Not overlay VPN / mesh** — Tailscale, WireGuard overlays, and fleet reachability are [overlay networks](overlay-networks.md) and [machine mesh](../../02-concepts/machine-mesh.md).
+- **Not a service module catalog** — daemon options live under [services](../services/README.md) and [common service examples](../services/common-service-examples.md).
+- **Not enterprise LDAP/AD** — directory integration is [enterprise identity](enterprise-identity.md).
+
 ## Examples
 
 ### Desktop: NetworkManager, firewall holes, SSH
