@@ -11,8 +11,8 @@ Next work: [EXPAND-PLAN.md](../EXPAND-PLAN.md) — Phase 1 quality deepen, then 
 ## Contents
 
 - [conventions.md](conventions.md) — Naming, stubs, cross-links, growth rules
-- [obsidian.md](obsidian.md) — Open as Obsidian vault; plugins and link settings
-- [dashboard.md](dashboard.md) — Dataview status tables (Obsidian)
+- [github.md](github.md) — GitHub-native viewing, link rules, local preview
+- [dashboard.md](dashboard.md) — Browse notes by `status` (GitHub search / ripgrep)
 - [research-method.md](research-method.md) — Pack → write → verify loop for filling articles
 - [quality-checklist.md](quality-checklist.md) — Rubric before `status: complete`
 - [sources.md](sources.md) — Living canonical upstream URL table (intentional `draft`; never mark complete)

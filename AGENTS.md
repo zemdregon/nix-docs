@@ -39,7 +39,7 @@ Nav map: [README.md](README.md)
 - Fill existing headings where present (`Overview`, `Details`, `Examples`, `References`). Add `## See also` with relative links when useful.
 - Status lifecycle (YAML frontmatter): `stub` → `draft` → `complete` (see conventions for the quality bar).
 - Use relative links between wiki pages. Put stable upstream URLs under `## References` and add new canonical sources to [meta/sources.md](meta/sources.md).
-- Keep Markdown link syntax with `.md` targets (Obsidian vault uses Markdown + relative paths — see [meta/obsidian.md](meta/obsidian.md)); do not introduce `[[wikilinks]]`.
+- Keep Markdown link syntax with `.md` targets (GitHub resolves relative `.md` paths — see [meta/github.md](meta/github.md)); do not introduce `[[wikilinks]]`.
 - Keep concept pages (`02-concepts/…`) separate from deep dives (`07-flakes/…`, etc.).
 - Be concise. No emojis. No marketing tone.
 
@@ -82,9 +82,9 @@ When parallelizing content fills:
 
 ## Cursor Cloud specific instructions
 
-This repo is a **plain-Markdown Obsidian vault** — there is no build system, package manager, automated test suite, or CI, and this is intentional (site generator deferred; see [meta/conventions.md](meta/conventions.md) "What does not belong yet"). Nothing needs installing to work here; Node 22 and Python 3.12 are preinstalled.
+This repo is a **plain-Markdown knowledge base viewed natively on GitHub** — there is no build system, package manager, automated test suite, or CI, and this is intentional (site generator deferred; see [meta/conventions.md](meta/conventions.md) "What does not belong yet"). Nothing needs installing to work here; Node 22 and Python 3.12 are preinstalled. GitHub is the reference renderer: folder `README.md` files auto-render as their directory's landing page, relative `.md` links are clickable, and YAML frontmatter shows as a table. See [meta/github.md](meta/github.md).
 
 - **Lint/test (the real quality gate):** the tracked invariant is "0 broken relative `.md` links" (see [README.md](README.md)). Validate by confirming every inline Markdown link whose target ends in `.md` resolves to an existing file, and that every `.md` starts with `status:` frontmatter. A stdlib-only Python script (no dependencies) can scan all `.md` files for this; there is intentionally no committed checker.
   - Known false positives: the [glossary.md](glossary.md) uses bold-term pseudo-anchors like `#cppnix`/`#lix`/`#tvix`/`#snix` that are not real headings. A strict heading-anchor checker flags ~8 of these, but they are **not** broken relative `.md` links and must not be "fixed" (out of scope).
-- **Build/run (preview):** there is no site generator. To preview rendered pages, render Markdown to HTML ad hoc (e.g. `pip install --break-system-packages markdown`, rewrite relative `.md` links to `.html`) and serve with `python3 -m http.server`, or open the folder as an Obsidian vault (see [meta/obsidian.md](meta/obsidian.md)). Do **not** commit a generator (MkDocs/mdBook/Hugo) or its config into the repo — see the "Do not" section above.
+- **Build/run (preview):** there is no site generator; GitHub renders the repo natively, so the simplest preview is to push a branch and view it on github.com. For a local preview with GitHub styling and working relative links, use [`grip`](https://github.com/joeyespo/grip) (`pip install --break-system-packages grip`, then `grip . 6419`); it renders through GitHub's API (unauthenticated use is rate-limited). See [meta/github.md](meta/github.md). Do **not** commit a generator (MkDocs/mdBook/Hugo) or its config into the repo — see the "Do not" section above.
 - **Authoring:** the core workflow is editing interlinked leaf `.md` files with relative links; after edits, re-run the relative-link check to keep the invariant at zero broken links.

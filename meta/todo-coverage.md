@@ -262,7 +262,7 @@ broken.forEach(b=>console.log(" ",b.join(" -> ")));
 '
 ```
 
-Last run (2026-07-31, post Phase 1/2 polish): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 47 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
+Last run (2026-07-31, post Phase 1/2 polish): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 47 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Status browsing: [dashboard.md](dashboard.md).
 
 ## Definition of done (per article)
 
