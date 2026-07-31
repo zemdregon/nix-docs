@@ -89,6 +89,7 @@ On NixOS, `nixos-rebuild list-generations` shows **system** profile generations;
 - [Nix manual — Profiles](https://nix.dev/manual/nix/stable/command-ref/files/profiles.html) — filesystem layout, manifests, and GC roots
 - [Nix manual — User profile link](https://nix.dev/manual/nix/stable/command-ref/files/profiles.html#user-profile-link) — `~/.nix-profile` and XDG paths
 - [Nix manual — Channels layout](https://nix.dev/manual/nix/stable/command-ref/files/channels.html) — channels profile and subscription files
+- [Nix manual — `nix profile`](https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-profile.html) — modern profile commands (`nix-command`)
 - [NixOS manual (stable)](https://nixos.org/manual/nixos/stable/) — system profile and activation
 
 ## See also

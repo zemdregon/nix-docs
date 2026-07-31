@@ -128,3 +128,4 @@ final: prev: {
 - [Writing Overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md) — install paths, stacking, NixOS + user config
 - [Package Sets](../06-nixpkgs/architecture/package-sets.md) — how `pkgs` is composed
 - [Functional Package Management](../01-philosophy/functional-package-management.md) — why overlays fit the model
+- [overlay-snippet.nix](../meta/examples/overlay-snippet.nix) — corpus fixture

@@ -41,9 +41,10 @@ nix-env --list-generations
 nix-env --switch-generation 42
 nix-env --rollback
 
-# Modern nix profile (same underlying generations)
+# Modern nix profile (same underlying generations; needs nix-command)
 nix profile history
 nix profile rollback
+nix profile rollback --to 42
 ```
 
 NixOS system: list generations, roll back the active default, or activate a specific one explicitly.
