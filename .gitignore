@@ -1,0 +1,10 @@
+# Obsidian local / machine-specific state (keep shared vault settings + plugins tracked)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/themes/
+.obsidian/snippets/
+.trash/
+
+# Editor / agent scratch
+.cursor/

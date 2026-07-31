@@ -1,0 +1,13 @@
+{
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "meta/attachments",
+  "newFileLocation": "current",
+  "newLinkFormat": "relative",
+  "showUnsupportedFiles": false,
+  "strictLineBreaks": false,
+  "useMarkdownLinks": true,
+  "userIgnoreFilters": [
+    ".cursor/",
+    ".git/"
+  ]
+}
