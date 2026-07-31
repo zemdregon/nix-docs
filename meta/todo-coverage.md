@@ -196,7 +196,8 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 3a. **Phase 5.1 cadence pass (done 2026-07-31)** — experimental hub re-stamped Nix 2.34.x; release-cadence + evaluator maturity stamps; Clan/mesh + nh/lsp freshness (Clan cite stay on 26.05).
 3b. **Lix glossary parity (done 2026-07-31)** — glossary Lix/Tvix/Snix + Flake CppNix/Lix wording.
 3c. **Broader gold calibration (done 2026-07-31)** — derivation/store-path/closure/flake concepts; rebuild/hermetic/functional-PM/hashing; evaluator leaves (Snix ≠ Tvix rename).
-3d. **Example corpus (done 2026-07-31)** — [meta/examples/](examples/README.md) hello-flake, overlay-snippet, shell.nix; linked from packages-apps-devShells + shells-and-direnv.
+3d. **Example corpus (done 2026-07-31; expanded 2026-07-31)** — [meta/examples/](examples/README.md) hello-flake, overlay-snippet, shell.nix, flake-with-checks, minimal-module.nix; linked from packages-apps-devShells, shells-and-direnv, checks-and-hydraJobs, writing-a-module, overlay-vs-override.
+3e. **Tier A concept deepen (done 2026-07-31)** — [profile](../02-concepts/profile.md), [generation](../02-concepts/generation.md), [overlay](../02-concepts/overlay.md), [channel](../02-concepts/channel.md) thickened toward gold density; cross-links between profile/generation/channel.
 
 ### Landed this batch (2026-07-31 v1 polish)
 
