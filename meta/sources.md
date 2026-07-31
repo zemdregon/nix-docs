@@ -296,10 +296,14 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Attic | https://github.com/zhaofengli/attic |
 | Harmonia | https://github.com/nix-community/harmonia |
 | Colmena docs | https://colmena.cli.rs/ |
+| Clan site | https://clan.lol/ |
 | Clan docs (26.05) | https://clan.lol/docs/26.05 |
-| Clan mesh VPN guide | https://clan.lol/docs/26.05/guides/networking/mesh-vpn |
-| Clan networking | https://clan.lol/docs/26.05/guides/networking/networking |
+| Clan docs (unstable) | https://clan.lol/docs/unstable |
+| Clan mesh VPN guide | https://clan.lol/docs/26.05/guides/networking/mesh-vpn/ |
+| Clan networking | https://clan.lol/docs/26.05/guides/networking/networking/ |
+| Clan networking (unstable) | https://clan.lol/docs/unstable/guides/networking/networking/ |
 | Clan zerotier service | https://clan.lol/docs/26.05/services/official/zerotier |
+| clan-core (Gitea) | https://git.clan.lol/clan/clan-core |
 | Attic | https://docs.attic.rs/ |
 | Harmonia | https://github.com/nix-community/harmonia |
 | Cachix docs | https://docs.cachix.org/ |

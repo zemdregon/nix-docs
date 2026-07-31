@@ -10,6 +10,8 @@ Nix editors gain diagnostics, completion, hover, and (when configured) format-on
 
 Formatting is delegated to an external binary (for example `nixfmt` or Alejandra) through each server’s `formatting.command` setting—not built into the LSP. See [Alejandra / nixpkgs-fmt](alejandra-nixpkgs-fmt.md) for formatter choice and flake `formatter` wiring.
 
+**Last checked:** 2026-07-31 — **nil** and **nixd** remain the active pair; rnix-lsp still unmaintained. Confirm server settings against upstream config docs.
+
 ## Details
 
 ### nil
@@ -90,7 +92,7 @@ For nil, point `cmd` at `"nil"` and nest settings under `settings.nil` (see nil 
 
 ## References
 
-- [oxalica/nil](https://github.com/oxalica/nil) — incremental Nix language server; editor integration and flake package
+- [oxalica/nil](https://github.com/oxalica/nil) — incremental Nix language server; editor integration and flake package (last checked 2026-07-31)
 - [nil — configuration](https://github.com/oxalica/nil/blob/main/docs/configuration.md) — LSP settings under `"nil"`
 - [nix-community/nixd](https://github.com/nix-community/nixd) — Nix language server with package/option completion
 - [nixd — configuration](https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md) — `nixd` settings, editor examples

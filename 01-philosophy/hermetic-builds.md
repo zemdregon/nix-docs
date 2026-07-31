@@ -8,13 +8,15 @@ status: complete
 
 A **hermetic build** runs in an isolated builder that may use only the inputs declared in the [derivation](../02-concepts/derivation.md). Nix enforces that with a **sandbox**: restricted filesystem views and (on Linux) private namespaces so undeclared tools, headers, and libraries cannot silently participate. The aim is **reproducibility and complete dependency graphs**, not a perfect security boundary against a compromised host.
 
-That closes a common gap behind “works on my machine”—where a build succeeds because `$PATH`, `/usr/include`, or a cached download happened to be present locally, but fails or behaves differently elsewhere. With the sandbox and declared inputs in place, the same derivation should produce the same store path on a laptop, in CI, or on a **remote builder**, given the same inputs. How that relates to evaluation purity and bit-for-bit goals is covered in [purity and reproducibility](purity-and-reproducibility.md); this page focuses on the build-time isolation mechanism.
+That closes a common gap behind “works on my machine”—where a build succeeds because `$PATH`, `/usr/include`, or a cached download happened to be present locally, but fails or behaves differently elsewhere. With the sandbox and declared inputs in place, the same derivation should produce the same store path on a laptop, in CI, or on a **remote builder**, given the same inputs.
+
+Hermetic builds are the build-time half of [purity and reproducibility](purity-and-reproducibility.md). The package-management framing—builds as functions from inputs to store outputs—is [functional package management](functional-package-management.md). Motivation sits in [Why Nix](why-nix.md).
 
 ## Details
 
 ### Declared inputs only
 
-Each derivation lists its dependencies as store paths and sources. During the build, the sandbox mounts those paths (and a minimal set of bind mounts from `sandbox-paths`) and hides the rest of the host filesystem. If a build script calls `gcc`, `curl`, or a library that was not declared, the build fails rather than succeeding with an undeclared dependency. That makes the [closure](../02-concepts/closure.md) an honest account of what the build actually used.
+Each derivation lists its dependencies as store paths and sources. During the build, the sandbox mounts those paths (and a minimal set of bind mounts from `sandbox-paths`) and hides the rest of the host filesystem. If a build script calls `gcc`, `curl`, or a library that was not declared, the build fails rather than succeeding with an undeclared dependency. That makes the [closure](../02-concepts/closure.md) an honest account of what the build actually used—the same inputs→outputs discipline as [functional package management](functional-package-management.md), enforced at build time.
 
 ### The `sandbox` setting
 
@@ -30,13 +32,15 @@ Remote builders use the same model: they receive a derivation and its input path
 
 ### Fixed-output exceptions
 
-Fetching upstream sources needs the network. Nix allows that only for [fixed-output derivations](../02-concepts/fixed-output-derivation.md) (FODs): on Linux they are **not** placed in a private network namespace, so they can reach the outside world. In exchange, the derivation must declare [`outputHash`](https://nix.dev/manual/nix/stable/language/advanced-attributes.html) (with `outputHashAlgo` / `outputHashMode` as required). If the built content does not match the declared hash, the build fails. Everything else in the closure stays content-addressed and fully sandboxed—no further network.
+Fetching upstream sources needs the network. Nix allows that only for [fixed-output derivations](../02-concepts/fixed-output-derivation.md) (FODs): on Linux they are **not** placed in a private network namespace, so they can reach the outside world. In exchange, the derivation must declare [`outputHash`](https://nix.dev/manual/nix/stable/language/advanced-attributes.html) (with `outputHashAlgo` / `outputHashMode` as required). If the built content does not match the declared hash, the build fails. Everything else in the closure stays content-addressed and fully sandboxed—no further network. How those hashes are computed (flat vs NAR) is covered under [hashing and inputs](../04-store-and-build/hashing-and-inputs.md).
 
 ### Limits of the model
 
-The sandbox targets **build reproducibility and complete dependency graphs**, not absolute isolation from a malicious or compromised host. Privilege, misconfiguration, `sandbox-paths` leaks, or sandbox bugs can still affect builds. For threat-model detail, see [sandbox escape surface](../14-security-and-trust/sandbox-escape-surface.md).
+The sandbox targets **build reproducibility and complete dependency graphs**, not absolute isolation from a malicious or compromised host. Privilege, misconfiguration, `sandbox-paths` leaks, or sandbox bugs can still affect builds. Input-addressed path identity also does not by itself guarantee bit-for-bit identical NAR bytes across every toolchain—see [purity and reproducibility](purity-and-reproducibility.md). For threat-model detail, see [sandbox escape surface](../14-security-and-trust/sandbox-escape-surface.md).
 
 ## Examples
+
+Illustrative scenarios grounded in the manual’s `sandbox` and FOD rules. They do not require a local build to check the policy; realizing them needs a Nix store and (for the remote case) a configured builder.
 
 **Undeclared tool on `$PATH`.** A `stdenv.mkDerivation` build script invokes `python3` without listing it in `nativeBuildInputs`. On a developer machine with Python installed globally, the script might appear to work; with `sandbox = true`, `python3` is unavailable and the build fails—surfacing the missing declaration.
 
@@ -54,7 +58,8 @@ The sandbox targets **build reproducibility and complete dependency graphs**, no
 ## See also
 
 - [Purity and reproducibility](purity-and-reproducibility.md)
-- [Why Nix](why-nix.md)
+- [Functional package management](functional-package-management.md)
 - [Builders and sandboxes](../04-store-and-build/builders-and-sandboxes.md)
 - [Fixed-output derivation](../02-concepts/fixed-output-derivation.md)
-- [Derivation](../02-concepts/derivation.md)
+- [Hashing and inputs](../04-store-and-build/hashing-and-inputs.md)
+- [Why Nix](why-nix.md)

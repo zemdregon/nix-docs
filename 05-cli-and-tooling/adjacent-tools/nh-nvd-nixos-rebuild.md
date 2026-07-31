@@ -14,6 +14,8 @@ Applying a NixOS (or Home Manager / nix-darwin) config means building a new syst
 
 `nh` and `nvd` improve review and ergonomics. Activation itself still goes through the same switch-to-configuration path once you choose to switch; they do not invent a separate activation model.
 
+**Last checked:** 2026-07-31 — aligned with [nh](../../13-implementations/frontends-and-ux/nh.md) / [nixos-rebuild](../../13-implementations/frontends-and-ux/nixos-rebuild.md) frontends; confirm flags with `--help` / man pages.
+
 ## Details
 
 ### `nixos-rebuild`
@@ -29,15 +31,19 @@ Official command for changing configuration (see [rebuild actions](../../09-nixo
 
 Root (or elevating appropriately) is required for actions that activate or change the boot default. With flakes, pass a flake attribute, e.g. `nixos-rebuild switch --flake .#host`. Rollback and generation selection are covered under [rollbacks](../../09-nixos/operations/rollbacks.md).
 
+On NixOS **26.05** (current stable), the on-PATH `nixos-rebuild` is the Python **`nixos-rebuild-ng`** rewrite; the classic Bash implementation is gone. Frontend notes: [nixos-rebuild (implementations)](../../13-implementations/frontends-and-ux/nixos-rebuild.md).
+
 ### `nh`
 
 Packaged in nixpkgs as `nh` ([nix-community/nh](https://github.com/nix-community/nh)). Subcommands include **`nh os`**, **`nh home`**, **`nh darwin`**, plus **`nh search`** and **`nh clean`**.
 
-Per the upstream README:
+Per the upstream README (default branch `master`, checked 2026-07-31):
 
 - `nh os` reimplements `nixos-rebuild-ng` in Rust (not a shell wrapper around `nixos-rebuild`).
 - Additions called out upstream: build-tree display via **nix-output-monitor** (nom), pretty diffs via **dix**, and confirmation before activation.
 - Feature parity with stock `nixos-rebuild` is incomplete; see upstream [issue #358](https://github.com/nix-community/nh/issues/358).
+
+Deeper UX placement: [nh (implementations)](../../13-implementations/frontends-and-ux/nh.md).
 
 Typical flake mapping from the README:
 
@@ -114,4 +120,4 @@ nh os switch
 - [nixos-rebuild actions](../../09-nixos/operations/rebuild-switch-boot-test.md) — switch / boot / test / build semantics
 - [Rollbacks](../../09-nixos/operations/rollbacks.md) — generations and undoing a bad switch
 - [nh (implementations)](../../13-implementations/frontends-and-ux/nh.md) — deeper nh notes
-- [nixos-rebuild (implementations)](../../13-implementations/frontends-and-ux/nixos-rebuild.md) — frontend-oriented rebuild notes
+- [nixos-rebuild (implementations)](../../13-implementations/frontends-and-ux/nixos-rebuild.md) — frontend-oriented rebuild notes (`nixos-rebuild-ng` on 26.05)

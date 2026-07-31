@@ -10,6 +10,8 @@ Overlay / mesh VPN products (WireGuard, Tailscale, Headscale, ZeroTier, and simi
 
 This is **not** a VPN tutorial. Host hostname, firewall defaults, and interface backends live in [Networking](networking.md). Overlay membership is only the **reachability** axis of a [machine mesh](../../02-concepts/machine-mesh.md)—it does not grant build, binary, deploy, or secret trust; see [Inter-machine trust](../../14-security-and-trust/inter-machine-trust.md).
 
+**Last checked:** 2026-07-31 — NixOS module option names and Clan mesh-vpn pointers; confirm against your channel / Clan doc version.
+
 ## Details
 
 ### What Nix consumes
@@ -24,7 +26,7 @@ Nix and `nixos-rebuild` talk over ordinary hostnames and [store URIs](../../04-s
 | **Tailscale** | Managed mesh client (coordination via Tailscale or Headscale) | `services.tailscale.enable` (and related: `authKeyFile`, `openFirewall`, `useRoutingFeatures`, `extraUpFlags`, …) |
 | **Headscale** | Self-hosted coordination server for Tailscale clients | `services.headscale.enable` (+ `address` / `port` / `settings`) |
 | **ZeroTier** | Mesh with network IDs / controller auth | `services.zerotierone.enable`, `services.zerotierone.joinNetworks` |
-| **Clan + ZeroTier** | Declarative fleet mesh via Clan inventory (`controller` / `peer` / optional `moon`) | Clan inventory `zerotier` instance—not raw `services.zerotierone` alone; see Clan mesh-vpn + zerotier service docs (26.05) |
+| **Clan + ZeroTier** | Declarative fleet mesh via Clan inventory (`controller` / `peer` / optional `moon`) | Clan inventory `zerotier` instance—not raw `services.zerotierone` alone; see Clan mesh-vpn + zerotier service docs (26.05). Unstable Clan also documents inventory `wireguard` / `mycelium` networking services—cite that channel, not this table. |
 
 Do not invent option names: confirm against [NixOS option search](https://search.nixos.org/options) for your channel. Keep private keys and auth material out of the store—prefer `privateKeyFile` / `authKeyFile` and [secrets strategies](secrets-strategies.md).
 
@@ -40,7 +42,7 @@ Do not invent option names: confirm against [NixOS option search](https://search
 
 **Headscale vs Tailscale SaaS.** Run `services.headscale` on a reachable control plane; clients still use `services.tailscale` and point login at Headscale (commonly via `extraUpFlags`, e.g. `--login-server=https://headscale.example.com`). Verify current Headscale client flags upstream when you wire this.
 
-**Clan mesh-vpn.** Clan’s integrated mesh today is **ZeroTier** through inventory roles (`controller`, `peer`, optional `moon` with `stableEndpoints`). Deploy the controller first, then peers (`clan machines update`). That fabric is what Clan expects for machine-to-machine reachability; fleet inventory and tooling: [Clan and mesh](../../12-deployment-and-infra/clan-and-mesh.md).
+**Clan mesh-vpn.** On docs **26.05**, Clan’s fully integrated mesh is **ZeroTier** through inventory roles (`controller`, `peer`, optional `moon` with `stableEndpoints`). Deploy the controller first, then peers (`clan machines update`). That fabric is what Clan expects for machine-to-machine reachability; fleet inventory and tooling: [Clan and mesh](../../12-deployment-and-infra/clan-and-mesh.md). Unstable networking also lists inventory WireGuard and other overlays—vocabulary only here; options live upstream.
 
 ### Anti-patterns
 
@@ -108,8 +110,9 @@ ssh://nix@10.100.0.1 x86_64-linux /root/.ssh/id_builder 4 1 kvm
 - [NixOS option search — `services.tailscale`](https://search.nixos.org/options?query=services.tailscale)
 - [NixOS option search — `services.headscale`](https://search.nixos.org/options?query=services.headscale)
 - [NixOS option search — `services.zerotierone`](https://search.nixos.org/options?query=services.zerotierone)
-- [Clan — Mesh VPN (ZeroTier) — 26.05](https://clan.lol/docs/26.05/guides/networking/mesh-vpn/)
+- [Clan — Mesh VPN (ZeroTier) — 26.05](https://clan.lol/docs/26.05/guides/networking/mesh-vpn/) — last checked 2026-07-31
 - [Clan — zerotier service (roles) — 26.05](https://clan.lol/docs/26.05/services/official/zerotier)
+- [Clan — Networking (unstable priorities)](https://clan.lol/docs/unstable/guides/networking/networking/) — `wireguard` / `p2p-ssh-iroh` / … when not on 26.05
 - [WireGuard](https://www.wireguard.com/) / [Tailscale docs](https://tailscale.com/kb) / [Headscale](https://headscale.net/) / [ZeroTier](https://docs.zerotier.com/) — product behavior beyond NixOS modules
 
 ## See also

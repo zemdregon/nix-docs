@@ -188,9 +188,15 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 ### Still open (optional / cadence)
 
 1. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) (design note, not a shipped tool; intentional `draft`); living [sources.md](sources.md) URL table (intentional living `draft`).
-2. **Cadence (EXPAND-PLAN Phase 5.1)** — refresh experimental tracking / release-cited leaves each Nix/NixOS release; evaluator renames; adjacent tools under `05-cli-and-tooling/adjacent-tools/`. Site generator remains optional Phase 5.2.
-3. **Further quality (optional)** — broader gold-page calibration beyond the high-traffic set; Lix glossary parity. Example corpus landed under [examples/](examples/README.md) (Phase 4 optional product, 2026-07-31).
+2. **Cadence (ongoing)** — re-run Phase 5.1 refresh each future Nix/NixOS release (experimental tracking, release-cited leaves, Clan APIs, adjacent tools). Site generator remains optional Phase 5.2.
+3. **Further quality (optional)** — more gold-page outliers beyond this batch; example corpus can gain more shared fixtures under [examples/](examples/README.md).
 
+### Landed (2026-07-31 post-v1 cadence / gold / corpus)
+
+3a. **Phase 5.1 cadence pass (done 2026-07-31)** — experimental hub re-stamped Nix 2.34.x; release-cadence + evaluator maturity stamps; Clan/mesh + nh/lsp freshness (Clan cite stay on 26.05).
+3b. **Lix glossary parity (done 2026-07-31)** — glossary Lix/Tvix/Snix + Flake CppNix/Lix wording.
+3c. **Broader gold calibration (done 2026-07-31)** — derivation/store-path/closure/flake concepts; rebuild/hermetic/functional-PM/hashing; evaluator leaves (Snix ≠ Tvix rename).
+3d. **Example corpus (done 2026-07-31)** — [meta/examples/](examples/README.md) hello-flake, overlay-snippet, shell.nix; linked from packages-apps-devShells + shells-and-direnv.
 
 ### Landed this batch (2026-07-31 v1 polish)
 

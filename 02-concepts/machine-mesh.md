@@ -10,7 +10,9 @@ A **machine mesh** is a mental model for a *group* of Nix / NixOS devices that s
 
 That is distinct from **single-host** Nix trust. [`trusted-users`](../14-security-and-trust/trusted-users.md) is daemon privilege on one install; putting an account there does not enroll a machine in a mesh, and mesh membership does not require (or justify) `trusted-users = *`.
 
-Fleet deploy tools such as [Colmena](../12-deployment-and-infra/colmena.md) and [deploy-rs](../12-deployment-and-infra/deploy-rs.md) usually implement a **hub → hosts** push over SSH. Peer-oriented frameworks such as [Clan](https://clan.lol/docs/26.05) aim at managing fleets of machines **without a central controller**—a different topology, still built on NixOS. Both can participate in the same interconnect story; neither is “the mesh” by itself.
+Fleet deploy tools such as [Colmena](../12-deployment-and-infra/colmena.md) and [deploy-rs](../12-deployment-and-infra/deploy-rs.md) usually implement a **hub → hosts** push over SSH. Peer-oriented frameworks such as [Clan](../12-deployment-and-infra/clan-and-mesh.md) aim at managing fleets of machines **without a central controller**—a different topology, still built on NixOS ([Clan docs 26.05](https://clan.lol/docs/26.05)). Both can participate in the same interconnect story; neither is “the mesh” by itself.
+
+**Last checked:** 2026-07-31 — vocabulary / topology only; Clan API and inventory options live on [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md).
 
 ## Details
 
@@ -30,7 +32,7 @@ It is **not** a synonym for overlay networking alone, and it is **not** a flake 
 | Pattern | Shape | Examples in this wiki |
 |---------|--------|------------------------|
 | **Hub → hosts** | One deployer evaluates, builds/copies, activates on SSH targets. Hosts do not form a control plane among themselves. | [Colmena](../12-deployment-and-infra/colmena.md), [deploy-rs](../12-deployment-and-infra/deploy-rs.md), [remote deploy](../09-nixos/operations/remote-deploy.md) |
-| **Peer / no central controller** | Multi-machine management framed as peer infrastructure on NixOS (inventory, services, networking, secrets)—verify current Clan docs for capabilities. | [Clan 26.05 docs](https://clan.lol/docs/26.05) (declarative fleets without a central controller; integrates with sops-nix, nixos-anywhere, disko) |
+| **Peer / no central controller** | Multi-machine management framed as peer infrastructure on NixOS (inventory, services, networking, secrets)—verify current Clan docs for capabilities. | [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) / [Clan 26.05 docs](https://clan.lol/docs/26.05) (declarative fleets without a central controller; integrates with sops-nix, nixos-anywhere, disko) |
 
 A hub fleet still needs the same trust axes (builders, caches, secrets); peer tooling changes *who coordinates*, not whether those axes exist.
 
@@ -77,7 +79,7 @@ Hub tools express the deploy edge; builders and caches express build/binary edge
 
 ## References
 
-- [Clan documentation (26.05)](https://clan.lol/docs/26.05) — declarative multi-machine management on NixOS without a central controller; peer-oriented framing; integrates sops-nix, nixos-anywhere, disko
+- [Clan documentation (26.05)](https://clan.lol/docs/26.05) — declarative multi-machine management on NixOS without a central controller; peer-oriented framing; integrates sops-nix, nixos-anywhere, disko (last checked 2026-07-31)
 - [Colmena docs](https://colmena.cli.rs/) — hub → hosts hive deploy (contrast topology)
 - [deploy-rs](https://github.com/serokell/deploy-rs) — flake-based hub deploy with multi-profile activation
 

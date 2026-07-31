@@ -8,7 +8,7 @@ status: complete
 
 A **flake** is a Nix project's standardized entry point: a directory whose root contains `flake.nix`, declaring **inputs** (dependencies on other flakes or sources) and **outputs** (packages, NixOS modules, dev shells, and other values). The first time you build or evaluate, Nix writes **`flake.lock`**, pinning each input to an exact revision so two checkouts get the same dependency graph.
 
-Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `nix.conf`, or pass `--extra-experimental-features 'nix-command flakes'`). They are widely used for reproducible projects and replace the implicit `NIX_PATH` / `<nixpkgs>` lookup of [channels](channel.md) with explicit, version-controlled inputs. Schema, workflows, registries, and migration are covered in [Flakes](../07-flakes/README.md)—this page stays at the concept level.
+Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `nix.conf`, or pass `--extra-experimental-features 'nix-command flakes'`). They remain experimental in current CppNix stable manuals (e.g. 2.34.x) even though widely used. They replace the implicit `NIX_PATH` / `<nixpkgs>` lookup of [channels](channel.md) with explicit, version-controlled inputs. Schema, workflows, registries, and migration are covered in [Flakes](../07-flakes/README.md)—this page stays at the concept level.
 
 ## Details
 
@@ -20,19 +20,21 @@ Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `ni
 
 **Pure evaluation.** Flake evaluation is **restricted**: no arbitrary access to the filesystem or environment unless declared as inputs. That supports hermetic, cache-friendly builds and makes “what went into this evaluation?” auditable. Impure escape hatches and flags are documented under [pure eval and impure](../07-flakes/pure-eval-and-impure.md).
 
+**Implementations.** [CppNix](../13-implementations/nix-evaluator/cpp-nix.md) and [Lix](../13-implementations/nix-evaluator/lix.md) both expose flake evaluation and the flake CLI under the same experimental feature flags; treat flag availability and exact CLI surface as implementation- and version-dependent. Other evaluators may lack or partially implement flakes—check that evaluator’s docs before assuming parity.
+
 **Not a tutorial surface.** Defining outputs, composing NixOS configurations, and publishing flakes belong in the [07-flakes](../07-flakes/README.md) domain and CLI docs—not here. Treat this page as vocabulary before reading those guides.
 
 ## Examples
 
 - **Minimal shape:** `flake.nix` lists `inputs.nixpkgs` and exposes `outputs.packages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.hello`.
 - **Pinned third-party input:** After `nix build`, `flake.lock` records the exact `nixpkgs` commit; another clone builds against the same revision without running `nix-channel --update`.
-- **Remote reference:** `nix run nixpkgs#hello` uses the registry to find Nixpkgs and run a package output—no local channel subscription required.
+- **Remote reference:** `nix run nixpkgs#hello` uses the registry to find Nixpkgs and run a package output—no local channel subscription required. Requires `nix-command` and `flakes`.
 
 ## References
 
 - [Nix manual — flakes and `nix flake`](https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-flake.html) — format, inputs, outputs, and lock file
 - [nix.dev — Flakes (concept)](https://nix.dev/concepts/flakes) — high-level introduction
-- [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/) — package set typically consumed as a flake input
+- [Nix manual — experimental features (`flakes`)](https://nix.dev/manual/nix/stable/development/experimental-features.html#xp-feature-flakes) — flag status
 - [RFC 49 — Flakes](https://github.com/NixOS/rfcs/pull/49) — original design specification
 
 ## See also
@@ -42,3 +44,4 @@ Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `ni
 - [Lockfile](../07-flakes/anatomy/lockfile.md) — structure and update semantics
 - [Flakes vs Channels](../comparisons/flakes-vs-channels.md) — when to use which
 - [flakes (experimental feature)](../08-experimental-features/flakes.md) — enabling and status in Nix
+- [CppNix](../13-implementations/nix-evaluator/cpp-nix.md) / [Lix](../13-implementations/nix-evaluator/lix.md) — evaluator implementations

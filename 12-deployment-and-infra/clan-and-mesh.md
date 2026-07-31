@@ -8,6 +8,8 @@ status: complete
 
 **Clan** ([clan.lol](https://clan.lol/), library **clan-core**) is a declarative, peer-oriented framework for managing fleets of [NixOS](../09-nixos/README.md) machines. Upstream positions it as multi-machine management **without a central controller**: inventory-driven services, first-class networking/backups/resources, and integrations with [sops-nix](agenix-sops-nix.md), [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md), and [disko](disko.md) for secrets and provisioning ([Clan docs 26.05](https://clan.lol/docs/26.05)).
 
+**Maturity / last checked:** 2026-07-31 — production-oriented peer fleet tooling; inventory/CLI/options still churn across doc channels. Prefer versioned docs over blogs; re-check options before copying.
+
 That is a different job from hub-style deploy tools:
 
 | Tool | Role |
@@ -18,7 +20,7 @@ That is a different job from hub-style deploy tools:
 
 Clan’s “mesh” is an overlay/VPN and connection policy among inventory machines—not Colmena’s “hive” attrset, and not [Digga / Hive](../13-implementations/community-frameworks/digga-hive.md) (divnix flake layout / collectors). See [Name clashes](#name-clashes-hive-vs-mesh) below.
 
-Docs are versioned like NixOS releases. Prefer **[26.05](https://clan.lol/docs/26.05)** for stable citations; **[unstable](https://clan.lol/docs/unstable)** tracks newer networking services and priorities—confirm the path you follow before copying options.
+Docs are versioned like NixOS releases. Prefer **[26.05](https://clan.lol/docs/26.05)** for stable citations (verified 2026-07-31: mesh-vpn, networking, zerotier service, quick-start all live). A **[26.11](https://clan.lol/docs/26.11)** URL tree also responds, but deep guide paths were incomplete relative to 26.05 at last check—do not migrate citations until the guide set matches. **[unstable](https://clan.lol/docs/unstable)** tracks newer networking services and priorities (`wireguard`, `p2p-ssh-iroh`, …)—confirm the path you follow before copying options.
 
 ## Details
 
@@ -42,7 +44,7 @@ By default, machines in one Clan are expected to share a chosen network technolo
 
 Update the controller first (`clan machines update controller`), then peers (`clan machines update`). Verify with `zerotier-cli info` (expect `ONLINE`). Vars such as ZeroTier network/identity material are listed with `clan vars list <machine>` (see the same guide for debugging and manual `zerotier-members allow`).
 
-Upstream note (26.05): ZeroTier is the mesh-VPN fully integrated into Clan’s networking story; Mycelium/Yggdrasil may appear via inventory but are not fully integrated into the networking module the same way—do not invent Tailscale/tinc options from this wiki.
+Upstream note (26.05 mesh-vpn): ZeroTier is the mesh-VPN fully integrated into Clan’s networking story; Mycelium/Yggdrasil may appear via inventory but are not fully integrated into the networking module the same way. Unstable’s networking priority table also lists first-class `wireguard` and experimental `p2p-ssh-iroh`—cite that channel when using them; do not invent Tailscale/tinc inventory options from this wiki.
 
 ### Networking fallback (how Clan reaches hosts)
 
@@ -50,7 +52,7 @@ Upstream note (26.05): ZeroTier is the mesh-VPN fully integrated into Clan’s n
 
 Clan needs a path for `clan machines update` and `clan ssh`. Prefer declaring **networking service instances** so Clan tries connections in priority order until one works (e.g. direct `internet` SSH, then VPN, then Tor). Setting inventory `deploy.targetHost` or `clan.core.networking.targetHost` **bypasses** that automatic fallback—use for static/debug cases only. Emergency override: `--target-host` on the CLI.
 
-High-level 26.05 ordering: direct internet → VPN overlays → Tor → other configured networks. For numbered priorities (`p2p-ssh-iroh`, `wireguard`, `zerotier`, `mycelium`, …), cite the **unstable** networking page and re-check before relying on them.
+High-level 26.05 ordering: direct internet → VPN overlays → Tor → other configured networks. For numbered priorities (unstable, highest first: `p2p-ssh-iroh` 3000, `internet` 2000, `wireguard` 1000, `zerotier` 900, `mycelium` 800, `tor` 10), cite the **unstable** networking page and re-check before relying on them.
 
 ### Contrast: hub deploy vs peer fleet
 
@@ -129,11 +131,12 @@ Pair with an `internet` (or other) networking instance so the admin path to the 
 
 ## References
 
-- [Clan documentation (26.05)](https://clan.lol/docs/26.05) — prefer this stamp for stable claims
+- [Clan documentation (26.05)](https://clan.lol/docs/26.05) — prefer this stamp for stable claims (last checked 2026-07-31)
 - [Clan documentation (unstable)](https://clan.lol/docs/unstable) — tip; networking service priorities expand here
 - [Mesh VPN (ZeroTier inventory roles) — 26.05](https://clan.lol/docs/26.05/guides/networking/mesh-vpn/)
 - [zerotier service (controller / peer / moon) — 26.05](https://clan.lol/docs/26.05/services/official/zerotier)
 - [Networking / fallback — 26.05](https://clan.lol/docs/26.05/guides/networking/networking/)
-- [Networking / fallback — unstable](https://clan.lol/docs/unstable/guides/networking/networking/) — finer priority table when needed
+- [Networking / fallback — unstable](https://clan.lol/docs/unstable/guides/networking/networking/) — numbered priority table (`wireguard`, `p2p-ssh-iroh`, …)
 - [Quick Start (Physical Machine) — 26.05](https://clan.lol/docs/26.05/getting-started/quick-start/)
 - [clan-core on Gitea](https://git.clan.lol/clan/clan-core) — source / releases
+- [Clan site](https://clan.lol/) — project entry
