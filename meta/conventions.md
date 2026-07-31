@@ -46,11 +46,11 @@ status: stub
 
 ## Linking
 
-- Use relative Markdown links between sibling and cousin topics (path includes `.md`). Do **not** use Obsidian `[[wikilinks]]` — the checked-in vault is configured for Markdown + relative paths (see [obsidian.md](obsidian.md)).
+- Use relative Markdown links between sibling and cousin topics (path includes `.md`). Do **not** use `[[wikilinks]]` — GitHub does not resolve them in repository Markdown; relative `.md` paths do (see [github.md](github.md)).
 - Always include the `.md` extension in wiki targets. Link a folder via its `README.md`, not a bare directory URL.
 - Avoid absolute URLs in stubs; add them in the content phase and record canonical sources in [sources.md](sources.md).
 - Prefer linking to a domain `README.md` when pointing at a whole area.
-- Several notes share basenames (`README.md`, two `nix-darwin.md` files). Relative paths keep links unambiguous in Obsidian and on Git forges.
+- Several notes share basenames (`README.md`, two `nix-darwin.md` files). Relative paths keep links unambiguous on GitHub and other Git forges.
 
 ## What does not belong yet
 

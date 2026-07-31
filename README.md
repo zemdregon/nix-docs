@@ -6,9 +6,9 @@ status: index
 
 Plain-Markdown knowledge base for the full Nix stack: philosophy, language, store, nixpkgs, NixOS, flakes, experimental features, tooling, and current implementations.
 
-No site generator. Browse folders by number; each domain `README.md` lists its children. Opens as an [Obsidian](https://obsidian.md/) vault (Open folder as vault → this directory); vault settings and plugins: [meta/obsidian.md](meta/obsidian.md); Dataview status tables: [meta/dashboard.md](meta/dashboard.md).
+No site generator. Renders natively on [GitHub](https://github.com/): browse folders by number, each domain `README.md` renders as that folder's landing page, and relative `.md` links are clickable. Viewing and local-preview notes: [meta/github.md](meta/github.md); browse notes by `status`: [meta/dashboard.md](meta/dashboard.md).
 
-**v1 (2026-07-31):** Stable Obsidian / plain-Markdown vault. Content campaign through Phase 4 landed; Phase 1 quality deepen and Phase 2 gold/consistency polish on high-traffic leaves also landed (~247 complete leaves, 0 broken relative `.md` links). Remaining work is release cadence refresh and optional further calibration — see [EXPAND-PLAN.md](EXPAND-PLAN.md) and [meta/todo-coverage.md](meta/todo-coverage.md). Site generator still deferred (optional Phase 5). Historical draft campaign: [ATTACK-PLAN.md](ATTACK-PLAN.md).
+**v1 (2026-07-31):** Stable plain-Markdown knowledge base, viewed natively on GitHub. Content campaign through Phase 4 landed; Phase 1 quality deepen and Phase 2 gold/consistency polish on high-traffic leaves also landed (~247 complete leaves, 0 broken relative `.md` links). Remaining work is release cadence refresh and optional further calibration — see [EXPAND-PLAN.md](EXPAND-PLAN.md) and [meta/todo-coverage.md](meta/todo-coverage.md). Site generator still deferred (optional Phase 5). Historical draft campaign: [ATTACK-PLAN.md](ATTACK-PLAN.md).
 
 ## How to navigate
 

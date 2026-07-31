@@ -2,49 +2,42 @@
 status: active
 ---
 
-# Vault dashboard
+# Status dashboard
 
-Dataview overview of wiki note `status` frontmatter. Open in Obsidian (Live Preview or Reading) after enabling the Dataview plugin.
+Every note carries a `status` in its YAML frontmatter (`stub` / `draft` /
+`complete` for leaves, `index` for folder READMEs, `active` / `superseded` for
+meta and plan docs — see [conventions.md](conventions.md)). GitHub renders that
+frontmatter as a table at the top of each file, but it cannot run live queries,
+so browse status with search instead of a Dataview view.
 
-## Counts by status
+## Browse by status on GitHub
 
-```dataview
-TABLE length(rows) AS count
-FROM ""
-WHERE status
-GROUP BY status
-SORT length(rows) DESC
+Use GitHub code search (the search box on the repo, or
+[github.com/search](https://github.com/search)) scoped to this repo:
+
+- Drafts: `status: draft path:*.md`
+- Stubs: `status: stub path:*.md`
+- Folder indexes: `status: index path:*.md`
+- Anything not yet complete: search `status: draft` and `status: stub`.
+
+## Browse by status locally
+
+From a clone, [ripgrep](https://github.com/BurntSushi/ripgrep) gives the same
+counts the old Dataview tables did:
+
+```bash
+# Count notes per status
+rg -N '^status:' -g '*.md' | sed 's/.*status: *//' | sort | uniq -c | sort -rn
+
+# List every leaf that is not complete yet
+rg -l '^status: (stub|draft)$' -g '*.md'
 ```
 
-## Indexes (folder READMEs)
-
-```dataview
-LIST
-FROM ""
-WHERE status = "index"
-SORT file.path ASC
-```
-
-## Draft / stub / active meta
-
-```dataview
-TABLE status, file.folder AS folder
-FROM ""
-WHERE status = "draft" OR status = "stub" OR status = "active" OR status = "superseded"
-SORT status ASC, file.path ASC
-```
-
-## Leaves still not complete
-
-```dataview
-TABLE status, file.folder AS folder
-FROM ""
-WHERE status AND status != "complete" AND status != "index"
-SORT status ASC, file.path ASC
-```
+The ground-truth checklist and last audit numbers live in
+[todo-coverage.md](todo-coverage.md).
 
 ## See also
 
-- [obsidian.md](obsidian.md) — vault plugins and link settings
+- [github.md](github.md) — how the wiki renders on GitHub
 - [todo-coverage.md](todo-coverage.md) — campaign checklist / audit hook
 - [conventions.md](conventions.md) — frontmatter `status` values

@@ -1,10 +1,11 @@
-# Obsidian local / machine-specific state (keep shared vault settings + plugins tracked)
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/cache
-.obsidian/themes/
-.obsidian/snippets/
-.trash/
-
 # Editor / agent scratch
 .cursor/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*~
+.vscode/
+
+# Local Markdown preview caches (e.g. grip)
+.grip/
