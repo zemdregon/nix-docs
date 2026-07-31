@@ -73,6 +73,8 @@ in {
 
 Import the file from [`configuration.nix`](../configuration/configuration-nix.md) (or another module’s `imports`) and set `services.helloWorld.enable = true;`.
 
+Shared minimal fixture (enable option + `mkIf` + systemd unit): [minimal-module.nix](../../meta/examples/minimal-module.nix) in the [example corpus](../../meta/examples/README.md).
+
 Escaping dynamic `Exec*` args (adapted from the NixOS manual; `utils` is a module argument):
 
 ```nix

@@ -122,7 +122,7 @@ nix flake check --no-build   # evaluate checks / hydraJobs / schema without buil
 }
 ```
 
-Illustrative only: assumes `./scripts/deploy.sh` exists in the first example; adjust systems and package names for your flake. Forge CI typically runs the same `nix flake check` as a contributor laptop—see [CI with Nix](../../11-development/ci-with-nix.md).
+Illustrative only: assumes `./scripts/deploy.sh` exists in the first example; adjust systems and package names for your flake. Shared fixture (packages + devShell + `checks.smoke` + `hydraJobs.smoke`): [flake-with-checks/flake.nix](../../meta/examples/flake-with-checks/flake.nix) in the [example corpus](../../meta/examples/README.md). Forge CI typically runs the same `nix flake check` as a contributor laptop—see [CI with Nix](../../11-development/ci-with-nix.md).
 
 ## References
 

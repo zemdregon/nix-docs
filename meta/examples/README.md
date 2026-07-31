@@ -11,5 +11,7 @@ Snippets are invented minimal fixtures—not copied host configs. They are **not
 ## Contents
 
 - [hello-flake/flake.nix](hello-flake/flake.nix) — minimal `packages.default` + `devShells.default`
+- [flake-with-checks/flake.nix](flake-with-checks/flake.nix) — hello-flake plus `checks.${system}.smoke` and a tiny `hydraJobs` leaf
 - [overlay-snippet.nix](overlay-snippet.nix) — `final: prev:` overlay shape
 - [shell.nix](shell.nix) — classic `mkShell` for `nix-shell` / direnv `use nix`
+- [minimal-module.nix](minimal-module.nix) — tiny NixOS module with `mkEnableOption` + `lib.mkIf`

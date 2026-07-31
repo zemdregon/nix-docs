@@ -26,7 +26,9 @@ Choose overlays when many packages—or everything that depends on a shared depe
 | Patch `hello` once in a dev shell | `.overrideAttrs` |
 | Pin `python3` for the whole system or project | Overlay |
 
-**Composition.** Overrides nest: `pkg.override { ... }.overrideAttrs { ... }`. Overlays stack in list order. A common pattern is an overlay that overrides several related attributes so downstream packages stay consistent—see the nixpkgs manual's BLAS/LAPACK examples.
+**Composition.** Overrides nest: `pkg.override { ... }.overrideAttrs { ... }`. Overlays stack in list order; later overlays replace top-level attrs with shallow merge—nested attrsets are not merged recursively (see [Overlay](overlay.md)). A common pattern is an overlay that overrides several related attributes so downstream packages stay consistent—see the nixpkgs manual's BLAS/LAPACK examples.
+
+Shared overlay fixture: [overlay-snippet.nix](../meta/examples/overlay-snippet.nix) in the [example corpus](../meta/examples/README.md).
 
 **Legacy note.** `packageOverrides` is an older, less flexible hook equivalent to an overlay with only `prev`. Prefer overlays for anything you might share or layer.
 
