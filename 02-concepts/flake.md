@@ -10,6 +10,13 @@ A **flake** is a Nix project's standardized entry point: a directory whose root 
 
 Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `nix.conf`, or pass `--extra-experimental-features 'nix-command flakes'`). They remain experimental in current CppNix stable manuals (e.g. 2.34.x) even though widely used. They replace the implicit `NIX_PATH` / `<nixpkgs>` lookup of [channels](channel.md) with explicit, version-controlled inputs. Schema, workflows, registries, and migration are covered in [Flakes](../07-flakes/README.md)—this page stays at the concept level.
 
+| | [Channel](channel.md) | Flake |
+|---|------------------------|-------|
+| Pin | Moving channel URL + local channel state | `flake.lock` commit per input |
+| Discovery | `NIX_PATH`, `<nixpkgs>` | `inputs` block + registry |
+| Eval purity | Classic workflows often impure | Flake commands default to pure eval |
+| Update | `nix-channel --update` | `nix flake update` |
+
 ## Details
 
 **Entry file.** `flake.nix` must provide `outputs` (a function of the realized inputs). Optional top-level attributes include `description`, `inputs`, and `nixConfig`. Inputs are named references such as `nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05"`; `outputs` returns the artifacts this flake provides (often keyed by system, e.g. `packages.x86_64-linux.default`).
@@ -24,9 +31,15 @@ Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `ni
 
 **Not a tutorial surface.** Defining outputs, composing NixOS configurations, and publishing flakes belong in the [07-flakes](../07-flakes/README.md) domain and CLI docs—not here. Treat this page as vocabulary before reading those guides.
 
+### Boundaries (what this page is not)
+
+- **Not pure-eval rules** — path restrictions, `--impure`, and Git staging gotchas are [pure eval and impure](../07-flakes/pure-eval-and-impure.md).
+- **Not lockfile mechanics** — JSON structure and update semantics are [lockfile](../07-flakes/anatomy/lockfile.md).
+- **Not NixOS system config** — wiring `nixosConfigurations` is [nixos-configurations](../07-flakes/workflows/nixos-configurations.md).
+
 ## Examples
 
-- **Minimal shape:** `flake.nix` lists `inputs.nixpkgs` and exposes `outputs.packages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.hello`.
+- **Minimal shape:** `flake.nix` lists `inputs.nixpkgs` and exposes `outputs.packages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.hello`. Runnable fixture: [hello-flake/flake.nix](../meta/examples/hello-flake/flake.nix).
 - **Pinned third-party input:** After `nix build`, `flake.lock` records the exact `nixpkgs` commit; another clone builds against the same revision without running `nix-channel --update`.
 - **Remote reference:** `nix run nixpkgs#hello` uses the registry to find Nixpkgs and run a package output—no local channel subscription required. Requires `nix-command` and `flakes`.
 

@@ -85,6 +85,26 @@ Database for local apps over the Unix socket. No TCP listen and no password in t
 
 `ensureDBOwnership` requires a database with the same name as the user in `ensureDatabases`. Remote TCP access needs extra options (`enableTCPIP`, authentication, and firewall ports)—look those up before exposing PostgreSQL on the network.
 
+### Custom oneshot unit (`systemd.services`)
+
+When no upstream module exists, declare a unit directly. Illustrative fragment: [systemd-oneshot-service.nix](../../meta/examples/systemd-oneshot-service.nix).
+
+```nix
+{ pkgs, ... }: {
+  systemd.services.my-backup = {
+    description = "Run backup script once at boot";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.writeShellScript "backup" ''
+        echo backup > /var/lib/backup-ran
+      ''}";
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+}
+```
+
 ## References
 
 - [NixOS option search](https://search.nixos.org/options) — channel-scoped (`26.05` stable as of 2026-07)

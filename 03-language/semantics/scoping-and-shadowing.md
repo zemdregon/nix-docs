@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-07
 ---
 
 # Scoping and Shadowing
@@ -76,6 +77,34 @@ let name = "foo"; in { foo = 1; }.${name}   # => 1 (lookup by value of name)
 
 Do not confuse this with `with` or `inherit`.
 
+### NixOS module scope (sketch)
+
+Module function arguments (`config`, `pkgs`, `lib`, …) are **lexical bindings** from the function pattern — not `with` imports. `inherit (config) services` copies attributes from `config` into a nested attrset you are defining; it does not add `services` as a global name in the module body.
+
+```nix
+{ config, lib, ... }: {
+  # `services` is NOT in scope here — use config.services or inherit explicitly:
+  environment.systemPackages = lib.optionals config.services.openssh.enable [
+    config.pkgs.openssh
+  ];
+}
+```
+
+### Common pitfalls
+
+| Mistake | Effect | Fix |
+|---------|--------|-----|
+| `{ x = y; }` without outer `y` or `rec` | Free variable error | Use `rec` or bind `y` in outer `let` |
+| Large `with pkgs;` in modules | Accidental shadowing, hard-to-grep names | Prefer `pkgs.hello` or explicit `inherit (pkgs) …` |
+| `if config.foo.enable then { … }` cycles | Infinite recursion during merge | [mkIf](../../09-nixos/modules/mkIf-mkMerge-mkOrder.md) on definitions |
+| Confusing `rec` with `//` merge | Expect deep merge; get shallow replace | [overlay](../../02-concepts/overlay.md) shallow-merge rules |
+
+### Boundaries (what this page is not)
+
+- **Not `with` tutorial syntax** — patterns and style are [let-in and with](../syntax/let-in-and-with.md).
+- **Not function pattern reference** — `@`, defaults, and `...` are [functions](../syntax/functions.md).
+- **Not module merge semantics** — `mkMerge` / priorities are [mkIf / mkMerge / mkOrder](../../09-nixos/modules/mkIf-mkMerge-mkOrder.md).
+
 ## Examples
 
 ### `let` wins over `with`
@@ -150,6 +179,23 @@ in f { x = 10; }
 ```
 
 `y`'s default expression runs in the function's pattern scope, so `x` is available.
+
+### `inherit` in a module attrset
+
+```nix
+{ config, pkgs, ... }: {
+  services.nginx = {
+    enable = true;
+    virtualHosts."localhost" = {
+      root = pkgs.writeTextDir "index.html" "<h1>hi</h1>";
+    };
+  };
+  # Equivalent to copying names from config — does not import all of config:
+  # inherit (config.services.nginx) enable;
+}
+```
+
+Try name resolution in `nix repl` with small `let` / `with` snippets before debugging large modules.
 
 ## See also
 

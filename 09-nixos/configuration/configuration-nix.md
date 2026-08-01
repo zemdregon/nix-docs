@@ -35,6 +35,12 @@ The function arguments come from the module system. `config` reads merged values
 
 **Composition.** NixOS merges every module in `imports` with the same rules: later definitions override earlier ones where options allow it, and `config` exposes the final merged tree. That is why a thin `configuration.nix` that only imports role modules and sets hostname is a valid layout—the entry file names the host; shared logic lives elsewhere.
 
+### Boundaries (what this page is not)
+
+- A full [options reference](../architecture/options-and-types.md)—use search.nixos.org for every option.
+- [Module authoring](../modules/writing-a-module.md)—how to write NixOS modules, not the host entry file.
+- [hardware-configuration.nix](hardware-configuration.md) generator output—machine-specific mounts and modules.
+
 ## Examples
 
 Minimal illustrative entry module (~15 lines):

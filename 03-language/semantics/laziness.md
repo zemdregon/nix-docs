@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-07
 ---
 
 # Laziness
@@ -48,6 +49,27 @@ Nix does not guarantee left-to-right evaluation of independent subexpressions. A
 
 For instance, in `wrap (1 + 2)`, the call to `wrap` can produce `{ wrapped = … }` before the addition `1 + 2` is forced — if `wrap`'s body does not use its argument immediately, the argument stays suspended until something selects into the result and demands it.
 
+### Laziness in NixOS modules
+
+The module system relies on laziness: importing `config` does not evaluate every option on the system. `lib.mkIf condition definition` delays evaluating `definition` until something reads the merged option value **and** `condition` is known to matter — which is why plain `if config.services.foo.enable then …` can cause infinite recursion (the condition itself may depend on `config` being fully computed). See [mkIf / mkMerge / mkOrder](../../09-nixos/modules/mkIf-mkMerge-mkOrder.md) and [anti-patterns](../idioms/anti-patterns.md).
+
+Importing all of nixpkgs as `pkgs` is cheap at eval time; only attributes you select (`pkgs.hello`, `config.environment.systemPackages`, …) force the corresponding package expressions.
+
+### Common pitfalls
+
+| Symptom | Likely cause | Read |
+|---------|--------------|------|
+| `infinite recursion encountered` | `if config.…` around a definition that also sets `config.…` | [mkIf](../../09-nixos/modules/mkIf-mkMerge-mkOrder.md), [anti-patterns](../idioms/anti-patterns.md) |
+| Surprising eval cost / memory | `map` / `filter` over huge lists forces every element | Restructure or filter earlier; [lazy trees and eval perf](../../11-development/lazy-trees-and-eval-perf.md) |
+| `assert` runs but branch “should” be dead | `assert` always forces its condition; only `if` skips the other branch | [conditionals and asserts](../syntax/conditionals-and-asserts.md) |
+| Expected trace never prints | Value was never forced (unused attr, unselected list elem) | This page — call-by-need |
+
+### Boundaries (what this page is not)
+
+- **Not the full reduction semantics** — WHNF and evaluation steps are [evaluation model](evaluation-model.md).
+- **Not purity or sandbox rules** — what the evaluator may read from the host is [purity boundaries](purity-boundaries.md).
+- **Not IFD or build scheduling** — eval-time builds are [import from derivation](../../02-concepts/import-from-derivation.md).
+
 ## Examples
 
 ### Unused fields stay cheap
@@ -88,6 +110,21 @@ Both sides must be attribute sets in WHNF before merge; inner values remain lazy
 { a = 1; } // { b = builtins.trace "forced" 2; }
 # merge succeeds; "forced" appears only when `.b` is selected
 ```
+
+### NixOS: `mkIf` delays work (sketch)
+
+```nix
+# Good — body not forced when enable is false
+services.foo = lib.mkIf config.services.foo.enable {
+  package = pkgs.heavy-tool;  # not evaluated unless enable is true
+};
+
+# Risky — condition may force config while config is still merging
+# services.foo.enable = if config.networking.hostName == "prod" then true else false;
+# Prefer mkIf on the *definition*, not plain if on enable, when cycles appear.
+```
+
+Run module snippets with `nixos-rebuild repl` or `nix-instantiate --eval` on a small module set — not evaluated in this vault.
 
 ## See also
 

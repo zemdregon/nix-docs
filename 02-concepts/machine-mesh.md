@@ -58,6 +58,12 @@ Treat each axis separately; least privilege on one does not imply the others.
 - Equating Digga/Hive flake layout or Colmena’s hive attrset with a network mesh.
 - Assuming shared VPN membership implies shared deploy, cache-signing, or secret-decrypt rights.
 
+### Boundaries (what this page is not)
+
+- **Not inter-trust policy detail** — SSH keys, substituters, and signing are [inter-machine trust](../14-security-and-trust/inter-machine-trust.md).
+- **Not a Clan or Colmena tutorial** — tool-specific flows are [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md), [Colmena](../12-deployment-and-infra/colmena.md), [deploy-rs](../12-deployment-and-infra/deploy-rs.md).
+- **Not overlay networking alone** — VPN reachability is [overlay networks](../09-nixos/configuration/overlay-networks.md); mesh adds build/deploy/secret axes.
+
 ## Examples
 
 Conceptual sketch only—no Clan CLI or options invented here. A small mesh might look like:

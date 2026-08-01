@@ -37,6 +37,12 @@ The exact filenames are yours; the pattern is one concern per module, composed t
 
 The manual also shows `<nixpkgs/nixos/modules/profiles/profile-name.nix>` for classic installs where that path resolves via `NIX_PATH`.
 
+### Boundaries (what this page is not)
+
+- [Flake inputs](../../07-flakes/anatomy/inputs-and-outputs.md)—pinning nixpkgs and third-party flakes.
+- [Module types](../architecture/options-and-types.md) and option merge semantics.
+- [Secrets](secrets-strategies.md)—encrypted deploy-time material and activation wiring.
+
 ## Examples
 
 Entry module mixing local fragments and an upstream profile:

@@ -63,6 +63,12 @@ For `switch` / `test`, activation roughly: update bootloader when the action req
 
 **Flakes (brief).** With a flake-based host, the same actions apply via `nixos-rebuild switch --flake …` (and the other subcommands with `--flake`). Activation and boot semantics above are unchanged; refreshing flake inputs before rebuild is [Upgrades](upgrades.md).
 
+### Boundaries (what this page is not)
+
+- [Upgrades](upgrades.md)—channel bumps, flake input updates, and pinning policy.
+- [Rollbacks](rollbacks.md) deep dive—boot menu generation selection and recovery workflows.
+- [Remote deploy](remote-deploy.md)—SSH rebuild to other hosts.
+
 ## Examples
 
 Commands below match the NixOS manual and `nixos-rebuild(8)`. They require a NixOS host (or a built system closure) to run; comments note expected side effects.

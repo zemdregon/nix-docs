@@ -10,6 +10,17 @@ A **store path** is the on-disk location of a single object in the Nix store. Ev
 
 Store paths are the unit Nix uses for **caching**, **garbage collection**, and **substitution**: if a path already exists locally or on a binary cache, Nix can skip building it. How digests are computed from inputs (or content) is covered in [hashing and inputs](../04-store-and-build/hashing-and-inputs.md).
 
+```mermaid
+flowchart TD
+  drv["Derivation .drv"]
+  realize[Realize or substitute]
+  path["/nix/store/hash-name"]
+  refs[Recorded references]
+  drv --> realize --> path
+  path --> refs
+  refs -->|"transitive"| closure[Closure]
+```
+
 ## Details
 
 **Path shape.** The store root is `/nix/store` (configurable per store). Each entry is `<hash>-<human-readable-name>`, for example `/nix/store/…-hello-2.12`. The hash portion is a 32-character Nix base-32 encoding of a 20-byte digest. The name aids debugging; the digest is what makes the path unique. Treat the digest as opaque for most operations—exact fingerprint rules differ by store-object kind.
@@ -23,6 +34,12 @@ Store paths are the unit Nix uses for **caching**, **garbage collection**, and *
 **GC and references.** Each store object records **references** to other store paths. Garbage collection deletes paths nothing references anymore. Profiles, generations, and other [GC roots](../04-store-and-build/garbage-collection.md) keep paths alive. The closure of a path is the full set reachable via those references.
 
 **Layout on disk.** Store objects share a common directory layout (metadata, `bin/`, `lib/`, etc. depending on type). Physical organization under `/nix/store` is described in [Nix store layout](../04-store-and-build/nix-store-layout.md).
+
+### Boundaries (what this page is not)
+
+- **Not the derivation recipe** — how `.drv` files are produced from Nix code is [derivation](derivation.md).
+- **Not binary cache protocol** — NARs, `.narinfo`, and substituters are [substitutes and narinfo](../04-store-and-build/substitutes-and-narinfo.md).
+- **Not profile symlinks** — user-visible `~/.nix-profile` links point at store paths but are managed via [profile](profile.md) and [generation](generation.md).
 
 ## Examples
 

@@ -92,6 +92,12 @@ Some community AD guides suggest shorter nscd `passwd`/`group` cache TTLs while 
 
 More general NixOS debug flow: [Troubleshooting](../operations/troubleshooting.md).
 
+### Boundaries (what this page is not)
+
+- [Secrets strategies](secrets-strategies.md)—agenix, sops-nix, and deploy-time credential delivery.
+- Generic [networking](networking.md)—interfaces, firewall, and DNS outside identity integration.
+- [Home Manager](../../10-home-and-user/home-manager/standalone-vs-nixos-module.md) user dotfiles and per-user packages.
+
 ## Examples
 
 Examples below match the option shapes in `nixpkgs` modules (`sssd.nix`, `realmd.nix`, `security/krb5`, `pam.nix`). End-to-end login against a real directory cannot be verified offline—you need working DNS, time sync, domain join, and reachable KDC/LDAP in a lab or production forest.

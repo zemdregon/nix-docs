@@ -37,6 +37,12 @@ On **UEFI**, the NixOS manual recommends systemd-boot: it reads kernel and initr
 
 **Declarative partitioning (disko).** [disko](../../12-deployment-and-infra/disko.md) is a community tool for describing partition tables and filesystems in Nix and applying them before or during install. It complements—not replaces—`fileSystems` and `boot.loader.*` in the NixOS config; see the disko page for scope and upstream docs.
 
+### Boundaries (what this page is not)
+
+- [disko](../../12-deployment-and-infra/disko.md) internals—declarative partition tables and format modes.
+- [ZFS and Btrfs](zfs-and-btrfs.md) pool layout, snapshots, and native encryption.
+- [Secure Boot and measured boot](secure-boot-and-lanzaboote.md)—signed ESP layout and TPM PCR policy.
+
 ## Examples
 
 Illustrative UEFI layout: root on a btrfs partition by UUID, ESP at `/boot`, systemd-boot enabled.

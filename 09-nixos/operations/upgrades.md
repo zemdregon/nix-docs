@@ -164,6 +164,12 @@ With `flake` set, the service passes `--refresh --flake <uri>` to `nixos-rebuild
 
 Set it once at install to the release you started on (e.g. `"26.05"`). Leave it alone through routine upgrades.
 
+### Boundaries (what this page is not)
+
+- [Rollback](rollbacks.md) procedures—selecting a previous generation at boot.
+- [Flake schema](../../07-flakes/anatomy/flake-nix-schema.md)—`flake.nix` outputs and evaluation layout.
+- nixpkgs [packaging](../../06-nixpkgs/packaging/simple-package.md)—adding or overriding packages.
+
 ## Examples
 
 Channel host: list root’s NixOS channel, switch to current stable, and upgrade:

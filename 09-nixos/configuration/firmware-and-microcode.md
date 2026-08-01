@@ -35,6 +35,12 @@ NixOS ships device firmware and CPU microcode through hardware options, not as a
 - **`enableAllFirmware` without allow-unfree.** Evaluation or build fails when nixpkgs refuses unfree packages. Set `nixpkgs.config.allowUnfree = true` or a targeted `allowUnfreePredicate`.
 - **Expecting nixos-hardware or Secure Boot to replace these flags.** Profiles may set firmware options for a machine type; [Secure Boot and Lanzaboote](secure-boot-and-lanzaboote.md) covers boot trust, not `/lib/firmware` content.
 
+### Boundaries (what this page is not)
+
+- [Secure Boot and Lanzaboote](secure-boot-and-lanzaboote.md)—signed boot chain and firmware key enrollment.
+- [nixos-hardware](nixos-hardware.md) machine profiles—vendor/model module bundles beyond firmware flags.
+- GPU and display drivers—see [Wayland and compositors](../desktop/wayland-and-compositors.md) for `hardware.graphics`.
+
 ## Examples
 
 Typical host policy (redistributable firmware; microcode follows generated default):

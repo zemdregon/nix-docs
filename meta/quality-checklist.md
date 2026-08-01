@@ -17,6 +17,17 @@ Short verify rubric before setting frontmatter `status: complete`. See also [res
 - [ ] Absolute claims cited or softened; no Discord-only lore as fact
 - [ ] Tone matches gold pages (e.g. `01-philosophy/why-nix.md`): concise, no marketing, no emoji
 
+## Complete+ (optional deepen bar)
+
+Use after a leaf is already `complete` when calibrating toward runbook-grade density (EXPAND-PLAN Phase 6+). Not required for v1 `complete` status.
+
+- [ ] **Lifecycle or decision artifact** — mermaid diagram, comparison table, or decision tree where the topic has stages or choices
+- [ ] **Boundaries** — short “what this page is not” (or equivalent scope note) on concept and operator leaves
+- [ ] **Failure mode** — at least one “what goes wrong” bullet or table row on operator/contributor leaves
+- [ ] **Example corpus link** — when a fixture exists under [meta/examples/](examples/README.md), cite it from `## Examples`
+- [ ] **`last-checked: YYYY-MM`** frontmatter on high-churn leaves (experimental, implementations, adjacent tools, deploy/mesh)
+- [ ] **Inbound links** — high-traffic leaves appear from cheatsheet, FAQ, or glossary where relevant
+
 ## Mesh / inter-trust extras (Phase M)
 
 - [ ] Distinguish daemon `trusted-users` from multi-machine inter-trust

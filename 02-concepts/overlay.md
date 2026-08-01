@@ -74,6 +74,12 @@ An overlay is **set-level**: it returns a fragment of `pkgs` that nixpkgs folds 
 
 Overlays often *call* `.override` / `.overrideAttrs` on `prev` packages to propagate a tweak set-wide (for example, swapping a BLAS provider or patching `hello` everywhere). See [Overlay vs Override](overlay-vs-override.md).
 
+### Boundaries (what this page is not)
+
+- **Not package-level overrides** — `.override` / `.overrideAttrs` scope is [overlay vs override](overlay-vs-override.md).
+- **Not fixed-point internals** — `extends` and composition theory are [overlays pattern](../03-language/idioms/overlays-pattern.md).
+- **Not nixpkgs contribution policy** — install paths and upstream conventions are [writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md).
+
 ## Examples
 
 **Pin Python across the set.**

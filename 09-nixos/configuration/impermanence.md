@@ -24,6 +24,12 @@ Under `environment.persistence."/persist"` (path is your persist mount), declare
 
 **Sharp edges.** Upstream requires marking persistent and ephemeral storage volumes `neededForBoot` (early mounts and paths such as `/etc/machine-id` otherwise race initrd ordering). Secrets that must survive reboot belong on the persist volume (or decrypt into `/run` after boot)—see [secrets strategies](secrets-strategies.md). Option details beyond this page: follow the README.
 
+### Boundaries (what this page is not)
+
+- [Secrets strategies](secrets-strategies.md) alone—decrypting credentials into ephemeral roots still needs that page.
+- [Home Manager dotfiles](../../10-home-and-user/home-manager/dotfiles-patterns.md)—user-level persistence patterns.
+- [ZFS snapshots](zfs-and-btrfs.md) and filesystem-level rollback semantics.
+
 ## Examples
 
 Minimal flake wiring and a small persistence set (host/paths invented; option names match the upstream README; not evaluated offline):

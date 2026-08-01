@@ -35,6 +35,12 @@ Use `switch` instead of `test` when you want the same permanence as a normal act
 
 **Overrides.** When inheriting the parent, later definitions in the child’s `configuration` compete with parent values via the usual [module system](../architecture/module-system.md) priority rules (`mkForce`, `mkDefault`, and friends)—same as any other module merge, not a specialisation-specific API.
 
+### Boundaries (what this page is not)
+
+- [Generations and boot](../architecture/generations-and-boot.md) concepts—profiles, channels, and default selection.
+- Boot menu and [bootloader](partitioning-and-bootloaders.md) internals—GRUB vs systemd-boot entry layout.
+- [Home Manager](../../10-home-and-user/home-manager/standalone-vs-nixos-module.md) per-user configs alongside specialisations.
+
 ## Examples
 
 Minimal invented attrset (illustrative; not a full host config):

@@ -43,6 +43,12 @@ With `users.mutableUsers = true`, password options apply when the account is **f
 
 **Bootstrap and SSH.** Fresh and headless installs often set `users.users.<admin>.openssh.authorizedKeys.keys` (and `extraGroups = [ "wheel" ]`) so the first rebuild enables key login without a console password.
 
+### Boundaries (what this page is not)
+
+- [Enterprise identity](enterprise-identity.md)—LDAP, SSSD, and directory-sourced accounts.
+- OpenSSH [service module examples](../services/common-service-examples.md)—daemon options beyond declarative users.
+- [Secrets strategies](secrets-strategies.md)—encrypted keys and deploy-time credential files.
+
 ## Examples
 
 Immutable users with a hash file and an SSH key (no real secrets):

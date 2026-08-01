@@ -30,6 +30,12 @@ Official starters live in [disko-templates](https://github.com/nix-community/dis
 
 **Destructive by design.** Modes that destroy/format wipe the target disks. Dual-boot with another OS is not a goal of these recipes.
 
+### Boundaries (what this page is not)
+
+- The [disko tool overview](../../12-deployment-and-infra/disko.md)—CLI, module API, and install integration.
+- [Manual partitioning](../installation/manual-install.md) or live-ISO fdisk workflows.
+- [ZFS and Btrfs](zfs-and-btrfs.md) filesystem tuning and native encryption deep dive.
+
 ## Examples
 
 Init a template, then import its `disko-config.nix` into the host (after wiring the disko module—see the [disko](../../12-deployment-and-infra/disko.md) page):

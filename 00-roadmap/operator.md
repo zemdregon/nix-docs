@@ -46,7 +46,20 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 - Desktop hosts (optional): [NixOS Desktop](../09-nixos/desktop/README.md) — compositors, PipeWire, fonts, Flatpak/FHS, Steam, printing
 - Install/bootstrap only as needed: [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md), [disko](../12-deployment-and-infra/disko.md)
 - Optional deepeners: [Impermanence](../09-nixos/configuration/impermanence.md), [Secure Boot and Lanzaboote](../09-nixos/configuration/secure-boot-and-lanzaboote.md), [ZFS and Btrfs](../09-nixos/configuration/zfs-and-btrfs.md), [Specialisations](../09-nixos/configuration/specialisations.md), [Enterprise identity](../09-nixos/configuration/enterprise-identity.md), [Disko recipes](../09-nixos/configuration/disko-recipes.md), [Overlay networks](../09-nixos/configuration/overlay-networks.md), [Firmware and microcode](../09-nixos/configuration/firmware-and-microcode.md)
-- Bootstrap images (optional): [Netboot and PXE](../09-nixos/installation/netboot-and-pxe.md)
+- Bootstrap / edge (when relevant): [Netboot and PXE](../09-nixos/installation/netboot-and-pxe.md), [Airgap and offline](../12-deployment-and-infra/airgap-and-offline.md), [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md)
+- Non-NixOS clients (optional): [WSL and foreign OS](../10-home-and-user/wsl-and-foreign-os.md) — Nix on Windows/macOS/Linux alongside NixOS fleet ops
+
+### Scenario paths (pick one track)
+
+**Risky change on production** — read in order: [rebuild switch / boot / test](../09-nixos/operations/rebuild-switch-boot-test.md) (`test` first) → [rollbacks](../09-nixos/operations/rollbacks.md) → [troubleshooting](../09-nixos/operations/troubleshooting.md) activation vs systemd table → [FAQ: common errors](../cheatsheets/faq-common-errors.md).
+
+**Pin bump (channel or flake)** — [upgrades](../09-nixos/operations/upgrades.md) → [flake lockfile](../07-flakes/anatomy/lockfile.md) or [channel](../02-concepts/channel.md) → [specialisations](../09-nixos/configuration/specialisations.md) if you maintain boot variants on the same host.
+
+**Fleet / multi-host** — [remote deploy](../09-nixos/operations/remote-deploy.md) → [machine mesh](../02-concepts/machine-mesh.md) + [inter-machine trust](../14-security-and-trust/inter-machine-trust.md) → tool pick: [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) / [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) when SSH/store URIs need VPN.
+
+**Disconnected or lab site** — [airgap and offline](../12-deployment-and-infra/airgap-and-offline.md) → [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md) → [binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) → [netboot and PXE](../09-nixos/installation/netboot-and-pxe.md) for LAN imaging.
+
+**Desktop laptop ops** — [networking](../09-nixos/configuration/networking.md) → [NixOS Desktop](../09-nixos/desktop/README.md) → [secrets strategies](../09-nixos/configuration/secrets-strategies.md) for Wi‑Fi PSKs.
 
 ### Virtualization and guests (optional)
 
@@ -88,6 +101,8 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 ## Next steps
 
 - Keep [NixOS Operations](../09-nixos/operations/README.md) and [CLI cheatsheet](../cheatsheets/cli.md) bookmarked while you run systems
+- Stuck on a message: [FAQ: common errors](../cheatsheets/faq-common-errors.md) before deep-diving every leaf
+- Developers on Windows/WSL in the same org: [WSL and foreign OS](../10-home-and-user/wsl-and-foreign-os.md) (client Nix) plus this roadmap (NixOS servers)
 - When you need to change packages or modules upstream, switch to [Contributor](contributor.md)
 - Glossary fallback: [glossary.md](../glossary.md)
 
@@ -98,3 +113,4 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 - [Contributor](contributor.md) — packaging and module authorship
 - [Security and Trust](../14-security-and-trust/README.md) — daemon trust, signing, secrets, inter-trust
 - [Machine mesh](../02-concepts/machine-mesh.md) — multi-machine reachability / build / deploy axes
+- [Airgap and offline](../12-deployment-and-infra/airgap-and-offline.md) · [Netboot and PXE](../09-nixos/installation/netboot-and-pxe.md) · [Specialisations](../09-nixos/configuration/specialisations.md)
