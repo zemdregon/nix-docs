@@ -26,6 +26,7 @@ for d in \
   13-implementations \
   14-security-and-trust \
   15-history-and-governance \
+  16-configuration-examples \
   comparisons \
   cheatsheets
 do
@@ -36,6 +37,9 @@ done
 for f in README.md glossary.md EXPAND-PLAN.md ATTACK-PLAN.md; do
   ln -s "$root/$f" "$docs/$f"
 done
+
+# Site chrome (favicon / header logo)
+ln -s "$root/assets" "$docs/assets"
 
 # meta/: publish files but skip audit tooling and attachments
 mkdir -p "$docs/meta"

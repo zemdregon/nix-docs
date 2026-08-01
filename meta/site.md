@@ -12,9 +12,14 @@ Published docs site for this wiki via [MkDocs](https://www.mkdocs.org/) + [Mater
 
 - **Source = repo root** — plain Markdown tree; no checked-in `docs/` mirror.
 - **Stage step** — [prepare-docs-dir.sh](prepare-docs-dir.sh) symlinks wiki paths into gitignored `docs/` (MkDocs requires `docs_dir` to be a child of the config directory).
+- **Logo / favicon** — [assets/nixos-logomark.svg](../assets/nixos-logomark.svg) (official NixOS logomark; staged into `docs/assets/`).
 - **Nav** — numbered domain `README.md` indexes + glossary / comparisons / cheatsheets / meta (leaves via in-page Contents and search).
 - **Excluded** — `AGENTS.md`, `.github/`, `meta/audit/`, `meta/attachments/`.
 - **Edit links** — paths under `docs/` match repo paths, so Material “edit” URLs hit the real files on `main`.
+
+## Attribution
+
+“NixOS Logo” by Simon Frankau, Tim Cuthbertson, and Daniel Baker (maintained by the [NixOS Marketing Team](https://nixos.org/community/teams/marketing/)), from [nixos/branding](https://github.com/NixOS/branding), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## Local build
 
