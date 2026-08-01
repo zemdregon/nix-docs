@@ -8,7 +8,18 @@ status: complete
 
 **Morph** ([DBCDK/morph](https://github.com/DBCDK/morph)) and **nixinate** ([MatthewCroughan/nixinate](https://github.com/MatthewCroughan/nixinate)) are lighter NixOS remote-deploy options beside [Colmena](colmena.md) and [deploy-rs](deploy-rs.md). Morph is a Go CLI that evaluates a multi-host Nix deployment file, then builds, copies, and activates over SSH (optional health checks and scp secrets). Nixinate is a flake library that turns each `nixosConfigurations.*` into a `nix run` deploy app.
 
-Neither replaces bare [remote `nixos-rebuild`](../09-nixos/operations/remote-deploy.md). Both follow the same **hub→hosts** SSH deploy pattern as Colmena and deploy-rs—not peer mesh fleets. Prefer Colmena/deploy-rs for a currently popular multi-host flake workflow; use these when an existing Morph fleet or a minimal flake-app deploy fits better.
+Neither replaces bare [remote `nixos-rebuild`](../09-nixos/operations/remote-deploy.md). Both follow the same **hub→hosts** SSH deploy pattern as Colmena and deploy-rs—not peer mesh fleets.
+
+### When still fit
+
+| Situation | Prefer |
+|-----------|--------|
+| Existing Morph deployment expressions / tags / health checks already in production | Stay on Morph; pin a tag or git revision |
+| One or a few flake hosts; want `nix run .#apps.nixinate.<name>` and little else | Nixinate can be enough |
+| New multi-host flake fleet, rollout controls, or a widely used deploy schema | [Colmena](colmena.md) or [deploy-rs](deploy-rs.md) |
+| Peer / mesh orchestration rather than hub SSH | Not these tools — see [Clan and mesh](clan-and-mesh.md) |
+
+For greenfield fleets, treat Morph and nixinate as legacy or niche fits, not the default recommendation.
 
 ## Details
 
@@ -20,7 +31,7 @@ Morph wraps `nix-build` / `nix copy` / `nix-env` / SSH / `switch-to-configuratio
 
 CLI (from upstream `--help`): `build`, `push`, `deploy`, `check-health`, `upload-secrets`, `exec`. `morph deploy` needs a switch action: `dry-activate`, `test`, `switch`, or `boot` (same names as `nixos-rebuild`). Host selection: `--on` globs, `--limit` / `--skip` / `--every`, and `--tagged` against `deployment.tags`. Features called out upstream: multi-host deploy, HTTP and command health checks, scp secrets kept out of the store, optional `deployment.preDeployChecks` (marked experimental).
 
-**Status (as of 2026-07):** not archived. Last push 2026-07-20 was dependency/CI maintenance (e.g. Go crypto bumps, `flake.lock`). Latest release tag is `v1.8.0` (2024-10-23)—tagged releases are infrequent. Upstream recommends pinning a tag or git revision; the README notes the CLI may change and discusses a possible rewrite. Flakes appear mainly for building Morph itself; day-to-day configs remain classic deployment expressions.
+**Status (checked 2026-08):** not archived. Last push still **2026-07-20** (dependency/CI maintenance: Go crypto bumps, `flake.lock`, tester/vendorHash fixes). Latest release tag remains **`v1.8.0` (2024-10-23)**—tagged releases are infrequent; no newer tag as of this check. Upstream recommends pinning a tag or git revision; the README notes the CLI may change and discusses a possible rewrite. Flakes appear mainly for building Morph itself; day-to-day configs remain classic deployment expressions.
 
 ### Nixinate
 
@@ -36,7 +47,15 @@ Nixinate generates a deployment script per configured `nixosConfiguration` and e
 
 It is flake-native but thinner than Colmena/deploy-rs: no separate deploy schema or rich multi-host orchestration—each machine is one `nix run` app. Upstream calls it a **proof of concept**.
 
-**Status (as of 2026-07):** not archived, but quieter than Morph. Last push 2025-03-23 (`NIX_SSHOPTS` on SSH invocations). No GitHub release tags. Pin the flake input; treat it as lightly maintained PoC rather than a primary fleet tool.
+**Status (checked 2026-08):** not archived, still quieter than Morph. Last push remains **2025-03-23** (`NIX_SSHOPTS` on SSH invocations). No GitHub release tags. Pin the flake input; treat it as a lightly maintained PoC rather than a primary fleet tool.
+
+### Failure / ops notes
+
+**Morph secrets (scp vs store).** Secrets are local files Morph uploads with `scp` so they never enter the Nix store. Declare them in the deployment (see upstream `examples/secrets.nix` / `data/options.nix`); upload with `morph upload-secrets` or `morph deploy … --upload-secrets`. Parent dirs for `secret.Destination` are created as root:root `755` unless `secret.mkDirs = false`. Ops consequences: secret material lives on the deploy hub’s filesystem and in transit over SSH—not in `/nix/store` closures—so store GC and binary caches do not carry those files, but you must keep hub paths, permissions, and SSH trust correct. A successful config switch without `--upload-secrets` can leave destinations stale if secrets changed only on the hub.
+
+**Nixinate maintenance.** Upstream frames nixinate as a PoC. Expect sparse commits, no release tags, and breaking edge cases as Nix/flake UX moves. Prefer pinning an exact flake revision (`inputs.nixinate.url = "github:matthewcroughan/nixinate/<rev>"` or a `flake.lock` entry you control). For anything beyond a small personal fleet, plan an exit to Colmena, deploy-rs, or plain remote `nixos-rebuild`.
+
+**Pin revisions (both).** Morph’s README asks you to check out a tag or otherwise pin the tool; infrequent tags mean many users run git `master`—pin explicitly if you depend on CLI stability. Nixinate has no tags: always pin via flake lock. Re-evaluate pins when upgrading Nix or nixpkgs; Morph’s recent activity has been dependency/CI bumps rather than tagged feature releases.
 
 ### Compared to Colmena / deploy-rs
 
@@ -114,6 +133,7 @@ nix run .#apps.nixinate.myMachine
 
 ## See also
 
+- [Fleet deploy](../cheatsheets/fleet-deploy.md) — tool chooser
 - [Colmena](colmena.md) — multi-host NixOS deploy tool
 - [deploy-rs](deploy-rs.md) — flake-oriented multi-profile deploy
 - [Remote deploy](../09-nixos/operations/remote-deploy.md) — `nixos-rebuild --target-host` / `--build-host`

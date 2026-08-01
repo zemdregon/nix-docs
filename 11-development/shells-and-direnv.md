@@ -119,3 +119,4 @@ Shared fixtures: classic [shell.nix](../meta/examples/shell.nix) (`use nix`) and
 - [Packages, apps, devShells](../07-flakes/workflows/packages-apps-devShells.md) — flake output layout for shells
 - [nix profile](../05-cli-and-tooling/modern-cli/nix-profile.md) — persistent profile installs (vs temporary shells)
 - [Language toolchains](language-toolchains.md) — language SDKs inside a shell
+- [Project devShell and direnv](../16-configuration-examples/project-devshell-and-direnv.md) — worked flake + `.envrc` walkthrough

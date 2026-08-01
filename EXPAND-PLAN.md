@@ -9,30 +9,32 @@ Supersedes: former [ATTACK-PLAN.md](ATTACK-PLAN.md) pointer (draft weeks 0–11)
 
 Operating rules: [AGENTS.md](AGENTS.md), [meta/conventions.md](meta/conventions.md), [meta/research-method.md](meta/research-method.md). Living checklist: [meta/todo-coverage.md](meta/todo-coverage.md).
 
-## Snapshot (2026-08-01)
+## Snapshot (2026-08-01 — Phase 7 closed)
 
 | Signal | State |
 |--------|--------|
-| Leaf articles | ~258 `status: complete` |
-| Folder indexes | ~48 `status: index` |
+| Leaf articles | ~274 `status: complete` |
+| Folder indexes | ~49 `status: index` |
 | Intentional drafts | [self-healing-config-mesh.md](12-deployment-and-infra/self-healing-config-mesh.md); [meta/sources.md](meta/sources.md) |
 | Relative `.md` links | 0 broken (audit in coverage; skip generated `docs/` if present) |
-| Content campaign | Phases 0–4 + Phase 6 **done**; Phase 5.1 cadence **ongoing** |
+| Content campaign | Phases 0–4, 6, **7 done**; Phase 5.1 cadence **ongoing** |
 | Site generator | **live** — MkDocs Material → [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/) ([meta/site.md](meta/site.md)) |
-| Active work | **Phase 7** — Batch F in progress (A–E done) |
+| Active work | **Phase 5.1 cadence only** — [meta/release-checklist.md](meta/release-checklist.md) |
 
-**Verdict:** v1 wiki is stable (plain Markdown + MkDocs site). The tree *maps* the NixOS universe. Remaining work is freshness, depth on thin audiences, and navigation products—not inventing `16-*` domains.
+**Verdict:** Campaign content batches are closed. The tree maps the NixOS universe with choosers, worked configs, and gold deepenings. Remaining work is **living truth** (release/quarterly refresh), optional gold thicken on thin audiences, and keeping intentional drafts intentional—not inventing new top-level domains.
 
 ```mermaid
 flowchart TD
   P0[Phases 0-4: v1 content]
-  P5[Phase 5: Cadence + optional site]
+  P5[Phase 5: Cadence + site]
   P6[Phase 6: Homelab gaps]
   P7[Phase 7: Toward definitive]
+  Cadence[Phase 5.1 ongoing]
   P0 --> P5
   P0 --> P6
   P5 --> P7
   P6 --> P7
+  P7 --> Cadence
 ```
 
 ---
@@ -71,7 +73,7 @@ Score candidates 1–5; do highest sum first:
 
 ---
 
-## Phase 7 — Toward definitive (active)
+## Phase 7 — Toward definitive (**done 2026-08-01**)
 
 ### Batch A — Cadence + first audience gaps (**done 2026-08-01**)
 
@@ -129,22 +131,83 @@ Close the thin spots that public readers hit first after the site went live.
 
 **Exit E:** met — glossary/toolchains/package-sets deepened; README + roadmap index refreshed.
 
-### Batch F — CI / Hydra / cross (**in progress 2026-08-01**)
+### Batch F — Configuration examples domain (**done 2026-08-01**)
 
-Public-site readers hitting CI and packaging edges.
+New top-level [16-configuration-examples](16-configuration-examples/README.md) — multi-file walkthroughs composing `00`–`15` (distinct from [meta/examples](meta/examples/README.md)). Nav wired in root README, roadmaps, `mkdocs.yml`, `prepare-docs-dir.sh`.
+
+**Exit F:** met — seven worked-config leaves + domain index.
+
+### Batch G — CI / Hydra / cross / builders cheatsheet (**done 2026-08-01**)
 
 | # | Path | Action |
 |---|------|--------|
-| F1 | [12-deployment-and-infra/hydra.md](12-deployment-and-infra/hydra.md) | **Deepen** — jobsets, flakes, when not to run Hydra |
-| F2 | [11-development/ci-with-nix.md](11-development/ci-with-nix.md) | **Deepen** — Complete+ matrices, caches, private inputs |
-| F3 | [06-nixpkgs/packaging/cross-compilation.md](06-nixpkgs/packaging/cross-compilation.md) | **Deepen** — pkgsCross chooser + failure modes |
-| F4 | [cheatsheets/packaging-builders.md](cheatsheets/packaging-builders.md) | **New** — dense language-builder → leaf table |
+| G1 | [12-deployment-and-infra/hydra.md](12-deployment-and-infra/hydra.md) | **Deepen** — jobsets, flakes, when not Hydra |
+| G2 | [11-development/ci-with-nix.md](11-development/ci-with-nix.md) | **Deepen** — matrices, caches, failure modes |
+| G3 | [06-nixpkgs/packaging/cross-compilation.md](06-nixpkgs/packaging/cross-compilation.md) | **Deepen** — pkgsCross chooser + failure modes |
+| G4 | [cheatsheets/packaging-builders.md](cheatsheets/packaging-builders.md) | **New** — language-builder → leaf table |
 
-**Exit F:** F1–F4 `complete`; cheatsheets README + contributor roadmap updated.
+**Exit G:** met — G1–G4 `complete`; cheatsheets README updated.
 
-### Batch C — Gold thicken + getting help (**done 2026-08-01**)
+### Batch H — Install bootstrap + secrets tools + VM tests (**done 2026-08-01**)
 
-*(Details under Done history / coverage checklist.)*
+| # | Path | Action |
+|---|------|--------|
+| H1 | [cheatsheets/install-and-bootstrap.md](cheatsheets/install-and-bootstrap.md) | **New** — chooser: ISO / anywhere / disko-install / netboot / HM-only / darwin / WSL |
+| H2 | [09-nixos/installation/nixos-anywhere.md](09-nixos/installation/nixos-anywhere.md) | **Deepen** — failure modes, when not to use, aarch64/`--kexec` |
+| H3 | [12-deployment-and-infra/agenix-sops-nix.md](12-deployment-and-infra/agenix-sops-nix.md) | **Deepen** — chooser + rekey / identity failure modes |
+| H4 | [11-development/testing-nixos-vm-tests.md](11-development/testing-nixos-vm-tests.md) | **Deepen** — flake `checks`, CI, interactive debug failures |
+
+**Exit H:** met — H1–H4 `complete`; cheatsheets README + beginner/operator roadmaps updated; sources row for custom kexec.
+
+### Batch I — Fleet deploy navigation (**done 2026-08-01**)
+
+| # | Path | Action |
+|---|------|--------|
+| I1 | [cheatsheets/fleet-deploy.md](cheatsheets/fleet-deploy.md) | **New** — `nixos-rebuild --target-host` vs Colmena vs deploy-rs vs Morph/Nixinate vs Clan |
+| I2 | [12-deployment-and-infra/deploy-rs.md](12-deployment-and-infra/deploy-rs.md) | **Deepen** — chooser edges + failure modes (magic-rollback, SSH users) |
+| I3 | [12-deployment-and-infra/morph-nixinate.md](12-deployment-and-infra/morph-nixinate.md) | **Deepen** — maturity stamp + when still fit |
+| I4 | [09-nixos/operations/remote-deploy.md](09-nixos/operations/remote-deploy.md) | **Deepen** — failure modes; link fleet chooser |
+
+**Exit I:** met — I1–I4 `complete`; cheatsheets + operator roadmap updated.
+
+### Batch J — Disk layout + impermanence (**done 2026-08-01**)
+
+| # | Path | Action |
+|---|------|--------|
+| J1 | [cheatsheets/disk-and-persistence.md](cheatsheets/disk-and-persistence.md) | **New** — disko vs manual vs recipes vs impermanence chooser |
+| J2 | [12-deployment-and-infra/disko.md](12-deployment-and-infra/disko.md) | **Deepen** — modes, by-id, failure modes |
+| J3 | [09-nixos/configuration/impermanence.md](09-nixos/configuration/impermanence.md) | **Deepen** — neededForBoot, secrets, failure modes |
+| J4 | [09-nixos/configuration/disko-recipes.md](09-nixos/configuration/disko-recipes.md) | **Deepen** — template refresh + when-not |
+
+**Exit J:** met — J1–J4 `complete`; operator + install-bootstrap wired.
+
+### Batch K — Binary cache navigation (**done 2026-08-01**)
+
+| # | Path | Action |
+|---|------|--------|
+| K1 | [cheatsheets/binary-caches.md](cheatsheets/binary-caches.md) | **New** — public / private / nix-serve / Harmonia / Attic / Cachix / S3 |
+| K2 | [12-deployment-and-infra/binary-cache-hosting.md](12-deployment-and-infra/binary-cache-hosting.md) | **Deepen** — chooser + failure modes |
+| K3 | [04-store-and-build/binary-caches.md](04-store-and-build/binary-caches.md) | **Deepen** — client failure modes (trust, fallback, priority) |
+| K4 | [14-security-and-trust/signing-and-caches.md](14-security-and-trust/signing-and-caches.md) | **Deepen** — key/trust failure modes |
+
+**Exit K:** met — K1–K4 `complete`; CI + operator wired.
+
+### Batch L — Configuration examples expand (**done 2026-08-01**)
+
+Second wave under [16-configuration-examples](16-configuration-examples/README.md) — compose Batches G–J deepenings into worked configs.
+
+| # | Path | Action |
+|---|------|--------|
+| L1 | [16-configuration-examples/disko-impermanence-host.md](16-configuration-examples/disko-impermanence-host.md) | **New** — disko + tmpfs root + `/persist` |
+| L2 | [16-configuration-examples/nixos-anywhere-bootstrap.md](16-configuration-examples/nixos-anywhere-bootstrap.md) | **New** — remote SSH wipe-and-install |
+| L3 | [16-configuration-examples/deploy-rs-fleet.md](16-configuration-examples/deploy-rs-fleet.md) | **New** — day-2 multi-profile hub deploy |
+| L4 | [16-configuration-examples/flake-ci-github-actions.md](16-configuration-examples/flake-ci-github-actions.md) | **New** — GHA install/cache/`flake check`/host matrix |
+
+**Exit L:** met — L1–L4 `complete`; domain README + roadmaps + chooser See also inbound; closeout verify pass 2026-08-01 (`broken=0`).
+
+### Phase 7 exit
+
+**Met 2026-08-01:** Batches A–L landed; site live (Batch D); cadence checklist exists and was used on a prior refresh (2026-07-31). No further Phase 7 batches. Post-campaign work = Phase 5.1 only (plus optional gold thicken scored by the priority rubric).
 
 ---
 
@@ -224,8 +287,18 @@ machine-mesh, inter-machine-trust, clan-and-mesh, overlay-networks + cousin cros
 | **C** | Gold thicken + getting-help | **done 2026-08-01** |
 | **D** | MkDocs + GitHub Pages (`zemdregon.github.io/nix-docs`) | **done 2026-08-01** |
 | **E** | Post-publish: glossary + toolchains + package-sets + homepage | **done 2026-08-01** |
+| **F** | `16-configuration-examples` worked-config domain | **done 2026-08-01** |
+| **G** | Hydra / CI / cross / packaging-builders cheatsheet | **done 2026-08-01** |
+| **H** | Install bootstrap chooser + anywhere / agenix-sops / VM tests | **done 2026-08-01** |
+| **I** | Fleet deploy chooser + deploy-rs / morph / remote-deploy | **done 2026-08-01** |
+| **J** | Disk/persistence chooser + disko / impermanence / recipes | **done 2026-08-01** |
+| **K** | Binary-cache chooser + hosting / client / signing | **done 2026-08-01** |
+| **L** | Worked configs: disko/impermanence, anywhere, deploy-rs, GHA CI | **done 2026-08-01** |
+| **Closeout** | Subagent verify on new G–L leaves; plan + coverage sync; audits | **done 2026-08-01** |
 
-Use **one subagent per leaf**; parent supplies research pack (3–8 facts, 1–3 URLs). After each batch: parent review, fix conflicts, update coverage + sources.
+Campaign batch table is **closed**. Further sessions: Phase 5.1 cadence, or optional gold thicken (score with the priority rubric)—do not reopen A–L unless a factual bug is found.
+
+Use **one subagent per leaf** for any new deepen/new leaf; parent supplies research pack (3–8 facts, 1–3 URLs). After each batch: parent review, fix conflicts, update coverage + sources.
 
 ---
 
@@ -236,7 +309,7 @@ Use **one subagent per leaf**; parent supplies research pack (3–8 facts, 1–3
 | **Article draft** | Accurate Overview + Details; ≥1 wiki link; ≥1 upstream Reference; `status: draft` |
 | **Article complete** | Verified example (or version-noted); no uncited absolutes; coverage updated; `status: complete` |
 | **Batch A done** | Five paths landed; README Contents; coverage + sources updated |
-| **Phase 7 done** | Batches A–C met; cadence checklist used on ≥1 release refresh |
+| **Phase 7 done** | Batches A–L met; site live; cadence checklist used on ≥1 refresh — **met 2026-08-01** |
 
 ---
 
@@ -244,7 +317,7 @@ Use **one subagent per leaf**; parent supplies research pack (3–8 facts, 1–3
 
 | File | Role |
 |------|------|
-| **EXPAND-PLAN.md (this file)** | **Only** campaign plan — history + active Phase 7 |
+| **EXPAND-PLAN.md (this file)** | **Only** campaign plan — history; Phase 7 closed; Phase 5.1 cadence |
 | [ATTACK-PLAN.md](ATTACK-PLAN.md) | Redirect stub only (do not reopen campaign there) |
 | [meta/todo-coverage.md](meta/todo-coverage.md) | Checklist ground truth |
 | [meta/release-checklist.md](meta/release-checklist.md) | Operational Phase 5.1 steps (Batch A1) |

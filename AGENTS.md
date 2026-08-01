@@ -8,7 +8,7 @@ Guidance for AI agents working in this repository.
 
 ## What this repo is
 
-Plain-Markdown knowledge base for the full Nix stack (philosophy → language → store → nixpkgs → NixOS → flakes → experimental features → tooling → implementations). No site generator yet.
+Plain-Markdown knowledge base for the full Nix stack (philosophy → language → store → nixpkgs → NixOS → flakes → experimental features → tooling → implementations → configuration examples). MkDocs site: see [meta/site.md](meta/site.md).
 
 Campaign plan (single): [EXPAND-PLAN.md](EXPAND-PLAN.md)  
 Conventions: [meta/conventions.md](meta/conventions.md)  

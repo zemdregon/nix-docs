@@ -80,11 +80,11 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 
 ### Scenario paths (pick one track)
 
-**First nixpkgs package PR** — [simple package](../06-nixpkgs/packaging/simple-package.md) + [example corpus](../meta/examples/simple-package.nix) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md) → language builders ([Python/Node/Rust/Go](../06-nixpkgs/packaging/python-node-rust-go.md), [Haskell](../06-nixpkgs/packaging/haskell-packaging.md), [JVM/PHP/others](../06-nixpkgs/packaging/jvm-php-and-others.md) as needed) → [tests and passthru](../06-nixpkgs/packaging/tests-and-passthru.md) → [ofborg and CI](../06-nixpkgs/contribution/ofborg-and-ci.md) → [review process](../06-nixpkgs/contribution/review-process.md).
+**First nixpkgs package PR** — [simple package](../06-nixpkgs/packaging/simple-package.md) + [example corpus](../meta/examples/simple-package.nix) → [packaging builders cheatsheet](../cheatsheets/packaging-builders.md) → [custom package and overlay flake (worked example)](../16-configuration-examples/custom-package-overlay-flake.md) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md) → language builders ([Python/Node/Rust/Go](../06-nixpkgs/packaging/python-node-rust-go.md), [Haskell](../06-nixpkgs/packaging/haskell-packaging.md), [JVM/PHP/others](../06-nixpkgs/packaging/jvm-php-and-others.md) as needed) → [tests and passthru](../06-nixpkgs/packaging/tests-and-passthru.md) → [ofborg and CI](../06-nixpkgs/contribution/ofborg-and-ci.md) → [review process](../06-nixpkgs/contribution/review-process.md).
 
 **NixOS module upstream** — [writing a module](../09-nixos/modules/writing-a-module.md) + [minimal-module.nix](../meta/examples/minimal-module.nix) → [module system internals](../09-nixos/architecture/module-system-internals.md) when merge/`specialArgs` bite → [custom options](../09-nixos/modules/custom-options.md) → [service patterns](../09-nixos/services/service-patterns.md) → [upstreaming modules](../09-nixos/modules/upstreaming-modules.md).
 
-**Flake library / devShell** — [flake.nix schema](../07-flakes/anatomy/flake-nix-schema.md) + [hello-flake](../meta/examples/hello-flake/flake.nix) → [packages / apps / devShells](../07-flakes/workflows/packages-apps-devShells.md) → [checks and hydraJobs](../07-flakes/workflows/checks-and-hydraJobs.md) → [CI with Nix](../11-development/ci-with-nix.md).
+**Flake library / devShell** — [flake.nix schema](../07-flakes/anatomy/flake-nix-schema.md) + [hello-flake](../meta/examples/hello-flake/flake.nix) → [project devShell and direnv (worked example)](../16-configuration-examples/project-devshell-and-direnv.md) → [packages / apps / devShells](../07-flakes/workflows/packages-apps-devShells.md) → [checks and hydraJobs](../07-flakes/workflows/checks-and-hydraJobs.md) → [CI with Nix](../11-development/ci-with-nix.md) → [Flake CI with GitHub Actions (worked example)](../16-configuration-examples/flake-ci-github-actions.md).
 
 **Private inputs in CI** — [access tokens](../05-cli-and-tooling/config/access-tokens.md) → [private flakes and CI](../11-development/private-flakes-and-ci.md) → [config repo layout](../07-flakes/workflows/config-repo-layout.md) when the flake is a fleet mono-repo.
 
@@ -96,7 +96,7 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 
 ### Example corpus (shared fixtures)
 
-Reusable snippets under [meta/examples/](../meta/examples/README.md) — cite from your docs/PRs; not a second tutorial track. Validate locally when Nix is installed: `node meta/examples/validate.mjs`.
+Reusable snippets under [meta/examples/](../meta/examples/README.md) — cite from your docs/PRs; not a second tutorial track. Multi-file walkthroughs: [16-configuration-examples](../16-configuration-examples/README.md). Validate fixtures locally when Nix is installed: `node meta/examples/validate.mjs`.
 
 ## Next steps
 
@@ -114,4 +114,4 @@ Reusable snippets under [meta/examples/](../meta/examples/README.md) — cite fr
 - [Operator](operator.md) — day-2 rebuild, deploy, and trust ops
 - Upstream entry points (via leaf refs): [nixpkgs contribution](../06-nixpkgs/contribution/README.md), [RFC process](../15-history-and-governance/rfc-process.md)
 - [Import from derivation](../02-concepts/import-from-derivation.md) — eval cost when packaging or reviewing flakes
-- [Example corpus](../meta/examples/README.md) · [FAQ: common errors](../cheatsheets/faq-common-errors.md)
+- [Example corpus](../meta/examples/README.md) · [Configuration examples](../16-configuration-examples/README.md) · [FAQ: common errors](../cheatsheets/faq-common-errors.md)

@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-08
 ---
 
 # disko
@@ -23,6 +24,43 @@ It complements [hardware-configuration.nix](../09-nixos/configuration/hardware-c
 - **nixos-anywhere** — Remote install flow runs a disko phase before activating the flake’s `nixosConfigurations` entry.
 
 **Relation to other config.** Hardware scan still covers kernel modules, firmware, and similar; filesystem entries normally come from disko rather than a generated `fileSystems` block. Prefer stable device paths (`/dev/disk/by-id/…`) when you can. Destructive modes wipe the target disk—dual-boot with other OSes is not a supported goal.
+
+### When to use what
+
+| Situation | Prefer | Skip / avoid if… |
+|-----------|--------|------------------|
+| Learning disks, dual-boot, or one-off layout by hand | [Manual partition](../09-nixos/configuration/partitioning-and-bootloaders.md) + [manual install](../09-nixos/installation/manual-install.md) | You want the same layout reused across machines |
+| Local / USB installer; declarative disks then `nixos-install` | disko CLI (`--mode …`) then manual install steps | Remote-only host with no console |
+| Local / workstation; partition + install in one flake step | **disko-install** | Host is only reachable over SSH |
+| Fresh NixOS over SSH (kexec → disks → install) | [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md) (runs a disko phase) | Day-2 config updates; dual-boot / partial-disk wipe |
+| Repair: remount existing layout without wiping | disko `mount` (or disko-install mount mode) | You meant a full reinstall |
+
+Chooser hub: [Install and bootstrap](../cheatsheets/install-and-bootstrap.md). Layout patterns: [Disko recipes](../09-nixos/configuration/disko-recipes.md).
+
+### CLI modes
+
+From the [reference](https://github.com/nix-community/disko/blob/master/docs/reference.md) (`-m` / `--mode`):
+
+| Mode | Effect |
+|------|--------|
+| `destroy` | Unmount filesystems and destroy partition tables on the selected disks |
+| `format` | Create partition tables, zpools, LVMs, raids, and filesystems if they do not exist yet |
+| `mount` | Mount partitions at the root mountpoint (default `/mnt`) |
+| `format,mount` | Format then mount |
+| `destroy,format,mount` | All three in sequence (the usual wipe-and-install path; previously `--mode disko`) |
+
+Default CLI mode is `mount` (less destructive). Automation can pass `--yes-wipe-all-disks` to skip the destroy safety check. **disko-install** fresh installs wipe/partition; its mount-only path repairs without destroying.
+
+### Failure modes
+
+| Symptom / risk | Likely cause | What to check |
+|----------------|--------------|---------------|
+| Wrong disk wiped or empty | `device` points at `/dev/sda` (or similar) that is not the intended drive | Prefer `/dev/disk/by-id/…`; confirm with `lsblk` before any destroy/format run |
+| Other OS / dual-boot data gone | Destructive modes reformat the whole target disk | Upstream: dual-boot is not supported; do not point disko at a shared disk you need to keep |
+| Installed system will not boot | Bootloader not enabled in NixOS config | Still set `boot.loader.systemd-boot.enable` or GRUB (disko does not replace that choice) |
+| No `fileSystems` / boot options from layout | Flake never imported `disko.nixosModules.disko` (or equivalent `module.nix`) | Add the module to `nixosConfigurations` `modules` / `imports`; keep `disko.devices` in that system |
+| Prompt / unlock fails after reboot (LUKS layout) | Disks formatted with LUKS but the installed config does not carry unlock-at-boot wiring from the module | Ensure the same `disko.devices` LUKS layout is in the installed flake with the module imported—not only a one-shot installer CLI run |
+| Unexpected wipe | `--mode destroy,format,mount` (or destroy alone) on the wrong config | Default is `mount`; use destroy only when you intend to erase; dry-run / double-check devices first |
 
 ## Examples
 
@@ -86,9 +124,13 @@ Flake input (recommended module install):
 
 - [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md)
 - [Partitioning and bootloaders](../09-nixos/configuration/partitioning-and-bootloaders.md)
+- [Disk and persistence](../cheatsheets/disk-and-persistence.md) — layout / impermanence chooser
 - [Disko recipes](../09-nixos/configuration/disko-recipes.md)
 - [hardware-configuration.nix](../09-nixos/configuration/hardware-configuration.md)
 - [Manual install](../09-nixos/installation/manual-install.md)
+- [Install and bootstrap](../cheatsheets/install-and-bootstrap.md)
+- [Disko + impermanence host (worked example)](../16-configuration-examples/disko-impermanence-host.md)
+- [nixos-anywhere bootstrap (worked example)](../16-configuration-examples/nixos-anywhere-bootstrap.md)
 
 ## References
 
@@ -96,4 +138,5 @@ Flake input (recommended module install):
 - [Quickstart](https://github.com/nix-community/disko/blob/master/docs/quickstart.md)
 - [HowTo (module install)](https://github.com/nix-community/disko/blob/master/docs/HowTo.md)
 - [disko-install](https://github.com/nix-community/disko/blob/master/docs/disko-install.md)
+- [Reference (CLI modes)](https://github.com/nix-community/disko/blob/master/docs/reference.md)
 - [disko-templates](https://github.com/nix-community/disko-templates)

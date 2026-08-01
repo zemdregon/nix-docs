@@ -136,6 +136,7 @@ colmena apply-local --sudo   # local node only
 
 - [Machine mesh](../02-concepts/machine-mesh.md) — interconnect mental model (hub deploy vs peer)
 - [Clan and mesh](clan-and-mesh.md) — peer/no-central-controller contrast to Colmena hub→hosts
+- [Fleet deploy](../cheatsheets/fleet-deploy.md) — tool chooser (Colmena vs deploy-rs vs rebuild)
 - [Remote deploy](../09-nixos/operations/remote-deploy.md) — single-host `nixos-rebuild --target-host` vs fleet hub push
 - [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md) — deploy trust axis among six axes
 - [deploy-rs](deploy-rs.md) — flake-oriented multi-host deploy

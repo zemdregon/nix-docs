@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-08
 ---
 
 # Disko recipes
@@ -12,21 +13,37 @@ Official starters live in [disko-templates](https://github.com/nix-community/dis
 
 ## Details
 
-**Templates vs hand-rolled.** Prefer a template when it matches your disk count and filesystem story; adapt `disko-config.nix` rather than inventing GPT types and nestings from scratch. The tool page covers how the NixOS module turns `disko.devices` into `fileSystems`; this page only names layouts.
+### When to use what
 
-**Current templates** (flake outputs as of 2026-07-30; check upstream if names drift):
+| Approach | Use when |
+|----------|----------|
+| **Template** (`disko-templates`) | Disk count and filesystem story match an official output (single ext4, LUKS root + ZFS data mirror, or ZFS wipe-root layout). Prefer this over inventing GPT types and nestings. |
+| **Hand-roll / adapt** | Close to a template or a [disko `example/`](https://github.com/nix-community/disko/tree/master/example) file, but you need different sizes, encryption, pool names, or disk count. Start from the nearest config and edit—do not invent LUKS/ZFS nesting from memory. Upstream `example/` files are also regression tests and may include uncommon options; strip what you do not need. |
+| **Manual install** ([manual install](../installation/manual-install.md)) | Dual-boot, one-off recovery, learning `parted`/`mkfs`, or you intentionally avoid declarative disk tooling. Disko’s destructive modes are not aimed at sharing a disk with another OS. |
+
+After any declarative layout: still enable systemd-boot or GRUB in the NixOS config, and keep [hardware-configuration](hardware-configuration.md) for kernel modules/firmware (`nixos-generate-config --no-filesystems` when disko owns mounts).
+
+### Current templates
+
+Flake outputs as of 2026-08 (re-checked against `github:nix-community/disko-templates`; still three—refresh this table if upstream adds or renames):
 
 | Template | Layout sketch |
 |----------|----------------|
-| `single-disk-ext4` | One disk, GPT: optional EF02 BIOS grub partition, ESP (vfat `/boot`), ext4 `/` |
-| `single-ext4-luks-and-double-zfs-mirror` | Root on ext4 + LUKS; separate ZFS mirror raid for data |
-| `zfs-impermanence` | Pool `zroot`; datasets under `local/{home,nix,persist,root}`; blank-snapshot / erase-your-darlings style root |
+| `single-disk-ext4` | One disk, GPT: EF02 BIOS grub partition (1M), ESP vfat `/boot` (1G), ext4 `/` |
+| `single-ext4-luks-and-double-zfs-mirror` | Disk `root`: ESP + LUKS→ext4 `/`; disks `data1`/`data2`: ZFS mirror pool `data` with encrypted dataset at `/data` |
+| `zfs-impermanence` | One disk: ESP + ZFS pool `zroot`; datasets `local/{home,nix,persist,root}`; blank snapshot on `local/root` for erase-your-darlings style wipe |
 
-**Device paths.** Prefer `/dev/disk/by-id/…` (or another stable symlink) over `/dev/sda`. Set the path on each disk entry, e.g. `disko.devices.disk.main.device`. Wrong device + destructive mode means wiped data.
+No other official template outputs exist at check time—do not invent names.
 
-**Bootloader is separate.** Disko owns partitions and filesystems; you still enable systemd-boot or GRUB in the NixOS config. See [partitioning and bootloaders](partitioning-and-bootloaders.md). Pair with [hardware-configuration](hardware-configuration.md) for kernel modules and firmware (`nixos-generate-config --no-filesystems` when disko owns mounts).
+### Device paths and ops pitfalls
 
-**Impermanence.** The `zfs-impermanence` template is a disk layout for wipe-on-boot roots; persistence bind-mounts and module options belong on [Impermanence](impermanence.md).
+**by-id mistakes.** Prefer `/dev/disk/by-id/…` (or another stable symlink) over `/dev/sda` / `/dev/nvme0n1`. Set the path on each disk entry the template expects (`disko.devices.disk.main.device`, or `root` / `data1` / `data2` for the hybrid). Enumerate with `ls -l /dev/disk/by-id` and `lsblk` before any destructive mode. Copy-pasting another machine’s by-id, picking a `-partN` symlink instead of the whole disk, or leaving the template’s placeholder device unchanged will format the wrong target.
+
+**Template drift.** Output names and `disko-config.nix` contents can change upstream. Pin or re-read the template you init; after `nix flake init --template …`, treat the copied file as yours and diff against upstream when upgrading layouts. This page’s table is a snapshot, not a lock.
+
+**`zfs-impermanence` ≠ impermanence module.** The template only creates pool/datasets (including `/persist` and a blankable root). Bind-mounts, `environment.persistence."…"`, and wipe-on-boot activation still require the [impermanence](impermanence.md) stack (or equivalent). Without that, you have a ZFS layout, not declared persistence.
+
+**Bootloader still required.** Disko owns partitions and filesystems (and may wire some GRUB device hints); you still enable systemd-boot or GRUB under `boot.loader.*`. See [partitioning and bootloaders](partitioning-and-bootloaders.md).
 
 **Destructive by design.** Modes that destroy/format wipe the target disks. Dual-boot with another OS is not a goal of these recipes.
 
@@ -35,6 +52,7 @@ Official starters live in [disko-templates](https://github.com/nix-community/dis
 - The [disko tool overview](../../12-deployment-and-infra/disko.md)—CLI, module API, and install integration.
 - [Manual partitioning](../installation/manual-install.md) or live-ISO fdisk workflows.
 - [ZFS and Btrfs](zfs-and-btrfs.md) filesystem tuning and native encryption deep dive.
+- Full [impermanence](impermanence.md) module options and persist lists.
 
 ## Examples
 
@@ -82,14 +100,18 @@ For LUKS+ZFS hybrid or ZFS impermanence dataset trees, start from the matching t
 
 ## See also
 
+- [Disk and persistence](../../cheatsheets/disk-and-persistence.md) — layout / impermanence chooser
 - [disko](../../12-deployment-and-infra/disko.md) — module, CLI modes, disko-install
 - [Partitioning and bootloaders](partitioning-and-bootloaders.md)
 - [ZFS and Btrfs](zfs-and-btrfs.md) — mounts, scrub, native encryption notes after layout
 - [hardware-configuration.nix](hardware-configuration.md)
-- [Impermanence](impermanence.md)
+- [Impermanence](impermanence.md) — persistence module; pair with `zfs-impermanence` layout
+- [Manual install](../installation/manual-install.md) — non-disko partition/format path
 - [nixos-anywhere](../installation/nixos-anywhere.md)
 
 ## References
 
 - [nix-community/disko](https://github.com/nix-community/disko)
+- [disko Quickstart](https://github.com/nix-community/disko/blob/master/docs/quickstart.md) — templates vs `example/`, device adjustment, bootloader note
+- [disko HowTo](https://github.com/nix-community/disko/blob/master/docs/HowTo.md) — module import; by-id device example
 - [nix-community/disko-templates](https://github.com/nix-community/disko-templates)

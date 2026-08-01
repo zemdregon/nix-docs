@@ -331,6 +331,7 @@ Deploy: `sudo nixos-rebuild switch --flake .#laptop` or `.#server`. Standalone H
 - [Imports and profiles](../../09-nixos/configuration/imports-and-profiles.md) — static `imports` and splitting configuration
 - [configuration.nix](../../09-nixos/configuration/configuration-nix.md) — primary machine configuration file
 - [Secrets strategies](../../09-nixos/configuration/secrets-strategies.md) — how secrets enter the module graph
+- [Multi-host config repo](../../16-configuration-examples/multi-host-config-repo.md) — worked fleet flake walkthrough
 - [agenix / sops-nix](../../12-deployment-and-infra/agenix-sops-nix.md) — encrypted secret modules
 - [flake-parts](../../13-implementations/module-ecosystems/flake-parts.md) — `mkFlake` and `perSystem`
 - [Dotfiles patterns](../../10-home-and-user/home-manager/dotfiles-patterns.md) — organizing user-level modules

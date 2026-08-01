@@ -4,7 +4,7 @@ status: index
 
 # NixOS Installation
 
-Installing NixOS.
+Installing NixOS. Path chooser: [Install and bootstrap](../../cheatsheets/install-and-bootstrap.md).
 
 ## Contents
 

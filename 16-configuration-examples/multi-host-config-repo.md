@@ -280,7 +280,9 @@ Match `networking.hostName`, the `nixosConfigurations` key, and the `#` suffix. 
 - [Remote deploy](../09-nixos/operations/remote-deploy.md) — `--target-host`, `--build-host`, elevation
 - [Colmena](../12-deployment-and-infra/colmena.md) — multi-host hive apply
 - [deploy-rs](../12-deployment-and-infra/deploy-rs.md) — flake `deploy.nodes` profiles
+- [deploy-rs fleet (worked example)](deploy-rs-fleet.md) — full `deploy.nodes` + `deployChecks` wiring
 - [CI with Nix](../11-development/ci-with-nix.md) — runner install, caches, `nix flake check`
+- [Flake CI with GitHub Actions (worked example)](flake-ci-github-actions.md) — host-matrix CI for this layout
 - [Private flakes and CI](../11-development/private-flakes-and-ci.md) — private inputs on CI runners
 - [Secrets strategies](../09-nixos/configuration/secrets-strategies.md) — how secrets enter the module graph
 - [Minimal flake NixOS host](minimal-flake-nixos-host.md) — single-host version of this walkthrough

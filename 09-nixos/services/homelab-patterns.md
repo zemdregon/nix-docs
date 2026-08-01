@@ -279,3 +279,4 @@ Declarative service config does not snapshot `/var/lib/forgejo`, `/var/lib/jelly
 - [Overlay networks](../configuration/overlay-networks.md) — Tailscale, WireGuard, private reachability
 - [Backups and restore](../operations/backups-and-restore.md) — `/var/lib` state and off-site copies
 - [Docker and Podman](docker-and-podman.md) — upstream compose stacks vs declarative modules
+- [Homelab proxy, services, and secrets](../../16-configuration-examples/homelab-proxy-secrets-services.md) — worked multi-file host fragment

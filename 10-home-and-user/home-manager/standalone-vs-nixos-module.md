@@ -98,3 +98,5 @@ sudo nixos-rebuild switch --flake .#hostname
 - [homeConfigurations](../../07-flakes/workflows/home-configurations.md)
 - [Users and groups](../../09-nixos/configuration/users-and-groups.md)
 - [Home Manager (ecosystem)](../../13-implementations/module-ecosystems/home-manager.md)
+- [NixOS with Home Manager](../../16-configuration-examples/nixos-with-home-manager.md) — worked embedded-HM flake
+- [nix-darwin with Home Manager](../../16-configuration-examples/nix-darwin-with-home-manager.md) — worked Darwin + HM flake

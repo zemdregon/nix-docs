@@ -117,6 +117,10 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Nixpkgs manual — `.overrideAttrs` | https://nixos.org/manual/nixpkgs/stable/#sec-pkg-overrideAttrs |
 | Nixpkgs manual — `packageOverrides` | https://nixos.org/manual/nixpkgs/stable/#sec-modify-via-packageOverrides |
 | Nixpkgs manual — Languages and frameworks | https://nixos.org/manual/nixpkgs/stable/#chap-language-support |
+| Nixpkgs manual — Python | https://nixos.org/manual/nixpkgs/stable/#python |
+| Nixpkgs manual — Go (`buildGoModule`) | https://nixos.org/manual/nixpkgs/stable/#ssec-language-go |
+| Nixpkgs manual — Rust / Cargo | https://nixos.org/manual/nixpkgs/stable/#compiling-rust-applications-with-cargo |
+| Nixpkgs manual — JavaScript / `buildNpmPackage` | https://nixos.org/manual/nixpkgs/stable/#javascript-buildNpmPackage |
 | Nixpkgs manual — Haskell | https://nixos.org/manual/nixpkgs/stable/#haskell |
 | Nixpkgs manual — Java | https://nixos.org/manual/nixpkgs/stable/#sec-language-java |
 | Nixpkgs manual — Gradle | https://nixos.org/manual/nixpkgs/stable/#gradle |
@@ -322,6 +326,14 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | nixos-anywhere | https://github.com/nix-community/nixos-anywhere |
 | nixos-anywhere docs | https://nix-community.github.io/nixos-anywhere/ |
 | nixos-anywhere quickstart | https://nix-community.github.io/nixos-anywhere/quickstart.html |
+| nixos-anywhere custom kexec howto | https://nix-community.github.io/nixos-anywhere/howtos/custom-kexec.html |
+| nixos-anywhere reference | https://nix-community.github.io/nixos-anywhere/reference.html |
+| disko Reference (CLI modes) | https://github.com/nix-community/disko/blob/master/docs/reference.md |
+| disko HowTo | https://github.com/nix-community/disko/blob/master/docs/HowTo.md |
+| disko-install docs | https://github.com/nix-community/disko/blob/master/docs/disko-install.md |
+| disko hybrid-tmpfs-on-root example | https://github.com/nix-community/disko/blob/master/example/hybrid-tmpfs-on-root.nix |
+| nix-store --generate-binary-cache-key | https://nix.dev/manual/nix/stable/command-ref/nix-store/generate-binary-cache-key.html |
+| cachix/cachix-action | https://github.com/cachix/cachix-action |
 | sops-nix | https://github.com/Mic92/sops-nix |
 | age-plugin-yubikey | https://github.com/str4d/age-plugin-yubikey |
 | age plugins (FiloSottile/age) | https://github.com/FiloSottile/age#plugins |

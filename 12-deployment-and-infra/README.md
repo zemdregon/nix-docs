@@ -4,7 +4,7 @@ status: index
 
 # Deployment and Infra
 
-Deploy tools, disk, secrets, Hydra, and caches.
+Deploy tools, disk, secrets, Hydra, and caches. Tool pick: [Fleet deploy](../cheatsheets/fleet-deploy.md).
 
 ## Contents
 

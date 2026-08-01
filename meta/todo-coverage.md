@@ -4,11 +4,11 @@ status: active
 
 # Coverage TODO
 
-Living checklist. Sole campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phases 0–6 done; Phase 7 active). Draft weeks 0–11 history only — [ATTACK-PLAN.md](../ATTACK-PLAN.md) is a redirect.
+Living checklist. Sole campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phases 0–4, 6, 7 done; Phase 5.1 cadence ongoing). Draft weeks 0–11 history only — [ATTACK-PLAN.md](../ATTACK-PLAN.md) is a redirect.
 
-**Meta truth snapshot (2026-08-01):** ~266 leaf articles `status: complete`; intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~49 folder READMEs `status: index` (includes [16-configuration-examples](../16-configuration-examples/README.md)). Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Site:** [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/). **Active:** Phase 7 Batches A–E done; Batch F (`16-configuration-examples`) landed; cadence ongoing. Status lives in YAML frontmatter.
+**Meta truth snapshot (2026-08-01 — Phase 7 closed):** ~274 leaf articles `status: complete` (quality audit); intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~49 folder READMEs `status: index` (includes [16-configuration-examples](../16-configuration-examples/README.md)). Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Site:** [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/). **Active:** Phase 5.1 cadence only ([release-checklist.md](release-checklist.md)). Status lives in YAML frontmatter.
 
-Weeks below are **historical** draft-campaign checkoffs. Track new work under [Phase 7](#phase-7--toward-definitive) and [Remaining work](#remaining-work).
+Weeks below are **historical** draft-campaign checkoffs. Phase 7 batches A–L are **closed** (see below). Track ongoing work under [Remaining work](#remaining-work).
 
 ## Structure / Week 0 (bootstrap)
 
@@ -107,7 +107,7 @@ Mental model domain to **draft**.
 
 - [x] [glossary.md](../glossary.md)
 - [x] Comparisons: [nix-vs-docker](../comparisons/nix-vs-docker.md), [nix-vs-apt-pacman](../comparisons/nix-vs-apt-pacman.md), [flakes-vs-channels](../comparisons/flakes-vs-channels.md), [nixos-vs-guix](../comparisons/nixos-vs-guix.md)
-- [x] Cheatsheets: [cli](../cheatsheets/cli.md), [language](../cheatsheets/language.md), [nixos-options-patterns](../cheatsheets/nixos-options-patterns.md)
+- [x] Cheatsheets: [cli](../cheatsheets/cli.md), [language](../cheatsheets/language.md), [nixos-options-patterns](../cheatsheets/nixos-options-patterns.md), [packaging-builders](../cheatsheets/packaging-builders.md)
 - [x] Roadmap link audit ([00-roadmap/](../00-roadmap/README.md)) — tree-wide relative `.md` links: 0 broken (2026-07-29)
 - [x] Complete-pass on high-traffic pages (beginner path + core concepts) — 2026-07-29: why-nix, core concepts (derivation/store-path/closure/generation/profile/flake), glossary, configuration-nix, module-system, rebuild/rollbacks, graphical-installer, flake-nix-schema, cli/language cheatsheets → `complete`
 
@@ -187,14 +187,14 @@ Prefer [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7 for scope.
 
 ### Still open
 
-1. **Phase 7 Batch F** — Hydra / CI / cross / packaging-builders cheatsheet (in progress).
-2. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release.
-3. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
-4. **Site** — live at [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/); ops in [site.md](site.md).
+1. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release and on quarterly triggers.
+2. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
+3. **Site** — live at [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/); ops in [site.md](site.md).
+4. **Optional** — gold thicken thin audiences scored by [EXPAND-PLAN.md](../EXPAND-PLAN.md) priority rubric (not a numbered Phase 7 batch).
 
-## Phase 7 — Toward definitive
+## Phase 7 — Toward definitive (**closed 2026-08-01**)
 
-Plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7.
+Plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7. Batches A–L complete; closeout verify + audits 2026-08-01.
 
 ### Batch A — Cadence + first audience gaps (2026-08-01)
 
@@ -245,10 +245,60 @@ New top-level domain [16-configuration-examples](../16-configuration-examples/RE
 - [x] [nix-darwin-with-home-manager](../16-configuration-examples/nix-darwin-with-home-manager.md)
 - [x] Roadmaps + cousin See also inbound links
 
-### Batch D (queued) — superseded
+### Batch L — Configuration examples expand (2026-08-01)
 
-- [x] Batch D — site generator (live)
-- [ ] Batch D — optional site generator (gated)
+Second wave under [16-configuration-examples](../16-configuration-examples/README.md) — compose Batches G–J deepenings into worked configs.
+
+- [x] [disko-impermanence-host](../16-configuration-examples/disko-impermanence-host.md)
+- [x] [nixos-anywhere-bootstrap](../16-configuration-examples/nixos-anywhere-bootstrap.md)
+- [x] [deploy-rs-fleet](../16-configuration-examples/deploy-rs-fleet.md)
+- [x] [flake-ci-github-actions](../16-configuration-examples/flake-ci-github-actions.md)
+- [x] Domain README + operator/contributor roadmaps + chooser See also inbound links
+
+### Batch G — CI / Hydra / cross / builders cheatsheet (2026-08-01)
+
+- [x] Deepen [hydra](../12-deployment-and-infra/hydra.md)
+- [x] Deepen [ci-with-nix](../11-development/ci-with-nix.md)
+- [x] Deepen [cross-compilation](../06-nixpkgs/packaging/cross-compilation.md)
+- [x] [packaging-builders](../cheatsheets/packaging-builders.md) cheatsheet
+
+### Batch H — Install bootstrap + secrets tools + VM tests (2026-08-01)
+
+- [x] [install-and-bootstrap](../cheatsheets/install-and-bootstrap.md) chooser
+- [x] Deepen [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md)
+- [x] Deepen [agenix-sops-nix](../12-deployment-and-infra/agenix-sops-nix.md)
+- [x] Deepen [testing-nixos-vm-tests](../11-development/testing-nixos-vm-tests.md)
+
+### Batch I — Fleet deploy navigation (2026-08-01)
+
+- [x] [fleet-deploy](../cheatsheets/fleet-deploy.md) chooser
+- [x] Deepen [deploy-rs](../12-deployment-and-infra/deploy-rs.md)
+- [x] Deepen [morph-nixinate](../12-deployment-and-infra/morph-nixinate.md)
+- [x] Deepen [remote-deploy](../09-nixos/operations/remote-deploy.md)
+
+### Batch J — Disk layout + impermanence (2026-08-01)
+
+- [x] [disk-and-persistence](../cheatsheets/disk-and-persistence.md) chooser
+- [x] Deepen [disko](../12-deployment-and-infra/disko.md)
+- [x] Deepen [impermanence](../09-nixos/configuration/impermanence.md)
+- [x] Deepen [disko-recipes](../09-nixos/configuration/disko-recipes.md)
+
+### Batch K — Binary cache navigation (2026-08-01)
+
+- [x] [binary-caches](../cheatsheets/binary-caches.md) chooser
+- [x] Deepen [binary-cache-hosting](../12-deployment-and-infra/binary-cache-hosting.md)
+- [x] Deepen [binary-caches](../04-store-and-build/binary-caches.md) (client)
+- [x] Deepen [signing-and-caches](../14-security-and-trust/signing-and-caches.md)
+
+### Closeout (2026-08-01)
+
+- [x] Subagent quality verify on new G–L leaves (5 cheatsheets + 4 worked configs)
+- [x] Parent review: sources rows, EXPAND-PLAN Batch L + Phase 7 exit, coverage sync
+- [x] Audits: `broken-links.mjs` → `broken=0`; `quality-audit.mjs` green
+
+### Batch D (historical note)
+
+- [x] Batch D — site generator (live) — see Batch D section above / [site.md](site.md)
 
 ## Phase 6 — Homelab and config-repo gaps (2026-08-01)
 

@@ -25,6 +25,7 @@ Use after a leaf is already `complete` when calibrating toward runbook-grade den
 - [ ] **Boundaries** — short “what this page is not” (or equivalent scope note) on concept and operator leaves
 - [ ] **Failure mode** — at least one “what goes wrong” bullet or table row on operator/contributor leaves
 - [ ] **Example corpus link** — when a fixture exists under [meta/examples/](examples/README.md), cite it from `## Examples`
+- [ ] **Worked-config link** — when a multi-file walkthrough belongs under [16-configuration-examples](../16-configuration-examples/README.md), prefer linking that leaf over inventing a second full tree
 - [ ] **`last-checked: YYYY-MM`** frontmatter on high-churn leaves (experimental, implementations, adjacent tools, deploy/mesh)
 - [ ] **Inbound links** — high-traffic leaves appear from cheatsheet, FAQ, or glossary where relevant
 

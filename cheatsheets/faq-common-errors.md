@@ -87,7 +87,7 @@ Auth side (private flake inputs): confirm effective tokens with config inspectio
 - [NixOS options patterns](nixos-options-patterns.md) — `mkIf` / merge helpers that prevent recursion
 - [Reading manuals and search](../00-roadmap/reading-manuals-and-search.md) — which manual / channel for option lookup
 - [Getting help and community](../15-history-and-governance/getting-help-and-community.md) — Discourse / Matrix / GitHub norms
-- [CLI cheatsheet](cli.md) · [nix.conf knobs](nix-conf-knobs.md)
+- [CLI cheatsheet](cli.md) · [nix.conf knobs](nix-conf-knobs.md) · [Install and bootstrap](install-and-bootstrap.md)
 
 ## References
 

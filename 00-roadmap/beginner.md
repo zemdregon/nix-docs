@@ -72,7 +72,7 @@ How builds land on disk and why GC and caches matter.
 Installation and a minimal system config — not a full ops tour.
 
 1. [NixOS overview](../09-nixos/README.md)
-2. [Installation overview](../09-nixos/installation/README.md) — prefer [graphical installer](../09-nixos/installation/graphical-installer.md); [manual install](../09-nixos/installation/manual-install.md) if needed
+2. [Installation overview](../09-nixos/installation/README.md) — prefer [graphical installer](../09-nixos/installation/graphical-installer.md); [manual install](../09-nixos/installation/manual-install.md) if needed. Stuck choosing a path? [Install and bootstrap](../cheatsheets/install-and-bootstrap.md)
 3. Optional context: [dual boot and VMs](../09-nixos/installation/dual-boot-and-vms.md) if you are installing beside another OS or practicing in a hypervisor guest
 4. [configuration.nix](../09-nixos/configuration/configuration-nix.md)
 5. [hardware-configuration](../09-nixos/configuration/hardware-configuration.md)
@@ -105,6 +105,14 @@ Keep these open while practicing:
 - [NixOS options patterns](../cheatsheets/nixos-options-patterns.md)
 - [FAQ: common errors](../cheatsheets/faq-common-errors.md) — symptom → cause → deeper leaf
 
+### 8. Picture-perfect configs (optional)
+
+After a first flake/NixOS pass, walk a composed example:
+
+1. [Minimal flake NixOS host](../16-configuration-examples/minimal-flake-nixos-host.md)
+2. Optional: [NixOS with Home Manager](../16-configuration-examples/nixos-with-home-manager.md) or [Project devShell and direnv](../16-configuration-examples/project-devshell-and-direnv.md)
+3. Index: [Configuration examples](../16-configuration-examples/README.md)
+
 ## Next steps
 
 - Follow the [operator roadmap](operator.md) for upgrades, troubleshooting, and day-2 ops
@@ -124,3 +132,4 @@ Keep these open while practicing:
 - [Operator](operator.md) — rebuilds, upgrades, deploy, secrets, caches
 - [Contributor](contributor.md) — packaging, modules, nixpkgs contribution
 - [Comparisons](../comparisons/README.md) — mental-model bridges from other ecosystems
+- [Configuration examples](../16-configuration-examples/README.md) — multi-file walkthroughs that compose the domains

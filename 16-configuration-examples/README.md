@@ -19,3 +19,7 @@ Pins such as `nixos-26.05` and `system = "x86_64-linux"` are illustrative. Flake
 - [Homelab proxy, services, and secrets](homelab-proxy-secrets-services.md) — Reverse proxy, firewall, and ciphertext secrets
 - [Multi-host config repo](multi-host-config-repo.md) — `hosts/` / `modules/` fleet flake and deploy hooks
 - [nix-darwin with Home Manager](nix-darwin-with-home-manager.md) — macOS system + user config via `darwin-rebuild`
+- [Disko + impermanence host](disko-impermanence-host.md) — Declarative disks, tmpfs root, and `/persist` survivors
+- [nixos-anywhere bootstrap](nixos-anywhere-bootstrap.md) — Remote SSH wipe-and-install of a disko flake
+- [deploy-rs fleet](deploy-rs-fleet.md) — Day-2 multi-profile hub deploy on a multi-host flake
+- [Flake CI with GitHub Actions](flake-ci-github-actions.md) — Runner install, cache, `nix flake check`, host matrix

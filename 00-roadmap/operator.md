@@ -43,10 +43,10 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 - [configuration.nix](../09-nixos/configuration/configuration-nix.md), [Imports and Profiles](../09-nixos/configuration/imports-and-profiles.md)
 - [Secrets Strategies](../09-nixos/configuration/secrets-strategies.md)
-- [Partitioning and Bootloaders](../09-nixos/configuration/partitioning-and-bootloaders.md) when install/disk layout bites
+- Disk / persist: [Disk and persistence](../cheatsheets/disk-and-persistence.md) → [Partitioning and Bootloaders](../09-nixos/configuration/partitioning-and-bootloaders.md), [disko](../12-deployment-and-infra/disko.md), [Disko recipes](../09-nixos/configuration/disko-recipes.md), [Impermanence](../09-nixos/configuration/impermanence.md)
 - Desktop hosts (optional): [NixOS Desktop](../09-nixos/desktop/README.md) — compositors, PipeWire, fonts, Flatpak/FHS, Steam, printing
-- Install/bootstrap only as needed: [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md), [disko](../12-deployment-and-infra/disko.md)
-- Optional deepeners: [Impermanence](../09-nixos/configuration/impermanence.md), [Secure Boot and Lanzaboote](../09-nixos/configuration/secure-boot-and-lanzaboote.md), [ZFS and Btrfs](../09-nixos/configuration/zfs-and-btrfs.md), [Specialisations](../09-nixos/configuration/specialisations.md), [Enterprise identity](../09-nixos/configuration/enterprise-identity.md), [Disko recipes](../09-nixos/configuration/disko-recipes.md), [Overlay networks](../09-nixos/configuration/overlay-networks.md), [Firmware and microcode](../09-nixos/configuration/firmware-and-microcode.md)
+- Install/bootstrap only as needed: [Install and bootstrap](../cheatsheets/install-and-bootstrap.md) chooser → [nixos-anywhere](../09-nixos/installation/nixos-anywhere.md), [disko](../12-deployment-and-infra/disko.md)
+- Optional deepeners: [Secure Boot and Lanzaboote](../09-nixos/configuration/secure-boot-and-lanzaboote.md), [ZFS and Btrfs](../09-nixos/configuration/zfs-and-btrfs.md), [Specialisations](../09-nixos/configuration/specialisations.md), [Enterprise identity](../09-nixos/configuration/enterprise-identity.md), [Overlay networks](../09-nixos/configuration/overlay-networks.md), [Firmware and microcode](../09-nixos/configuration/firmware-and-microcode.md)
 - Bootstrap / edge (when relevant): [Netboot and PXE](../09-nixos/installation/netboot-and-pxe.md), [Airgap and offline](../12-deployment-and-infra/airgap-and-offline.md), [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md)
 - Non-NixOS clients (optional): [WSL and foreign OS](../10-home-and-user/wsl-and-foreign-os.md) — Nix on Windows/macOS/Linux alongside NixOS fleet ops
 
@@ -56,15 +56,21 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 **Pin bump (channel or flake)** — [upgrades](../09-nixos/operations/upgrades.md) → [flake lockfile](../07-flakes/anatomy/lockfile.md) or [channel](../02-concepts/channel.md) → [specialisations](../09-nixos/configuration/specialisations.md) if you maintain boot variants on the same host.
 
-**Fleet / multi-host** — [remote deploy](../09-nixos/operations/remote-deploy.md) → [machine mesh](../02-concepts/machine-mesh.md) + [inter-machine trust](../14-security-and-trust/inter-machine-trust.md) → tool pick: [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) / [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) when SSH/store URIs need VPN.
+**Fleet / multi-host** — [Fleet deploy](../cheatsheets/fleet-deploy.md) chooser → [remote deploy](../09-nixos/operations/remote-deploy.md) → [machine mesh](../02-concepts/machine-mesh.md) + [inter-machine trust](../14-security-and-trust/inter-machine-trust.md) → tool pick: [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) / [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) when SSH/store URIs need VPN.
 
 **Disconnected or lab site** — [airgap and offline](../12-deployment-and-infra/airgap-and-offline.md) → [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md) → [binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) → [netboot and PXE](../09-nixos/installation/netboot-and-pxe.md) for LAN imaging.
 
 **Desktop laptop ops** — [networking](../09-nixos/configuration/networking.md) → [NixOS Desktop](../09-nixos/desktop/README.md) → [secrets strategies](../09-nixos/configuration/secrets-strategies.md) for Wi‑Fi PSKs.
 
-**Homelab / self-hosted** — [homelab patterns](../09-nixos/services/homelab-patterns.md) → [common service examples](../09-nixos/services/common-service-examples.md) → [backups and restore](../09-nixos/operations/backups-and-restore.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) for tailnet-only exposure.
+**Homelab / self-hosted** — [homelab patterns](../09-nixos/services/homelab-patterns.md) → [homelab proxy, services, and secrets (worked example)](../16-configuration-examples/homelab-proxy-secrets-services.md) → [common service examples](../09-nixos/services/common-service-examples.md) → [backups and restore](../09-nixos/operations/backups-and-restore.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) for tailnet-only exposure.
 
-**Multi-host flake repo** — [config repo layout](../07-flakes/workflows/config-repo-layout.md) → [nixosConfigurations](../07-flakes/workflows/nixos-configurations.md) → [imports and profiles](../09-nixos/configuration/imports-and-profiles.md).
+**Multi-host flake repo** — [config repo layout](../07-flakes/workflows/config-repo-layout.md) → [multi-host config repo (worked example)](../16-configuration-examples/multi-host-config-repo.md) → [nixosConfigurations](../07-flakes/workflows/nixos-configurations.md) → [imports and profiles](../09-nixos/configuration/imports-and-profiles.md).
+
+**Disk + ephemeral root** — [disk and persistence (cheatsheet)](../cheatsheets/disk-and-persistence.md) → [Disko + impermanence host (worked example)](../16-configuration-examples/disko-impermanence-host.md) → [disko](../12-deployment-and-infra/disko.md) / [impermanence](../09-nixos/configuration/impermanence.md).
+
+**Remote install then day-2 fleet** — [install and bootstrap](../cheatsheets/install-and-bootstrap.md) → [nixos-anywhere bootstrap (worked example)](../16-configuration-examples/nixos-anywhere-bootstrap.md) → [fleet deploy](../cheatsheets/fleet-deploy.md) → [deploy-rs fleet (worked example)](../16-configuration-examples/deploy-rs-fleet.md) → [remote deploy](../09-nixos/operations/remote-deploy.md).
+
+**Config flake CI** — [CI with Nix](../11-development/ci-with-nix.md) → [Flake CI with GitHub Actions (worked example)](../16-configuration-examples/flake-ci-github-actions.md) → [binary caches (cheatsheet)](../cheatsheets/binary-caches.md).
 
 ### Virtualization and guests (optional)
 
@@ -83,7 +89,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 ### Store, caches, and GC
 
 - Hub: [Store and Build](../04-store-and-build/README.md)
-- [Binary Caches](../04-store-and-build/binary-caches.md), [Substitutes and narinfo](../04-store-and-build/substitutes-and-narinfo.md)
+- [Binary caches (cheatsheet)](../cheatsheets/binary-caches.md) → [Binary Caches](../04-store-and-build/binary-caches.md), [Substitutes and narinfo](../04-store-and-build/substitutes-and-narinfo.md)
 - [Store protocols](../04-store-and-build/store-protocols.md) — `--store` vs substituters vs remote builders
 - [Garbage Collection](../04-store-and-build/garbage-collection.md), [Remote Builders](../04-store-and-build/remote-builders.md)
 - Hosting your own: [Binary Cache Hosting](../12-deployment-and-infra/binary-cache-hosting.md)
@@ -119,6 +125,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 - [Beginner](beginner.md) — first-pass philosophy, concepts, and a working system
 - [Reading manuals and search](reading-manuals-and-search.md) — manuals + search.nixos.org
 - [Contributor](contributor.md) — packaging and module authorship
+- [Configuration examples](../16-configuration-examples/README.md) — picture-perfect multi-file host/fleet/homelab configs
 - [Security and Trust](../14-security-and-trust/README.md) — daemon trust, signing, secrets, inter-trust
 - [Machine mesh](../02-concepts/machine-mesh.md) — multi-machine reachability / build / deploy axes
 - [Airgap and offline](../12-deployment-and-infra/airgap-and-offline.md) · [Netboot and PXE](../09-nixos/installation/netboot-and-pxe.md) · [Specialisations](../09-nixos/configuration/specialisations.md)

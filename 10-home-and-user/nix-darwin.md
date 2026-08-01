@@ -149,6 +149,7 @@ modules = [
 - [Module ecosystems: nix-darwin](../13-implementations/module-ecosystems/nix-darwin.md) — placement among module stacks
 - [nixosConfigurations workflows](../07-flakes/workflows/nixos-configurations.md) — flake cousin on NixOS
 - [NixOS module system](../09-nixos/architecture/module-system.md) — shared module mechanics
+- [nix-darwin with Home Manager](../16-configuration-examples/nix-darwin-with-home-manager.md) — worked Darwin + HM flake walkthrough
 
 ## References
 

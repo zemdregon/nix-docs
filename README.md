@@ -10,7 +10,7 @@ Browse folders by number; each domain `README.md` lists its children. Convention
 
 **Published site:** [https://zemdregon.github.io/nix-docs/](https://zemdregon.github.io/nix-docs/) (MkDocs Material / GitHub Pages) — build notes in [meta/site.md](meta/site.md).
 
-**v1 + Phase 7 (2026-08-01):** ~266 complete leaves including [16-configuration-examples](16-configuration-examples/README.md). Campaign plan: [EXPAND-PLAN.md](EXPAND-PLAN.md). Checklist: [meta/todo-coverage.md](meta/todo-coverage.md).
+**v1 + Phase 7 closed (2026-08-01):** ~274 complete leaves including [16-configuration-examples](16-configuration-examples/README.md). Campaign plan: [EXPAND-PLAN.md](EXPAND-PLAN.md) (cadence ongoing). Checklist: [meta/todo-coverage.md](meta/todo-coverage.md).
 
 ## How to navigate
 
