@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-07
 ---
 
 # Purity Boundaries
@@ -59,6 +60,34 @@ Flake-based workflows default toward this stricter model; flags and escape hatch
 
 When a source truly must be downloaded at build time, a [fixed-output derivation](../../02-concepts/fixed-output-derivation.md) declares the expected output hash. The sandbox may grant network access for that step, but a mismatch fails the build instead of silently changing the closure. That is controlled impurity at **build** time, not a license for arbitrary impurity during **eval**.
 
+### Eval vs build vs flake pure eval (three layers)
+
+| Layer | Question it answers | Controlled by |
+|-------|---------------------|---------------|
+| **Eval purity** | May the evaluator read `$HOME`, `NIX_PATH`, unpinned paths? | `pure-eval`, `--pure-eval`, flake default pure mode |
+| **IFD** | May eval realise a `.drv` to continue? | `allow-import-from-derivation` (separate from `pure-eval`) |
+| **Build sandbox** | May the builder use network / host paths? | Ordinary derivations: no; FODs: hash-bounded network |
+
+Flake commands default to strict **eval** purity; they do **not** disable IFD unless you set `allow-import-from-derivation = false`. See [pure eval and impure](../../07-flakes/pure-eval-and-impure.md) and [import from derivation](../../02-concepts/import-from-derivation.md).
+
+**Version stamp:** `pure-eval` and `allow-import-from-derivation` defaults described here match Nix **2.34.x** stable manual; confirm on your install with `nix --version`.
+
+### Common pitfalls
+
+| Symptom | Likely cause | Read |
+|---------|--------------|------|
+| `access to absolute path … forbidden in pure evaluation mode` | Host path or `~/…` under flake pure eval | [pure eval and impure](../../07-flakes/pure-eval-and-impure.md) |
+| `attribute 'currentSystem' missing` | `builtins.currentSystem` under pure eval | Pass explicit `system` in flake outputs |
+| Eval differs on two machines, same repo | Channel / `NIX_PATH` / unpinned import | [flake](../../02-concepts/flake.md), [channel](../../02-concepts/channel.md) |
+| Hash mismatch on fetch | FOD upstream changed | [fixed-output derivation](../../02-concepts/fixed-output-derivation.md) |
+| CI eval suddenly builds | IFD in expression | [import from derivation](../../02-concepts/import-from-derivation.md) |
+
+### Boundaries (what this page is not)
+
+- **Not flake-specific path rules** — Git staging, `--impure`, and in-tree paths are [pure eval and impure](../../07-flakes/pure-eval-and-impure.md).
+- **Not builder sandbox details** — mount namespaces and `sandbox` are [builders and sandboxes](../../04-store-and-build/builders-and-sandboxes.md).
+- **Not a `nix.conf` reference** — knob list is [nix.conf knobs](../../cheatsheets/nix-conf-knobs.md).
+
 ## Examples
 
 ### Impure path import (default eval)
@@ -96,6 +125,18 @@ import <nixpkgs> {}
 ```
 
 The first form declares exactly which Git tree enters evaluation; the second depends on how the machine’s `NIX_PATH` is configured.
+
+### Flake vs classic side-by-side
+
+Corpus: [broken-flake.nix](../../meta/examples/impure-vs-pure-flake/broken-flake.nix) vs [fixed-flake.nix](../../meta/examples/impure-vs-pure-flake/fixed-flake.nix).
+
+```bash
+# Classic impure one-liner (needs NIX_PATH)
+nix-instantiate --eval -E 'import <nixpkgs> {}' 2>/dev/null | head -1
+
+# Pure eval rejects undeclared ambient state
+nix eval --pure-eval --expr 'builtins.getEnv "USER"'   # => ""
+```
 
 ## See also
 
