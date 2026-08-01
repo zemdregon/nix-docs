@@ -29,7 +29,7 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 ### 2. Language
 
 - Hub: [Language](../03-language/README.md)
-- Syntax and evaluation: [functions](../03-language/syntax/functions.md), [lists and attrsets](../03-language/syntax/lists-and-attrsets.md), [laziness](../03-language/semantics/laziness.md), [evaluation model](../03-language/semantics/evaluation-model.md), [purity boundaries](../03-language/semantics/purity-boundaries.md)
+- Syntax and evaluation: [functions](../03-language/syntax/functions.md), [lists and attrsets](../03-language/syntax/lists-and-attrsets.md), [laziness](../03-language/semantics/laziness.md), [scoping and shadowing](../03-language/semantics/scoping-and-shadowing.md), [evaluation model](../03-language/semantics/evaluation-model.md), [purity boundaries](../03-language/semantics/purity-boundaries.md)
 - Idioms used in nixpkgs: [callPackage](../03-language/idioms/callPackage.md), [overlays pattern](../03-language/idioms/overlays-pattern.md), [lib helpers](../03-language/idioms/lib-helpers.md), [anti-patterns](../03-language/idioms/anti-patterns.md)
 - Quick ref: [language cheatsheet](../cheatsheets/language.md) or [03-language/cheatsheet](../03-language/cheatsheet.md)
 
@@ -78,9 +78,28 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 - Evaluators: [cpp Nix](../13-implementations/nix-evaluator/cpp-nix.md), [Lix](../13-implementations/nix-evaluator/lix.md), [Tvix](../13-implementations/nix-evaluator/tvix.md), [Snix](../13-implementations/nix-evaluator/snix.md)
 - Frameworks you may meet in the wild: [flake-parts](../13-implementations/module-ecosystems/flake-parts.md), [community frameworks](../13-implementations/community-frameworks/README.md)
 
+### Scenario paths (pick one track)
+
+**First nixpkgs package PR** — [simple package](../06-nixpkgs/packaging/simple-package.md) + [example corpus](../meta/examples/simple-package.nix) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md) → [tests and passthru](../06-nixpkgs/packaging/tests-and-passthru.md) → [ofborg and CI](../06-nixpkgs/contribution/ofborg-and-ci.md) → [review process](../06-nixpkgs/contribution/review-process.md).
+
+**NixOS module upstream** — [writing a module](../09-nixos/modules/writing-a-module.md) + [minimal-module.nix](../meta/examples/minimal-module.nix) → [custom options](../09-nixos/modules/custom-options.md) → [service patterns](../09-nixos/services/service-patterns.md) → [upstreaming modules](../09-nixos/modules/upstreaming-modules.md).
+
+**Flake library / devShell** — [flake.nix schema](../07-flakes/anatomy/flake-nix-schema.md) + [hello-flake](../meta/examples/hello-flake/flake.nix) → [packages / apps / devShells](../07-flakes/workflows/packages-apps-devShells.md) → [checks and hydraJobs](../07-flakes/workflows/checks-and-hydraJobs.md) → [CI with Nix](../11-development/ci-with-nix.md).
+
+**Debugging eval failures** — [scoping and shadowing](../03-language/semantics/scoping-and-shadowing.md) → [laziness](../03-language/semantics/laziness.md) → [purity boundaries](../03-language/semantics/purity-boundaries.md) → [pure eval and impure](../07-flakes/pure-eval-and-impure.md) → [debugging evaluation](../11-development/debugging-evaluation.md) → [FAQ: common errors](../cheatsheets/faq-common-errors.md).
+
+**Hash / fetch breakage** — [fixed-output derivation](../02-concepts/fixed-output-derivation.md) + [fod-fetchurl.nix](../meta/examples/fod-fetchurl.nix) → [debugging builds](../04-store-and-build/debugging-builds.md) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md).
+
+**Experimental feature in a PR** — [feature flags overview](../08-experimental-features/feature-flags-overview.md) → specific leaf (e.g. [ca-derivations](../08-experimental-features/ca-derivations.md)) → [tracking stabilization](../08-experimental-features/tracking-stabilization.md); stamp behavior in commit message / PR text.
+
+### Example corpus (shared fixtures)
+
+Reusable snippets under [meta/examples/](../meta/examples/README.md) — cite from your docs/PRs; not a second tutorial track. Validate locally when Nix is installed: `node meta/examples/validate.mjs`.
+
 ## Next steps
 
-- Pick one concrete contribution: a package bump/add, a module fix, or an RFC comment — then work the relevant subsection above as a checklist
+- Pick one concrete contribution: a package bump/add, a module fix, or an RFC comment — then work the relevant **scenario path** above as a checklist
+- Shared snippets: [meta/examples](../meta/examples/README.md) (`hello-flake`, `overlay-snippet`, `minimal-module`, …)
 - Eval/build symptom shortcuts: [FAQ: common errors](../cheatsheets/faq-common-errors.md) (IFD, FOD hash mismatch, pure-eval failures)
 - Use [glossary](../glossary.md) when terms collide; track wiki gaps in [todo-coverage](../meta/todo-coverage.md)
 - Switch to [Operator](operator.md) only if you need install/rebuild/maintenance order, not for packaging or module design
@@ -92,3 +111,4 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 - [Operator](operator.md) — day-2 rebuild, deploy, and trust ops
 - Upstream entry points (via leaf refs): [nixpkgs contribution](../06-nixpkgs/contribution/README.md), [RFC process](../15-history-and-governance/rfc-process.md)
 - [Import from derivation](../02-concepts/import-from-derivation.md) — eval cost when packaging or reviewing flakes
+- [Example corpus](../meta/examples/README.md) · [FAQ: common errors](../cheatsheets/faq-common-errors.md)

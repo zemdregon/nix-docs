@@ -9,6 +9,17 @@ import path from "path";
 const ROOT = process.cwd();
 const SKIP_DIRS = new Set([".git", "node_modules", ".cursor"]);
 
+/** Leaves intentionally without runnable ## Examples (roadmaps, cheatsheets, …). */
+const THIN_EXAMPLES_EXEMPT = [
+  /^00-roadmap\//,
+  /^cheatsheets\//,
+  /^glossary\.md$/,
+  /^03-language\/cheatsheet\.md$/,
+  /^07-flakes\/pure-eval-and-impure\.md$/, // large Examples with ### subsections
+  /^09-nixos\/configuration\/networking\.md$/,
+  /^09-nixos\/services\/common-service-examples\.md$/,
+];
+
 function walk(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.name.startsWith(".") && ent.name !== ".") continue;
@@ -33,6 +44,21 @@ function parseFrontmatter(text) {
 
 function rel(p) {
   return path.relative(ROOT, p).replace(/\\/g, "/");
+}
+
+/** Extract body of a level-2 section (stops at next `## ` heading; `###` is included). */
+function sectionBody(body, title) {
+  const re = new RegExp(`^## ${title}\\s*\\n([\\s\\S]*?)(?=^## )`, "m");
+  const m = body.match(re);
+  if (m) return m[1];
+  const reLast = new RegExp(`^## ${title}\\s*\\n([\\s\\S]*)$`, "m");
+  return (body.match(reLast) || [null, null])[1];
+}
+
+function isExamplesExempt(relPath, body) {
+  if (THIN_EXAMPLES_EXEMPT.some((re) => re.test(relPath))) return true;
+  if (/no runnable example/i.test(body.slice(0, 800))) return true;
+  return false;
 }
 
 const files = walk(ROOT);
@@ -63,9 +89,7 @@ for (const file of files) {
   const text = fs.readFileSync(file, "utf8");
   const { body, fm } = parseFrontmatter(text);
   if (fm.status !== "complete") continue;
-  if (file.endsWith("/README.md") || file.includes("/meta/") && !file.includes("/0")) {
-    // skip index/meta plan docs except numbered domains
-  }
+
   const isLeaf =
     !file.endsWith("/README.md") &&
     !["glossary.md", "EXPAND-PLAN.md", "ATTACK-PLAN.md", "AGENTS.md"].includes(
@@ -75,17 +99,21 @@ for (const file of files) {
   if (!isLeaf) continue;
 
   completeLeaves.push(file);
+  const relPath = rel(file);
 
-  const ex = body.match(/## Examples([\s\S]*?)(## |$)/);
-  if (!ex || ex[1].trim().length < 40) thinExamples.push(rel(file));
+  const exBody = sectionBody(body, "Examples");
+  const exLen = exBody ? exBody.trim().length : 0;
+  if (!isExamplesExempt(relPath, body) && exLen < 40) {
+    thinExamples.push(relPath);
+  }
 
-  if (!/## See also/.test(body)) noSeeAlso.push(rel(file));
+  if (!/## See also/.test(body)) noSeeAlso.push(relPath);
 
   const isConceptOrOps =
     /\/02-concepts\//.test(file) ||
     /\/09-nixos\/(operations|configuration)\//.test(file);
   if (isConceptOrOps && !/Boundaries|what this page is not/i.test(body)) {
-    noBoundaries.push(rel(file));
+    noBoundaries.push(relPath);
   }
 
   if (fm["last-checked"]) {
@@ -93,7 +121,7 @@ for (const file of files) {
     const ageMonths =
       (today.getFullYear() - d.getFullYear()) * 12 +
       (today.getMonth() - d.getMonth());
-    if (ageMonths > STALE_MONTHS) staleLastChecked.push(rel(file));
+    if (ageMonths > STALE_MONTHS) staleLastChecked.push(relPath);
   }
 }
 

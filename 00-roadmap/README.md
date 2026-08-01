@@ -16,6 +16,8 @@ See [Nix Docs](../README.md) for the full domain list, and [conventions](../meta
 
 Paths can overlap. Switch when your goal changes.
 
+Each roadmap includes **scenario paths** — short ordered tracks for a specific task (risky rebuild, first package PR, airgap site, …). Use those when you know the job; use the full numbered sections for a first read-through.
+
 ## Contents
 
 - [Beginner](beginner.md) — First-pass path through philosophy, concepts, and basic NixOS
