@@ -73,6 +73,7 @@ steam-run ./some-upstream-installer.run
 
 - [Wayland and compositors](wayland-and-compositors.md) — compositors, `xdg.portal`, sessions
 - [Gaming: Steam and Proton](gaming-steam-proton.md) — `programs.steam`, `steam-run`, Proton
+- [nix-ld and foreign binaries](nix-ld-and-foreign-binaries.md) — system-wide dynamic linker shim
 - [configuration.nix](../configuration/configuration-nix.md) — host policy, allow-unfree
 - [Containers (OCI)](../../11-development/containers-oci.md) — another isolation/packaging model (image export, not desktop apps)
 

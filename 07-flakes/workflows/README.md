@@ -13,3 +13,4 @@ Typical flake output patterns.
 - [homeConfigurations](home-configurations.md) — Home Manager via flakes
 - [Templates](templates.md) — flake init templates
 - [checks and hydraJobs](checks-and-hydraJobs.md) — CI-oriented outputs
+- [Config repo layout](config-repo-layout.md) — hosts/modules/users mono-repo conventions

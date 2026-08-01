@@ -115,6 +115,7 @@ When no upstream module exists, declare a unit directly. Illustrative fragment: 
 ## See also
 
 - [Service patterns](service-patterns.md)
+- [Homelab patterns](homelab-patterns.md) — proxy, TLS, and multi-service composition
 - [Networking](../configuration/networking.md)
 - [Secrets strategies](../configuration/secrets-strategies.md)
 - [Users and groups](../configuration/users-and-groups.md)

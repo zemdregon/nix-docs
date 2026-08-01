@@ -13,3 +13,4 @@ Day-2 operations for NixOS systems.
 - [Upgrades](upgrades.md) — Channel/flake upgrades
 - [Remote Deploy](remote-deploy.md) — Deploying to remote hosts
 - [Troubleshooting](troubleshooting.md) — Common failure modes
+- [Backups and restore](backups-and-restore.md) — Data backup vs generation rollback

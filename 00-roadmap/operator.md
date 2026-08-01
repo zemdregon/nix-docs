@@ -61,11 +61,15 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 **Desktop laptop ops** — [networking](../09-nixos/configuration/networking.md) → [NixOS Desktop](../09-nixos/desktop/README.md) → [secrets strategies](../09-nixos/configuration/secrets-strategies.md) for Wi‑Fi PSKs.
 
+**Homelab / self-hosted** — [homelab patterns](../09-nixos/services/homelab-patterns.md) → [common service examples](../09-nixos/services/common-service-examples.md) → [backups and restore](../09-nixos/operations/backups-and-restore.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) for tailnet-only exposure.
+
+**Multi-host flake repo** — [config repo layout](../07-flakes/workflows/config-repo-layout.md) → [nixosConfigurations](../07-flakes/workflows/nixos-configurations.md) → [imports and profiles](../09-nixos/configuration/imports-and-profiles.md).
+
 ### Virtualization and guests (optional)
 
 - Hub: [NixOS Services](../09-nixos/services/README.md)
 - [Libvirt and VMs](../09-nixos/services/libvirt-and-vms.md), [MicroVMs](../09-nixos/services/microvms.md)
-- Containers: [Containers and nspawn](../09-nixos/services/containers-and-nspawn.md), [Declarative containers](../09-nixos/services/declarative-containers.md)
+- Containers: [Containers and nspawn](../09-nixos/services/containers-and-nspawn.md), [Declarative containers](../09-nixos/services/declarative-containers.md), [Docker and Podman](../09-nixos/services/docker-and-podman.md)
 - Mental model vs orchestrators: [Nix vs containers / orchestrators](../comparisons/nix-vs-containers-orchestrators.md)
 
 ### CLI and daemon config
