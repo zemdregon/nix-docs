@@ -97,6 +97,7 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Source | URL |
 |--------|-----|
 | Nixpkgs manual (stable) | https://nixos.org/manual/nixpkgs/stable/ |
+| Nixpkgs manual — Configuring Nixpkgs (`allowUnfree`) | https://nixos.org/manual/nixpkgs/stable/#sec-configuring-nixpkgs |
 | Nixpkgs manual — Fetchers | https://nixos.org/manual/nixpkgs/stable/#chap-pkgs-fetchers |
 | Nixpkgs manual — Standard environment | https://nixos.org/manual/nixpkgs/stable/#chap-stdenv |
 | Nixpkgs manual — Using stdenv | https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv |

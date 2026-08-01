@@ -1,5 +1,6 @@
 ---
-status: draft
+status: complete
+last-checked: 2026-08
 ---
 
 # Backups and restore
@@ -11,6 +12,44 @@ NixOS [generations](../../02-concepts/generation.md) and [rollbacks](rollbacks.m
 Treat **system rollback** and **data backup** as complementary: generations undo a bad config; backups restore files and databases after disk loss, ransomware, or operator error. On [impermanent](../configuration/impermanence.md) hosts the split is sharper—rebuild recreates undeclared paths on every boot, so anything on your persist list that matters off-box needs an explicit backup job.
 
 ## Details
+
+### Generation rollback vs data backup
+
+Use this flow when deciding what to do after a problem:
+
+```mermaid
+flowchart TD
+  A[Something went wrong] --> B{Bad NixOS config or package change?}
+  B -->|Yes| C{Data still intact on disk?}
+  B -->|No| D{Lost files, DB, or whole disk?}
+  C -->|Yes| E["nixos-rebuild switch --rollback or boot menu"]
+  C -->|No| F[Restore data from backup first, then rollback if needed]
+  D -->|Partial| G[Stop service, restore paths or replay dump]
+  D -->|Total| H[Reinstall or boot install media, apply flake/config]
+  G --> I[nixos-rebuild switch if config must match restored data]
+  H --> J[Restore restic/borg snapshots into correct paths]
+  J --> I
+  E --> K[Verify services and timers]
+  F --> K
+  I --> K
+```
+
+| Situation | Tool | What it restores |
+|-----------|------|------------------|
+| Broken `configuration.nix`, wrong channel bump | Generation rollback | System closure, `/etc`, declared users |
+| Deleted `/home`, corrupted Postgres data dir | Restic / Borg restore | Arbitrary paths and dumps |
+| Dead SSD, stolen machine | Install + config + off-site backup | Hardware + closure + data |
+| Ephemeral root with missing persist item | Rebuild + restore | Declared paths only after restore |
+
+### Failure modes
+
+**Backing up `/nix`** — The store is content-addressed and huge; it duplicates what `nix copy` or a fresh `nixos-rebuild` already provides. Including `/nix` balloons backup time and storage without improving recovery—you rebuild closures from your flake or channel instead. Always `exclude` `/nix` (and often `/run`, `/tmp`, swap files).
+
+**Password or key in the Nix store** — Plain strings in `configuration.nix` are copied into `/nix/store` and are world-readable on the machine. Repository passwords, S3 keys, and SSH private keys used for backup must live in `passwordFile`, `environmentFile`, or borg `encryption.passCommand` pointing at root-only paths (e.g. `/run/agenix/…`) populated by [secrets strategies](../configuration/secrets-strategies.md) or [agenix / sops-nix](../../12-deployment-and-infra/agenix-sops-nix.md).
+
+**Restore without stopping the service** — Restoring into `/var/lib/postgresql` or Docker’s data root while Postgres or the daemon is running produces a torn, inconsistent dataset. Stop the unit (`systemctl stop postgresql`), restore, fix ownership if needed, then start. For databases prefer logical dumps (`pg_dumpall` via restic `command`) when point-in-time file restore is risky.
+
+**Untested backups** — Timers that show `active (waiting)` prove scheduling, not recoverability. Periodically restore to a VM or spare host: list snapshots, extract one path, start the app, and confirm checksums or row counts. A backup you have never restored is inventory, not insurance.
 
 ### What generations cover (and do not)
 
@@ -25,15 +64,43 @@ It does **not** rewind:
 
 After hardware failure, you need both a working system generation (or install media + config) **and** restored data.
 
+### Paths homelab operators typically include
+
+Homelab stacks mix declarative config with long-lived state. Common backup targets (adjust to your modules and persist list):
+
+| Path / target | Why |
+|---------------|-----|
+| `/etc/nixos` or flake repo path | Source of truth when not fully in git on the host |
+| `/home` | SSH keys, project data, Syncthing metadata under `~/.config/syncthing` |
+| `/var/lib/postgresql` | App DBs when using file-level backup (prefer `pg_dump` when possible) |
+| `/var/lib/docker` or `/var/lib/containers` | Named volumes and local image layers not in registry |
+| `/var/lib/nextcloud` | Nextcloud data directory (often large; exclude caches) |
+| `/var/lib/syncthing` | Server-side Syncthing config if not under `/home` |
+| `/var/lib/traefik`, `/var/lib/nginx` | ACME state and custom certs when not fully in Nix |
+| Logical dumps via `command` | Postgres, MySQL, restic stdin jobs—portable across OS versions |
+
+Pair path backups with your [impermanence](../configuration/impermanence.md) persist list: anything on persist that is irreplaceable should also be off-site.
+
 ### Declarative backup modules
 
 nixpkgs ships NixOS modules that wrap [Restic](https://restic.net/) and [BorgBackup](https://www.borgbackup.org/) with systemd services and timers.
 
-**`services.restic.backups`** — one attribute set per named job. Each job defines `paths` (or `command` for stdin backups such as `pg_dumpall`), `repository` / `repositoryFile`, and `passwordFile` or `environmentFile` for credentials. Backends include local paths, SFTP, S3-compatible stores, and rclone remotes. The module generates `restic-backups-<name>.service` and, when `timerConfig` is non-null (default: daily), a matching timer. Use `pruneOpts` for retention, `initialize = true` on first deploy, and `exclude` for caches and `/nix`.
+**`services.restic.backups.<name>`** — one attribute set per named job. Key options:
 
-**`services.borgbackup.jobs`** — client jobs with `paths`, `repo`, `encryption`, `compression`, and `startAt` (systemd calendar). **`services.borgbackup.repos`** — SSH-restricted borg serve endpoints on the same host. Remote repos use `environment.BORG_RSH` and keys outside the store.
+- `paths` — directories to back up; or `command` for stdin backups (e.g. `pg_dumpall`).
+- `repository` / `repositoryFile` — local path, `sftp:…`, `s3:…`, rclone remotes.
+- `passwordFile` or `environmentFile` — credentials outside the store (required pattern).
+- `timerConfig` — systemd calendar (default daily when non-null); set `OnCalendar`, `Persistent`.
+- `pruneOpts` — retention flags passed to `restic forget`.
+- `initialize = true` — create repo on first deploy if missing.
+- `createWrapper = true` — installs `restic-<name>` wrapper with repo env baked in.
+- `exclude` — e.g. `"/nix"`, cache globs.
 
-Both modules schedule via systemd; override timing with `timerConfig` (restic) or `startAt` / timer-related job options (borg). Inspect units with `systemctl list-timers` and logs with `journalctl -u restic-backups-*` or `borgbackup-job-*`.
+Generates `restic-backups-<name>.service` and `restic-backups-<name>.timer`.
+
+**`services.borgbackup.jobs.<name>`** — client jobs: `paths`, `repo`, `encryption` (`mode`, `passCommand`), `compression`, `startAt` (systemd calendar string). **`services.borgbackup.repos.<name>`** — on the **serve** host: `path`, `authorizedKeys` (module injects `borg serve --restrict-to-repository` per key). Optional `authorizedKeysAppendOnly`, `allowSubRepos`, `quota`. Remote clients set `environment.BORG_RSH` and keys outside the store.
+
+Both modules schedule via systemd; override timing with `timerConfig` (restic) or `startAt` (borg). Inspect units with `systemctl list-timers` and logs with `journalctl` (see Troubleshooting below).
 
 ### Credentials and secrets
 
@@ -65,6 +132,24 @@ Local snapshots ([ZFS and Btrfs](../configuration/zfs-and-btrfs.md)) give fast p
 
 Practice restores on a VM or spare machine periodically; an untested backup is a guess.
 
+### Troubleshooting
+
+**Timer never runs** — `systemctl list-timers 'restic-backups-*'` and `borgbackup-job-*` show next trigger. `Persistent = true` in `timerConfig` catches missed runs after downtime.
+
+**Failed backup unit** — Check status and recent logs:
+
+```bash
+systemctl status restic-backups-home.service
+journalctl -u 'restic-backups-*' -b --no-pager
+journalctl -u 'borgbackup-job-*' -b --no-pager
+```
+
+Common causes: wrong `passwordFile` permissions, expired S3 credentials in `environmentFile`, repo not initialized (`initialize` / `doInit`), network to remote `repo`, or SSH key not loaded at backup time.
+
+**Manual one-shot** — `sudo systemctl start restic-backups-<name>.service` (same as timer-fired run). Use the generated wrapper for inspection: `sudo restic-<name> snapshots`.
+
+**Restore smoke test** — `restic restore latest --target /tmp/restic-test --path /home/user/important` then diff against source; delete test tree after.
+
 ### Boundaries (what this page is not)
 
 - [Rollbacks](rollbacks.md) and [Garbage collection](../../04-store-and-build/garbage-collection.md)—generation lifecycle only.
@@ -83,6 +168,7 @@ Minimal restic job to a local repository (password file supplied outside eval):
     repository = "/mnt/backup/restic-home";
     passwordFile = "/run/agenix/restic-password";
     initialize = true;
+    createWrapper = true;
     timerConfig = {
       OnCalendar = "daily";
       Persistent = true;
@@ -96,14 +182,44 @@ Minimal restic job to a local repository (password file supplied outside eval):
 }
 ```
 
-Borg job with passphrase via `passCommand` (pattern from the NixOS manual):
+Restic to S3-compatible storage (credentials in env file, not in the store):
+
+```nix
+{
+  services.restic.backups.offsite = {
+    paths = [
+      "/var/lib/nextcloud"
+      "/var/lib/syncthing"
+      "/home"
+    ];
+    exclude = [
+      "/nix"
+      "/home/*/.cache"
+      "**/cache/**"
+    ];
+    repository = "s3:s3.eu-central-1.amazonaws.com/my-homelab-backups";
+    passwordFile = "/run/agenix/restic-password";
+    environmentFile = "/run/agenix/restic-s3-env"; # AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+    initialize = true;
+    createWrapper = true;
+    timerConfig.OnCalendar = "03:30";
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 4"
+      "--keep-monthly 12"
+    ];
+  };
+}
+```
+
+Borg client job with passphrase via `passCommand`:
 
 ```nix
 {
   services.borgbackup.jobs.etc = {
     paths = [ "/etc/nixos" "/var/lib/postgresql" ];
     exclude = [ "/nix" ];
-    repo = "user@backup-host:repo";
+    repo = "borg@backup-host:.";
     doInit = true;
     encryption = {
       mode = "repokey-blake2";
@@ -117,6 +233,21 @@ Borg job with passphrase via `passCommand` (pattern from the NixOS manual):
   };
 }
 ```
+
+Borg **repository server** on the backup host (clients use `user@host:.` per module docs):
+
+```nix
+{
+  services.borgbackup.repos.homelab = {
+    path = "/srv/borg/homelab";
+    authorizedKeys = [
+      "ssh-ed25519 AAAA... backup-client"
+    ];
+  };
+}
+```
+
+Clients use `repo = "borg@backup-host:."` (colon-dot) with `BORG_RSH` and a key listed in `authorizedKeys`.
 
 Database via restic stdin (service runs as `postgres` user in the generated unit):
 
@@ -143,7 +274,7 @@ After deploy, trigger a manual run and list snapshots:
 ```bash
 sudo systemctl start restic-backups-home.service
 sudo restic-home snapshots
-# or: sudo borg list --rsh 'ssh -i /run/agenix/borg-backup-key' user@backup-host:repo
+# or: sudo borg list --rsh 'ssh -i /run/agenix/borg-backup-key' borg@backup-host:.
 ```
 
 ## References
@@ -161,3 +292,4 @@ sudo restic-home snapshots
 - [ZFS and Btrfs](../configuration/zfs-and-btrfs.md)
 - [Secrets strategies](../configuration/secrets-strategies.md)
 - [agenix / sops-nix](../../12-deployment-and-infra/agenix-sops-nix.md)
+- [Homelab patterns](../services/homelab-patterns.md)

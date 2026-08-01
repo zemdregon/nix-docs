@@ -1,5 +1,6 @@
 ---
-status: draft
+status: complete
+last-checked: 2026-08
 ---
 
 # Homelab Patterns
@@ -10,7 +11,27 @@ Homelab and self-hosted stacks on NixOS rarely stop at `services.<app>.enable = 
 
 This page teaches those repeatable patterns—not a catalog of every `services.*` option tree. Start with [Service patterns](service-patterns.md) and [Common service examples](common-service-examples.md) for module shape and individual daemons; use this page when wiring several services into one host.
 
+## Boundaries
+
+**In scope:** how to compose proxy, TLS, firewall, secrets, and state for typical self-hosted apps (Forgejo, Jellyfin, Syncthing as *examples* of the pattern—not exhaustive module documentation).
+
+**Out of scope:** per-service option reference, container orchestration beyond a pointer, backup job configuration (see [Backups and restore](../operations/backups-and-restore.md)), and overlay VPN setup details (see [Overlay networks](../configuration/overlay-networks.md)).
+
+If you need the full option tree for one daemon, use [search.nixos.org/options](https://search.nixos.org/options) and that module's manual section—not this page.
+
 ## Details
+
+### Decision: proxy, exposure, and reachability
+
+| Goal | Reverse proxy | Exposure | Notes |
+|------|---------------|----------|-------|
+| Public HTTPS app on a domain | **nginx** or **Caddy** | Open 80/443; backend on `127.0.0.1` | nginx: mature `virtualHosts`, `locations`, `proxyPass`, `proxyWebsockets`, `enableACME`, `forceSSL`. Caddy: `services.caddy.enable`, `virtualHosts.<host>.extraConfig` with `reverse_proxy`; automatic HTTPS or `useACMEHost` + `security.acme`. |
+| Multiple apps, one hostname (path routing) | **nginx** (preferred) or Caddy `handle_path` in `extraConfig` | Same as above | nginx `locations."/app1/"` / `locations."/app2/"` with distinct `proxyPass` targets. |
+| LAN or tailnet only, no public DNS | **None** (direct) or proxy on overlay address | **No** public `openFirewall`; `services.tailscale.enable` (or WireGuard) | Reach `https://<host>.<tailnet>:<port>` or bind listeners to the overlay IP. Do not punch 80/443 on the public interface if the app is private. |
+| Quick internal tool, trusted LAN | **Direct expose** | Module `openFirewall` or explicit `allowedTCPPorts` | Acceptable on a flat home LAN; avoid on VPS or mixed-trust networks. |
+| App with built-in TLS and you accept bypassing a proxy | **Direct expose** | Open the app's port | Loses centralized TLS, path routing, and uniform headers; rarely ideal for internet-facing hosts. |
+
+**nginx vs Caddy (homelab lens):** both integrate with `security.acme`. nginx fits complex `locations`, header tweaks, and modules already documented in nixpkgs. Caddy reduces Caddyfile-style boilerplate for simple `reverse_proxy` vhosts; advanced routing still belongs in `extraConfig`. Pick one proxy per host unless you have a deliberate split (e.g. nginx for legacy, Caddy for new).
 
 ### The usual stack
 
@@ -21,7 +42,7 @@ This page teaches those repeatable patterns—not a catalog of every `services.*
 | TLS | Certificates and renewal | `security.acme` + proxy ACME options, or Caddy automatic HTTPS |
 | Firewall | Inbound exposure | `services.<name>.openFirewall` when the module provides it; else `networking.firewall.allowedTCPPorts` |
 | Secrets | Passwords, API keys, TLS material | Paths via agenix, sops-nix, or `environmentFiles` — [Secrets strategies](../configuration/secrets-strategies.md) |
-| State | Databases, uploads, indexes | Module data dirs (often `/var/lib/<name>`); plan backups separately |
+| State | Databases, uploads, indexes | Module data dirs (often `/var/lib/<name>`); plan [backups](../operations/backups-and-restore.md) separately |
 
 Many homelab modules (Syncthing, Jellyfin, Forgejo, Nextcloud, and similar) follow this shape: flip `enable`, tune a few settings, then integrate with proxy and firewall rather than exposing the app port directly on the internet.
 
@@ -29,8 +50,8 @@ Many homelab modules (Syncthing, Jellyfin, Forgejo, Nextcloud, and similar) foll
 
 **Pattern:** the application listens on `127.0.0.1` (or a Unix socket); only the proxy binds publicly on 80/443.
 
-- **nginx:** declare `services.nginx.virtualHosts."app.example.org"` with `proxyPass` / `proxyWebsockets` (or `locations`) pointing at the backend URL. Search [nginx options](https://search.nixos.org/options?query=services.nginx) for exact attribute names on your channel.
-- **Caddy:** declare `services.caddy.virtualHosts."app.example.org"` with `extraConfig` or module helpers to reverse-proxy to the backend. Search [Caddy options](https://search.nixos.org/options?query=services.caddy).
+- **nginx:** declare `services.nginx.virtualHosts."app.example.org"` with `locations` containing `proxyPass` and, for WebSockets or server-sent events (SSE), `proxyWebsockets = true`. Search [nginx options](https://search.nixos.org/options?query=services.nginx) for exact attribute names on your channel.
+- **Caddy:** `services.caddy.enable = true`; declare `services.caddy.virtualHosts."app.example.org"` with `extraConfig` containing a `reverse_proxy` directive to the backend URL. Search [Caddy options](https://search.nixos.org/options?query=services.caddy).
 
 Benefits: one place for TLS, HTTP→HTTPS redirects, multiple apps on one host (path or subdomain routing), and tighter firewall rules (open 80/443 only, not every app port).
 
@@ -38,9 +59,23 @@ Benefits: one place for TLS, HTTP→HTTPS redirects, multiple apps on one host (
 
 Public homelab hostnames usually use Let's Encrypt (or another ACME CA).
 
-**nginx path:** define certificates under `security.acme.certs."app.example.org"` (email, `extraDomainNames`, DNS challenge plugins if needed), then on the matching `virtualHost` set options such as `enableACME`, `useACME`, and `forceSSL`. The manual documents the `security.acme` module: [NixOS manual — ACME](https://nixos.org/manual/nixos/stable/#module-security-acme).
+**Shared ACME setup:** accept the provider terms and set a contact address once, then define per-host certificates:
 
-**Caddy path:** the NixOS Caddy module can obtain and renew certificates automatically when `virtualHosts` are configured for public DNS names—confirm `services.caddy` ACME-related options on search.nixos.org for your release.
+```nix
+security.acme = {
+  acceptTerms = true;
+  defaults.email = "admin@example.org";
+  certs."app.example.org" = {
+    # extraDomainNames = [ "www.app.example.org" ];
+  };
+};
+```
+
+Alternatively, set `email` on individual `security.acme.certs."<name>"` entries instead of `defaults.email`.
+
+**nginx path:** on the matching `virtualHost`, set `enableACME = true` and `forceSSL = true` (or `useACMEHost` when reusing a cert defined above). The manual documents the module: [NixOS manual — ACME](https://nixos.org/manual/nixos/stable/#module-security-acme).
+
+**Caddy path:** either let Caddy obtain certificates for public DNS names automatically, or set `virtualHosts.<host>.useACMEHost` to a name under `security.acme.certs` so Caddy uses the centrally managed cert files. Confirm ACME-related options on search.nixos.org for your release.
 
 Keep ACME account keys and DNS API tokens out of evaluated config; reference decrypted paths from [Secrets strategies](../configuration/secrets-strategies.md).
 
@@ -50,7 +85,7 @@ Prefer module-specific `services.<name>.openFirewall` when nixpkgs exposes it—
 
 When no `openFirewall` exists, add explicit rules under `networking.firewall.allowedTCPPorts` / `allowedUDPPorts`. See [Networking](../configuration/networking.md).
 
-**Tailnet-only exposure:** do not open public firewall holes; bind the service or proxy to the overlay address (Tailscale, WireGuard, …) and restrict listeners accordingly. Overlay setup and interface patterns: [Overlay networks](../configuration/overlay-networks.md).
+**Tailnet-only exposure:** do not open public firewall holes; enable `services.tailscale.enable` (or another overlay), leave public `allowedTCPPorts` empty for the app, and reach the service over the tailnet. Overlay setup and interface patterns: [Overlay networks](../configuration/overlay-networks.md).
 
 ### Secrets and configuration
 
@@ -58,7 +93,18 @@ Never put database passwords, admin tokens, or private keys as string literals i
 
 ### Stateful services
 
-Databases (PostgreSQL, Redis), file sync (Syncthing), media libraries (Jellyfin), and groupware (Nextcloud) persist data under `/var/lib` (or paths the module documents). Declarative Nix config describes *how* the service runs; backup, restore, and off-site copies are operational concerns—treat state dirs as first-class assets when planning the host.
+Databases (PostgreSQL, Redis), file sync (Syncthing), media libraries (Jellyfin), and groupware (Nextcloud) persist data under `/var/lib` (or paths the module documents). Declarative Nix config describes *how* the service runs; backup, restore, and off-site copies are operational concerns—treat state dirs as first-class assets and wire [Backups and restore](../operations/backups-and-restore.md) for anything under `/var/lib` you cannot recreate from config alone.
+
+### Failure modes
+
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| ACME renewal or initial issue fails; logs mention HTTP-01 challenge | Port 80 blocked upstream (ISP CGNAT, CDN orange-cloud, another host), or no listener on `/.well-known/acme-challenge/` | Ensure 80 reaches this host; for nginx use `enableACME` / webroot as documented; for DNS-only names use `security.acme` DNS challenge plugins. Do not assume HTTPS-only exposure works for HTTP-01. |
+| App reachable on `:3000` (or module default) from the internet, bypassing TLS | `services.forgejo.openFirewall = true` (or similar) while also running a proxy | Disable module `openFirewall`; bind app to `127.0.0.1`; expose only 80/443 via nginx/Caddy. |
+| Password or API key visible in `/nix/store` | Secret pasted in `configuration.nix`, `builtins.readFile` on a tracked file, or `pkgs.writeText` with credentials | Move to `environmentFile`, `passwordFile`, or agenix/sops paths under `/run`. |
+| Forgejo/Git UI loads but live logs, CI streams, or Jellyfin notifications stall | Missing WebSocket/SSE proxy headers | Set `proxyWebsockets = true` on the nginx `location` (or equivalent Caddy `reverse_proxy` transport). Without it, long-poll and SSE connections hang behind the proxy. |
+| TLS works on subdomain but not alias | Certificate SAN mismatch | Add `extraDomainNames` on `security.acme.certs."<primary>"` or `serverAliases` on the nginx vhost before renewal. |
+| Database empty after reinstall despite "declarative" config | `/var/lib/postgresql` (or app data) not in backup scope | Generations restore *config*, not arbitrary `/var/lib` trees—see [Backups and restore](../operations/backups-and-restore.md). |
 
 ## Examples
 
@@ -68,7 +114,12 @@ Illustrative composition (adjust option names per channel; backends and domains 
 
 ```nix
 { ... }: {
-  # Backend: git forge on localhost only
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "admin@example.org";
+    certs."git.example.org" = { };
+  };
+
   services.forgejo = {
     enable = true;
     settings.server = {
@@ -76,11 +127,7 @@ Illustrative composition (adjust option names per channel; backends and domains 
       HTTP_PORT = 3000;
       ROOT_URL = "https://git.example.org/";
     };
-    # Many modules expose openFirewall; prefer binding to localhost + proxy instead.
-  };
-
-  security.acme.certs."git.example.org" = {
-    email = "admin@example.org";
+    # Do not set openFirewall when using a reverse proxy.
   };
 
   services.nginx = {
@@ -98,6 +145,91 @@ Illustrative composition (adjust option names per channel; backends and domains 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 }
 ```
+
+### Caddy reverse proxy + central ACME
+
+```nix
+{ config, ... }: {
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "admin@example.org";
+    certs."media.example.org" = {
+      group = config.services.caddy.group;
+    };
+  };
+
+  services.jellyfin.enable = true;
+  # Jellyfin listens on localhost by default; confirm port in module docs.
+
+  services.caddy = {
+    enable = true;
+    virtualHosts."media.example.org" = {
+      useACMEHost = "media.example.org";
+      extraConfig = ''
+        reverse_proxy http://127.0.0.1:8096
+      '';
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+}
+```
+
+### Path-based routing: two apps, one hostname
+
+nginx routes `/git/` and `/sync/` to different localhost backends:
+
+```nix
+{ ... }: {
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "admin@example.org";
+  };
+
+  services.forgejo = {
+    enable = true;
+    settings.server.HTTP_PORT = 3000;
+  };
+  services.syncthing.enable = true;
+  # Confirm Syncthing GUI port in services.syncthing options.
+
+  services.nginx = {
+    enable = true;
+    virtualHosts."home.example.org" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/git/" = {
+        proxyPass = "http://127.0.0.1:3000/";
+        proxyWebsockets = true;
+      };
+      locations."/sync/" = {
+        proxyPass = "http://127.0.0.1:8384/";
+        proxyWebsockets = true;
+      };
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+}
+```
+
+Trailing slashes on `proxyPass` and `location` paths must match what each app expects—check upstream docs if redirects loop.
+
+### PostgreSQL backend for an app (localhost only)
+
+Forgejo’s module can provision PostgreSQL for you when `database.type = "postgres"` (default `database.createDatabase = true` enables `services.postgresql` with matching DB/user). For apps without that helper, use a standalone [PostgreSQL snippet](common-service-examples.md) on the Unix socket—no TCP listen, no password in Nix:
+
+```nix
+{ ... }: {
+  services.forgejo = {
+    enable = true;
+    database.type = "postgres";
+    # Module enables postgresql and creates DB/user; use database.passwordFile for auth.
+  };
+}
+```
+
+For password auth or remote TCP, add module-specific settings and secrets via [Secrets strategies](../configuration/secrets-strategies.md)—do not inline passwords.
 
 ### Syncthing or Jellyfin without public exposure
 
@@ -127,6 +259,10 @@ Enable the service, skip wide firewall opens, reach it over Tailscale or WireGua
 ```
 
 Populate `/run/secrets/some-app.env` with agenix, sops-nix, or deploy-time material—not `builtins.readFile` in Nix.
+
+### Homelab state and backups
+
+Declarative service config does not snapshot `/var/lib/forgejo`, `/var/lib/jellyfin`, or PostgreSQL data directories. After composition is working, add Restic or Borg jobs targeting those paths—patterns in [Backups and restore](../operations/backups-and-restore.md).
 
 ## References
 

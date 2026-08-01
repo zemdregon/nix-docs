@@ -195,14 +195,14 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 
 New leaves from gap analysis (homelab / daily-driver config patterns):
 
-- [x] [config-repo-layout](../07-flakes/workflows/config-repo-layout.md) — flake mono-repo `hosts/` / `modules/` / `users/` conventions (`draft`)
-- [x] [homelab-patterns](../09-nixos/services/homelab-patterns.md) — reverse proxy, ACME, secrets, firewall composition (`draft`)
-- [x] [backups-and-restore](../09-nixos/operations/backups-and-restore.md) — restic/borg vs generation rollback (`draft`)
-- [x] [docker-and-podman](../09-nixos/services/docker-and-podman.md) — host container runtimes (`draft`)
-- [x] [unfree-and-licenses](../06-nixpkgs/architecture/unfree-and-licenses.md) — `allowUnfree` policy hub (`draft`)
-- [x] [nix-ld-and-foreign-binaries](../09-nixos/desktop/nix-ld-and-foreign-binaries.md) — prebuilt vendor binaries (`draft`)
+- [x] [config-repo-layout](../07-flakes/workflows/config-repo-layout.md) — flake mono-repo `hosts/` / `modules/` / `users/` conventions (`complete`)
+- [x] [homelab-patterns](../09-nixos/services/homelab-patterns.md) — reverse proxy, ACME, secrets, firewall composition (`complete`)
+- [x] [backups-and-restore](../09-nixos/operations/backups-and-restore.md) — restic/borg vs generation rollback (`complete`)
+- [x] [docker-and-podman](../09-nixos/services/docker-and-podman.md) — host container runtimes (`complete`)
+- [x] [unfree-and-licenses](../06-nixpkgs/architecture/unfree-and-licenses.md) — `allowUnfree` policy hub (`complete`)
+- [x] [nix-ld-and-foreign-binaries](../09-nixos/desktop/nix-ld-and-foreign-binaries.md) — prebuilt vendor binaries (`complete`)
 
-Cross-links: operator roadmap homelab + config-repo tracks; `common-service-examples`, `nixos-configurations`, `flatpak-and-fhs` See also updated. Complete-pass promotion deferred.
+Cross-links: operator + beginner roadmaps; `common-service-examples`, `nixos-configurations`, `imports-and-profiles`, `flatpak-and-fhs` See also updated.
 
 ### Landed (2026-07-31 installer/store/frontend gold)
 
