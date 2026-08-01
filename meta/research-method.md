@@ -4,7 +4,7 @@ status: active
 
 # Research method
 
-Repeatable loop for filling stubs and complete passes. Matches [EXPAND-PLAN.md](../EXPAND-PLAN.md) and [AGENTS.md](../AGENTS.md). Historical draft weeks: [ATTACK-PLAN.md](../ATTACK-PLAN.md).
+Repeatable loop for filling stubs and complete passes. Matches [EXPAND-PLAN.md](../EXPAND-PLAN.md) and [AGENTS.md](../AGENTS.md).
 
 ## Loop
 

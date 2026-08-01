@@ -18,6 +18,7 @@ First-pass reading order for someone new to Nix and NixOS. Skim each linked page
 - Comfortable with a Linux shell and editing text files
 - Willing to install NixOS in a VM or spare machine (recommended), or follow along conceptually
 - No prior functional programming required
+- Skim [Reading manuals and search](reading-manuals-and-search.md) once — how this wiki relates to upstream manuals and search.nixos.org
 
 ## Reading order
 
@@ -110,12 +111,16 @@ Keep these open while practicing:
 - From Ubuntu or Arch: [Ubuntu / Arch to NixOS](../comparisons/ubuntu-arch-to-nixos.md); other apt/pacman/Docker mental models in [comparisons](../comparisons/README.md)
 - When ready to package or contribute: [contributor roadmap](contributor.md)
 - Home-manager and nix-darwin live under [10-home-and-user](../10-home-and-user/README.md) — after a solid NixOS baseline
+- Installing Nix (not NixOS) on another OS: [Installers and Nix variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md)
 - Stuck on an error message: [FAQ: common errors](../cheatsheets/faq-common-errors.md)
+- Ask the community (after searching): [Getting help and community](../15-history-and-governance/getting-help-and-community.md)
 - Glossary fallback: [glossary](../glossary.md)
 
 ## See also
 
 - [Learning roadmaps](README.md) — path chooser
+- [Reading manuals and search](reading-manuals-and-search.md) — manuals + search.nixos.org
+- [Getting help and community](../15-history-and-governance/getting-help-and-community.md) — Discourse / Matrix / GitHub
 - [Operator](operator.md) — rebuilds, upgrades, deploy, secrets, caches
 - [Contributor](contributor.md) — packaging, modules, nixpkgs contribution
 - [Comparisons](../comparisons/README.md) — mental-model bridges from other ecosystems

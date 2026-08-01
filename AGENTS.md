@@ -10,8 +10,7 @@ Guidance for AI agents working in this repository.
 
 Plain-Markdown knowledge base for the full Nix stack (philosophy → language → store → nixpkgs → NixOS → flakes → experimental features → tooling → implementations). No site generator yet.
 
-Expand plan (current): [EXPAND-PLAN.md](EXPAND-PLAN.md)  
-Historical draft campaign pointer: [ATTACK-PLAN.md](ATTACK-PLAN.md)  
+Campaign plan (single): [EXPAND-PLAN.md](EXPAND-PLAN.md)  
 Conventions: [meta/conventions.md](meta/conventions.md)  
 Sources: [meta/sources.md](meta/sources.md)  
 Coverage: [meta/todo-coverage.md](meta/todo-coverage.md)  
@@ -39,19 +38,19 @@ Nav map: [README.md](README.md)
 - Fill existing headings where present (`Overview`, `Details`, `Examples`, `References`). Add `## See also` with relative links when useful.
 - Status lifecycle (YAML frontmatter): `stub` → `draft` → `complete` (see conventions for the quality bar).
 - Use relative links between wiki pages. Put stable upstream URLs under `## References` and add new canonical sources to [meta/sources.md](meta/sources.md).
-- Keep Markdown link syntax with `.md` targets (Obsidian vault uses Markdown + relative paths — see [meta/obsidian.md](meta/obsidian.md)); do not introduce `[[wikilinks]]`.
+- Keep Markdown link syntax with `.md` targets (relative paths including the `.md` extension); do not introduce `[[wikilinks]]`.
 - Keep concept pages (`02-concepts/…`) separate from deep dives (`07-flakes/…`, etc.).
 - Be concise. No emojis. No marketing tone.
 
 ## Do not
 
 - Scrape or vendor full upstream docs into this repo.
-- Add MkDocs / mdBook / Hugo until the wiki is mostly draft (unless the user explicitly asks).
+- Replace or stack another site generator on top of the existing MkDocs setup without being asked (see [meta/site.md](meta/site.md)).
 - Mark `complete` from memory or blogs alone.
 - Invent Nix/NixOS APIs, options, or flags.
 - Expand scope beyond the files you were asked to edit.
 - Commit, push, or force-push unless the user explicitly asks.
-- Edit [EXPAND-PLAN.md](EXPAND-PLAN.md), [ATTACK-PLAN.md](ATTACK-PLAN.md), or plan files in `.cursor/plans/` unless the user asks to update the plan.
+- Edit [EXPAND-PLAN.md](EXPAND-PLAN.md) (or create parallel plan files) unless the user asks to update the plan.
 
 ## Subagent pattern
 

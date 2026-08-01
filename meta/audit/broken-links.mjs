@@ -14,6 +14,7 @@ function walk(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.name.startsWith(".")) continue;
     if (ent.name === "node_modules") continue;
+    if (ent.name === "docs") continue; // generated MkDocs symlink tree (meta/prepare-docs-dir.sh)
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) walk(p, acc);
     else if (ent.name.endsWith(".md")) acc.push(p);

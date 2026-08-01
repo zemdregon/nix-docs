@@ -11,6 +11,7 @@ Using Nix for software development and CI.
 - [Shells and direnv](shells-and-direnv.md) — Dev shells
 - [Language Toolchains](language-toolchains.md) — Per-language tooling
 - [CI with Nix](ci-with-nix.md) — CI integration
+- [Private flakes and CI](private-flakes-and-ci.md) — Private inputs, access-tokens, CI matrices
 - [Containers (OCI)](containers-oci.md) — OCI image builds
 - [Testing / NixOS VM Tests](testing-nixos-vm-tests.md) — VM and integration tests
 - [Debugging Evaluation](debugging-evaluation.md) — Eval debugging

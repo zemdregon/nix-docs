@@ -12,6 +12,8 @@ That cadence is **not** the same as **Nix** (the evaluator/daemon) versioning. N
 
 Day to day, most installs follow a **channel** rather than a calendar date: stable lines vs `nixos-unstable` / `nixpkgs-unstable`. Live channel health is on [status.nixos.org](https://status.nixos.org/); channel URLs live at [channels.nixos.org](https://channels.nixos.org/).
 
+When refreshing this wiki after a release, follow [meta/release-checklist.md](../meta/release-checklist.md).
+
 **Current illustrative stable (last checked 2026-07-31):** the [NixOS download page](https://nixos.org/download/) listed **NixOS 26.05** as current; `nixos-26.05` and the prior line `nixos-25.11` both resolve on [channels.nixos.org](https://channels.nixos.org/). Re-check those pages before treating any `YY.MM` as “latest.”
 
 ## Details

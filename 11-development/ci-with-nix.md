@@ -93,4 +93,5 @@ For private GitHub flake inputs, pass a token into Nix config from a secret (do 
 - [Hydra](../12-deployment-and-infra/hydra.md) — large-scale Nix CI
 - [Binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) — Cachix, Attic, and self-hosted caches
 - [Access tokens](../05-cli-and-tooling/config/access-tokens.md) — private flake inputs in CI
+- [Private flakes and CI](private-flakes-and-ci.md) — private-input failure modes and org CI matrices
 - [Debugging evaluation](debugging-evaluation.md) — evaluating flakes when CI fails early

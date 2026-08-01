@@ -6,9 +6,11 @@ status: index
 
 Plain-Markdown knowledge base for the full Nix stack: philosophy, language, store, nixpkgs, NixOS, flakes, experimental features, tooling, and current implementations.
 
-No site generator. Browse folders by number; each domain `README.md` lists its children. Opens as an [Obsidian](https://obsidian.md/) vault (Open folder as vault → this directory); vault settings and plugins: [meta/obsidian.md](meta/obsidian.md); Dataview status tables: [meta/dashboard.md](meta/dashboard.md).
+Browse folders by number; each domain `README.md` lists its children. Conventions: [meta/conventions.md](meta/conventions.md).
 
-**v1 (2026-07-31):** Stable Obsidian / plain-Markdown vault. Content campaign through Phase 4 landed; Phase 1 quality deepen and Phase 2 gold/consistency polish on high-traffic leaves also landed (~247 complete leaves, 0 broken relative `.md` links). Remaining work is release cadence refresh and optional further calibration — see [EXPAND-PLAN.md](EXPAND-PLAN.md) and [meta/todo-coverage.md](meta/todo-coverage.md). Site generator still deferred (optional Phase 5). Historical draft campaign: [ATTACK-PLAN.md](ATTACK-PLAN.md).
+**Published site:** [MkDocs Material on GitHub Pages](https://zemdregon.github.io/nix-docs/) — build/serve notes in [meta/site.md](meta/site.md).
+
+**v1 + Phase 7 (2026-08-01):** Stable plain-Markdown wiki (~254 complete leaves). Single campaign doc: [EXPAND-PLAN.md](EXPAND-PLAN.md) (Phases 0–6 done; Phase 7 toward definitive — cadence, thin audiences, gold depth). Checklist: [meta/todo-coverage.md](meta/todo-coverage.md).
 
 ## How to navigate
 

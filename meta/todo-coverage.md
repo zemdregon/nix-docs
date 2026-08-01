@@ -4,11 +4,11 @@ status: active
 
 # Coverage TODO
 
-Living checklist. Draft campaign (weeks 0–11) is done — see [ATTACK-PLAN.md](../ATTACK-PLAN.md). Forward plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md).
+Living checklist. Sole campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phases 0–6 done; Phase 7 active). Draft weeks 0–11 history only — [ATTACK-PLAN.md](../ATTACK-PLAN.md) is a redirect.
 
-**Meta truth snapshot (2026-07-31):** 247 leaf articles `status: complete`; intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) (design note) + living [sources.md](sources.md); 47 folder READMEs `status: index`. Relative `.md` links: 0 broken (see [Audit hook](#audit-hook)). **v1:** Phases 0–4 complete; Phase 1 quality + Phase 2 gold/consistency polish landed 2026-07-31. Phase M + M.0 done. Status lives in YAML frontmatter; see [dashboard.md](dashboard.md).
+**Meta truth snapshot (2026-08-01):** ~259 leaf articles `status: complete`; intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~48 folder READMEs `status: index`. Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Active:** Phase 7 Batch D gated (Batches A–C done). Status lives in YAML frontmatter.
 
-Weeks below are **historical** draft-campaign checkoffs (at least `draft`). Track status promotion under **Complete pass**. Open items in [Remaining work](#remaining-work) are **non-blocking for v1**.
+Weeks below are **historical** draft-campaign checkoffs. Track new work under [Phase 7](#phase-7--toward-definitive) and [Remaining work](#remaining-work).
 
 ## Structure / Week 0 (bootstrap)
 
@@ -81,7 +81,7 @@ Mental model domain to **draft**.
 ## Week 7 — `06-nixpkgs` + start `05-cli-and-tooling`
 
 - [x] Nixpkgs architecture: [stdenv](../06-nixpkgs/architecture/stdenv.md), [mkDerivation](../06-nixpkgs/architecture/mkDerivation.md), [lib](../06-nixpkgs/architecture/lib.md), [package-sets](../06-nixpkgs/architecture/package-sets.md), [maintainers-and-teams](../06-nixpkgs/architecture/maintainers-and-teams.md)
-- [x] Packaging: [simple-package](../06-nixpkgs/packaging/simple-package.md), [multiple-outputs](../06-nixpkgs/packaging/multiple-outputs.md), [patches-and-overrides](../06-nixpkgs/packaging/patches-and-overrides.md), [cross-compilation](../06-nixpkgs/packaging/cross-compilation.md), [python-node-rust-go](../06-nixpkgs/packaging/python-node-rust-go.md), [tests-and-passthru](../06-nixpkgs/packaging/tests-and-passthru.md)
+- [x] Packaging: [simple-package](../06-nixpkgs/packaging/simple-package.md), [multiple-outputs](../06-nixpkgs/packaging/multiple-outputs.md), [patches-and-overrides](../06-nixpkgs/packaging/patches-and-overrides.md), [cross-compilation](../06-nixpkgs/packaging/cross-compilation.md), [python-node-rust-go](../06-nixpkgs/packaging/python-node-rust-go.md), [tests-and-passthru](../06-nixpkgs/packaging/tests-and-passthru.md), [haskell-packaging](../06-nixpkgs/packaging/haskell-packaging.md), [jvm-php-and-others](../06-nixpkgs/packaging/jvm-php-and-others.md)
 - [x] Overlays: [writing-overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md), [packageOverrides](../06-nixpkgs/overlays-and-overrides/packageOverrides.md), [pinning](../06-nixpkgs/overlays-and-overrides/pinning.md)
 - [x] Contribution: [review-process](../06-nixpkgs/contribution/review-process.md), [staging-and-branches](../06-nixpkgs/contribution/staging-and-branches.md), [ofborg-and-ci](../06-nixpkgs/contribution/ofborg-and-ci.md)
 - [x] CLI (start): modern + classic leaves under [05-cli-and-tooling/](../05-cli-and-tooling/README.md)
@@ -101,7 +101,7 @@ Mental model domain to **draft**.
 
 - [x] Evaluators: [cpp-nix](../13-implementations/nix-evaluator/cpp-nix.md), [lix](../13-implementations/nix-evaluator/lix.md), [tvix](../13-implementations/nix-evaluator/tvix.md), [snix](../13-implementations/nix-evaluator/snix.md)
 - [x] Module ecosystems / UX / cloud / frameworks under [13-implementations/](../13-implementations/README.md)
-- [x] History: [timeline](../15-history-and-governance/timeline.md), [nixos-foundation](../15-history-and-governance/nixos-foundation.md), [rfc-process](../15-history-and-governance/rfc-process.md), [release-cadence](../15-history-and-governance/release-cadence.md), [forks-and-governance-splits](../15-history-and-governance/forks-and-governance-splits.md)
+- [x] History: [timeline](../15-history-and-governance/timeline.md), [nixos-foundation](../15-history-and-governance/nixos-foundation.md), [rfc-process](../15-history-and-governance/rfc-process.md), [release-cadence](../15-history-and-governance/release-cadence.md), [forks-and-governance-splits](../15-history-and-governance/forks-and-governance-splits.md), [getting-help-and-community](../15-history-and-governance/getting-help-and-community.md)
 
 ## Week 11 — cross-cutting + polish
 
@@ -183,13 +183,45 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 
 ## Remaining work
 
-**v1 non-blocking** (2026-07-31). Phases 0–4 content campaign plus Phase 1/2 high-traffic polish are complete. Items below are intentional drafts, release cadence, or optional further calibration — not v1 blockers. Prefer [EXPAND-PLAN.md](../EXPAND-PLAN.md) for scope.
+Prefer [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7 for scope.
 
-### Still open (optional / cadence)
+### Still open
 
-1. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) (design note, not a shipped tool; intentional `draft`); living [sources.md](sources.md) URL table (intentional living `draft`).
-2. **Cadence (ongoing)** — re-run Phase 5.1 refresh each future Nix/NixOS release (experimental tracking, release-cited leaves, Clan APIs, adjacent tools). Site generator remains optional Phase 5.2.
-3. **Further quality (optional)** — more gold-page outliers beyond this batch if needed (e.g. thin philosophy leftovers, FAQ thicken, Phase 3 leaf polish).
+1. **Phase 7 Batch D** — optional site generator (gated). See [EXPAND-PLAN.md](../EXPAND-PLAN.md).
+2. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
+3. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release.
+
+## Phase 7 — Toward definitive
+
+Plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7.
+
+### Batch A — Cadence + first audience gaps (2026-08-01)
+
+- [x] [release-checklist](release-checklist.md) — Phase 5.1 operational checklist
+- [x] [reading-manuals-and-search](../00-roadmap/reading-manuals-and-search.md) — manuals + search.nixos.org
+- [x] [installers-and-nix-variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md) — official / Lix / Determinate
+- [x] Deepen [nix-darwin](../10-home-and-user/nix-darwin.md)
+- [x] Deepen [amazon-gce-azure](../13-implementations/cloud-and-images/amazon-gce-azure.md)
+
+### Batch B — Language ecosystems + org flakes (2026-08-01)
+
+- [x] [haskell-packaging](../06-nixpkgs/packaging/haskell-packaging.md)
+- [x] [jvm-php-and-others](../06-nixpkgs/packaging/jvm-php-and-others.md)
+- [x] Deepen [config-repo-layout](../07-flakes/workflows/config-repo-layout.md)
+- [x] [private-flakes-and-ci](../11-development/private-flakes-and-ci.md)
+
+### Batch C — Gold thicken + getting help (2026-08-01)
+
+- [x] [getting-help-and-community](../15-history-and-governance/getting-help-and-community.md)
+- [x] Deepen [module-system-internals](../09-nixos/architecture/module-system-internals.md)
+- [x] Deepen [store-protocols](../04-store-and-build/store-protocols.md)
+- [x] Deepen [faq-common-errors](../cheatsheets/faq-common-errors.md)
+- [x] Roadmaps → getting-help + FAQ (beginner / operator / contributor)
+
+### Batch D (queued)
+
+- [ ] Optional site generator (gated)
+- [ ] Batch D — optional site generator (gated)
 
 ## Phase 6 — Homelab and config-repo gaps (2026-08-01)
 
@@ -303,7 +335,7 @@ broken.forEach(b=>console.log(" ",b.join(" -> ")));
 '
 ```
 
-Last run (2026-07-31, post installer/store/frontend gold): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 48 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
+Last run (2026-07-31, post installer/store/frontend gold): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 48 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`.
 
 **Quality audit (Phase 6+):** `node meta/audit/broken-links.mjs` · `node meta/audit/quality-audit.mjs` · `node meta/examples/validate.mjs` (Nix). CI: [.github/workflows/docs-audit.yml](../.github/workflows/docs-audit.yml). See [quality-checklist.md](quality-checklist.md) Complete+ bar.
 

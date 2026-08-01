@@ -46,17 +46,23 @@ status: stub
 
 ## Linking
 
-- Use relative Markdown links between sibling and cousin topics (path includes `.md`). Do **not** use Obsidian `[[wikilinks]]` — the checked-in vault is configured for Markdown + relative paths (see [obsidian.md](obsidian.md)).
+- Use relative Markdown links between sibling and cousin topics (path includes `.md`). Do **not** use `[[wikilinks]]`.
 - Always include the `.md` extension in wiki targets. Link a folder via its `README.md`, not a bare directory URL.
 - Avoid absolute URLs in stubs; add them in the content phase and record canonical sources in [sources.md](sources.md).
 - Prefer linking to a domain `README.md` when pointing at a whole area.
-- Several notes share basenames (`README.md`, two `nix-darwin.md` files). Relative paths keep links unambiguous in Obsidian and on Git forges.
+- Several notes share basenames (`README.md`, two `nix-darwin.md` files). Relative paths keep links unambiguous on Git forges and the published site.
 
-## What does not belong yet
+## Publishing
 
-- Site generators (mdBook, MkDocs, Hugo) and their config.
+- GitHub Pages via MkDocs Material: root [mkdocs.yml](../mkdocs.yml), deps [requirements-docs.txt](../requirements-docs.txt), stage script [prepare-docs-dir.sh](prepare-docs-dir.sh), notes [site.md](site.md).
+- Keep writing in plain Markdown with relative `.md` links; do not structure articles for a theme.
+- Do not vendor a second copy of the tree under `docs/`.
+
+## What does not belong
+
 - Scraped or mirrored upstream manuals.
-- Long explanatory prose about Nix/NixOS (fill stubs in later passes).
+- Extra site generators alongside MkDocs (unless replacing it deliberately).
+- Long explanatory prose invented without a research pack (fill stubs in dedicated passes).
 
 ## Research and coverage
 

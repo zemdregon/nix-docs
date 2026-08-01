@@ -9,7 +9,7 @@ last-checked: 2026-08
 
 A **config mono-repo** is a single flake that holds NixOS systems, optional Home Manager profiles, shared modules, and sometimes custom packages. There is no upstream-mandated tree, but most repos converge on the same shape: `flake.nix` at the root, one module per host under `hosts/`, reusable role modules under `modules/`, and flake inputs threaded through `specialArgs` rather than read from `config` during import resolution.
 
-This page describes **folder conventions** and how they connect to [nixosConfigurations](nixos-configurations.md) and [homeConfigurations](home-configurations.md). Output wiring and module semantics are covered in those pages and under [09-nixos](../../09-nixos/README.md).
+This page describes **folder conventions** and how they connect to [nixosConfigurations](nixos-configurations.md) and [homeConfigurations](home-configurations.md). At org scale it also covers private inputs, CI host matrices, ownership, secrets placement, registries, and when to split flakes. Output wiring and module semantics are covered in those pages and under [09-nixos](../../09-nixos/README.md).
 
 ## Details
 
@@ -23,6 +23,7 @@ This page describes **folder conventions** and how they connect to [nixosConfigu
 | `users/<name>/home.nix` | Optional per-user Home Manager module when not colocated with the host |
 | `overlays/` | Nixpkgs overlays applied from host or shared modules |
 | `pkgs/` | Custom packages built with `callPackage` and referenced from modules |
+| `secrets/` | Optional encrypted secret files / key lists (never plaintext tokens) |
 
 Filenames are conventions, not requirements. The pattern is **thin entry modules** that `imports` focused fragments; see [Imports and profiles](../../09-nixos/configuration/imports-and-profiles.md).
 
@@ -142,6 +143,44 @@ Reference them in the same repo (`imports = [ inputs.self.nixosModules.desktop ]
 
 Use a framework when manual `flake.nix` glue becomes noisy; the underlying layout (hosts, modules, users) stays recognizable.
 
+### Private flake inputs
+
+A config mono-repo often depends on private org flakes (`github:org/private-repo`, `git+ssh://…`, private GitLab). HTTPS GitHub/GitLab fetches need credentials on the machine or CI runner — typically [`access-tokens`](../../05-cli-and-tooling/config/access-tokens.md) in `nix.conf`, or a `netrc` file — never committed next to `flake.nix`. SSH URLs use the runner’s deploy keys or agent instead.
+
+Keep private input URLs in `flake.nix` / `flake.lock` as ordinary flakerefs; auth is a **client** concern (developer laptop, CI secret store), not a layout concern. CI wiring for private inputs is covered under [private flakes and CI](../../11-development/private-flakes-and-ci.md).
+
+### Multi-host CI matrix
+
+Org fleets usually want CI to prove that hosts still evaluate and build. Common patterns:
+
+1. **`checks`** — expose named derivations under `checks.<system>.*` (e.g. wrap `nixosConfigurations.laptop.config.system.build.toplevel`, or lighter smoke tests). `nix flake check` builds them. See [checks and hydraJobs](checks-and-hydraJobs.md).
+2. **Explicit matrix builds** — CI jobs that `nix build .#nixosConfigurations.<host>.config.system.build.toplevel` for selected hosts (same installable Colmena/Morph/nixinate deploy against).
+
+Building every host on every PR is often too expensive. Treat **path filters** and **host groups** as a *repo/CI convention*, not a Nix feature: e.g. changes under `hosts/laptop/` or `modules/desktop.nix` rebuild the laptop group; `modules/common.nix` rebuilds a wider set. Document the groups in the CI config (or a small script that maps changed paths → hosts). Full runner setup and caches: [CI with Nix](../../11-development/ci-with-nix.md).
+
+### Team ownership
+
+Use forge **CODEOWNERS** (or equivalent) so reviews map to directories: `hosts/<team-host>/` → host owners; `modules/<domain>/` → platform or service owners; `users/` → individuals. This is a Git-forge convention layered on the folder split above — Nix does not enforce it. Keep ownership lines coarse (directory roots) so CODEOWNERS stays maintainable as hosts grow.
+
+### Secrets in mono-repos
+
+Never commit forge tokens, `access-tokens` values, age/sops private keys, or plaintext secrets beside the flake. Encrypted secret material and the NixOS modules that consume it usually live under `modules/` (shared policy) and/or a dedicated `secrets/` tree (encrypted files + key lists). Host entries only select *which* secrets apply.
+
+See [secrets strategies](../../09-nixos/configuration/secrets-strategies.md) and [agenix / sops-nix](../../12-deployment-and-infra/agenix-sops-nix.md) for tooling; this page only places those files in the tree.
+
+### Private registries
+
+[`nix registry`](../registries-and-refs.md) aliases (`nixpkgs`, org shorthand ids) are optional CLI convenience. They do **not** replace `flake.lock` pins for the config repo, and they do **not** supply credentials: fetching a private `github:…` or HTTPS git URL still needs [access-tokens](../../05-cli-and-tooling/config/access-tokens.md) / netrc (or SSH) on the client. Prefer explicit input URLs in `flake.nix` for shared mono-repos so collaborators are not dependent on a local registry pin.
+
+### Multiple flakes vs one mono-repo
+
+| Prefer | When |
+|--------|------|
+| **One flake** | Shared `flake.lock`, shared `modules/`, one PR can update roles + all hosts; deploy tools address `nixosConfigurations.*` from a single root |
+| **Split flakes** | Different release cadences (dotfiles vs infra), hard ACL boundaries (team A must not evaluate team B’s hosts), or separate CI/cache identities |
+
+A common middle ground: one infra mono-repo flake for NixOS hosts, plus a smaller flake for personal Home Manager — linked via an input when needed, not forced into one lockfile. Exported `nixosModules` (above) let a split flake reuse roles without copying trees.
+
 ## Boundaries
 
 This page covers **where files live** and how folders connect to flake outputs. It does not define:
@@ -149,7 +188,8 @@ This page covers **where files live** and how folders connect to flake outputs. 
 - Individual option trees or service modules (see [09-nixos](../../09-nixos/README.md) and [configuration.nix](../../09-nixos/configuration/configuration-nix.md)).
 - Full `nixosSystem` / `homeManagerConfiguration` API tables ([nixosConfigurations](nixos-configurations.md), [homeConfigurations](home-configurations.md)).
 - `perSystem`, `mkFlake`, or flake-parts module options ([flake-parts](../../13-implementations/module-ecosystems/flake-parts.md)).
-- Remote deploy flags, secrets, or disk partitioning ([remote deploy](../../09-nixos/operations/remote-deploy.md), [secrets strategies](../../09-nixos/configuration/secrets-strategies.md)).
+- Remote deploy flags or disk partitioning ([remote deploy](../../09-nixos/operations/remote-deploy.md)).
+- Full secrets tooling or CI runner recipes ([secrets strategies](../../09-nixos/configuration/secrets-strategies.md), [CI with Nix](../../11-development/ci-with-nix.md)).
 
 ## Failure modes
 
@@ -159,6 +199,8 @@ This page covers **where files live** and how folders connect to flake outputs. 
 - **HM / NixOS package drift** — embedded Home Manager without `useGlobalPkgs` evaluates against a separate `pkgs` than NixOS; `environment.systemPackages` and `home.packages` can install different revisions of the same name.
 - **One giant `configuration.nix`** — hard to review, merge-conflict prone, and difficult to reuse across hosts. Split by role and import.
 - **Hostname scattered in role modules** — `networking.hostName` belongs in the host entry; role modules should stay hostname-agnostic so they compose on any machine.
+- **Committed credentials** — tokens or private keys in the repo (or in `flake.nix`) — use local/`nix.conf` auth and encrypted secret stores instead.
+- **CI rebuilds the entire fleet on every PR** — without path filters or host groups, large mono-repos burn CI budget; narrow the matrix by convention.
 
 ## Examples
 
@@ -183,9 +225,11 @@ Illustrative mono-repo tree:
 │       └── home.nix
 ├── overlays/
 │   └── default.nix
-└── pkgs/
-    └── my-cli/
-        └── default.nix
+├── pkgs/
+│   └── my-cli/
+│       └── default.nix
+└── secrets/                 # encrypted only; optional
+    └── …
 ```
 
 Multi-host `flake.nix` with shared inputs, two `nixosConfigurations`, exported module, and standalone HM:
@@ -279,7 +323,14 @@ Deploy: `sudo nixos-rebuild switch --flake .#laptop` or `.#server`. Standalone H
 - [Inputs and outputs](../anatomy/inputs-and-outputs.md) — conventional flake output keys
 - [nixosConfigurations](nixos-configurations.md) — `nixosSystem` wiring and rebuild
 - [homeConfigurations](home-configurations.md) — standalone Home Manager flakes
+- [checks and hydraJobs](checks-and-hydraJobs.md) — CI-oriented flake outputs
+- [Registries and refs](../registries-and-refs.md) — flake registry vs locked inputs
+- [Access tokens](../../05-cli-and-tooling/config/access-tokens.md) — auth for private HTTPS flake inputs
+- [Private flakes and CI](../../11-development/private-flakes-and-ci.md) — private inputs on CI runners
+- [CI with Nix](../../11-development/ci-with-nix.md) — forge runners and caches
 - [Imports and profiles](../../09-nixos/configuration/imports-and-profiles.md) — static `imports` and splitting configuration
 - [configuration.nix](../../09-nixos/configuration/configuration-nix.md) — primary machine configuration file
+- [Secrets strategies](../../09-nixos/configuration/secrets-strategies.md) — how secrets enter the module graph
+- [agenix / sops-nix](../../12-deployment-and-infra/agenix-sops-nix.md) — encrypted secret modules
 - [flake-parts](../../13-implementations/module-ecosystems/flake-parts.md) — `mkFlake` and `perSystem`
 - [Dotfiles patterns](../../10-home-and-user/home-manager/dotfiles-patterns.md) — organizing user-level modules

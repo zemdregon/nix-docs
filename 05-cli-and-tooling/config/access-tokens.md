@@ -87,6 +87,7 @@ With tokens configured, private flake inputs resolve like public ones (illustrat
 
 - [`nix.conf`](nix-conf.md) — configuration file and related settings
 - [Flake inputs and outputs](../../07-flakes/anatomy/inputs-and-outputs.md) — declaring and locking inputs (including private remotes)
+- [Private flakes and CI](../../11-development/private-flakes-and-ci.md) — CI injection and private-input failure modes
 - [Pure eval and impure](../../07-flakes/pure-eval-and-impure.md) — evaluation purity vs network fetches
 - [`nix flake`](../modern-cli/nix-flake.md) — CLI for locking and fetching flakes
 

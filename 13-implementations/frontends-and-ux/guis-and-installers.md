@@ -65,5 +65,6 @@ Exact flags and flake vs channels differ by setup—see [`nixos-rebuild`](nixos-
 ## See also
 
 - [Graphical installer](../../09-nixos/installation/graphical-installer.md) — installer screens and boot media
+- [Installers and Nix variants](installers-and-nix-variants.md) — package-manager installs (official / Lix / Determinate), not the ISO
 - [nixos-rebuild](nixos-rebuild.md) — classic rebuild frontend
 - [nh](nh.md) — modern rebuild UX wrapper

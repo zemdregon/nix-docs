@@ -6,37 +6,61 @@ status: complete
 
 ## Overview
 
-NixOS on the big three clouds is mostly an **image** problem: boot a NixOS disk image, then manage the system with flakes and deploy tools. Coverage is uneven. **Amazon EC2** has official AMIs published by the NixOS project (discover them via API/Terraform—do not hardcode IDs). **Google Compute Engine** and **Azure** do not ship maintained public NixOS images from the project; you build and register your own (or install onto a generic VM with [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md)).
+NixOS on AWS, Google Compute Engine, and Azure is mostly an **image** problem: boot a NixOS disk image, then manage the system with flakes and deploy tools. Coverage is uneven. **Amazon EC2** has official AMIs published by the NixOS project (discover them via API/Terraform—do not hardcode IDs). **GCE** and **Azure** do not ship maintained public NixOS images from the project; you build and register your own, or install onto a generic VM with [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md).
 
-Image formats for `amazon`, `gce` / `google-compute`, and `azure` live in nixpkgs. Historically [nixos-generators](nixos-generators.md) wrapped them; from NixOS **25.05** onward, prefer `nixos-rebuild build-image --image-variant …` (generators is marked deprecated in favor of that upstream path).
+From NixOS **25.05** onward, the preferred build path is upstream `nixos-rebuild build-image --image-variant …`. [nixos-generators](nixos-generators.md) historically wrapped the same formats and is deprecated in favor of that path.
 
 ## Details
 
+### Preferred build path (NixOS ≥ 25.05)
+
+nixpkgs defines cloud/virtualization image variants under `image.modules` / `system.build.images`. Build them with:
+
+```bash
+nixos-rebuild build-image --image-variant <name>
+```
+
+Run `nixos-rebuild build-image` **with no arguments** to list variants available for the evaluated config. Relevant cloud names include `amazon`, `google-compute`, and `azure` (confirm with that listing—names can change across releases).
+
+Flake form (host attr from `nixosConfigurations`):
+
+```bash
+nixos-rebuild build-image --flake .#host --image-variant amazon
+```
+
+Same pattern for `--image-variant google-compute` or `azure`. Manual: [Building Images with nixos-rebuild build-image](https://nixos.org/manual/nixos/stable/#sec-image-nixos-rebuild-build-image) (`#sec-image-nixos-rebuild-build-image`).
+
+Per-variant tweaks use `image.modules.<variant>` (same idea as specialisations). Older workflows used [nixos-generators](nixos-generators.md) formats `amazon` / `gce` / `azure`; new work should prefer `build-image` unless a format has not migrated.
+
 ### Amazon EC2
 
-[nixos.org/download](https://nixos.org/download/) documents official NixOS AMIs: weekly publishes to all AWS regions for `x86_64` and `arm64`. The download page names the AWS account owner to filter on and recommends a Terraform/OpenTofu `aws_ami` data source (or `ec2 describe-images`) with a **name prefix** for the release channel (e.g. `nixos/26.05*`) plus architecture—not a pinned AMI ID.
+[nixos.org/download](https://nixos.org/download/) documents official NixOS AMIs: weekly publishes to all AWS regions for `x86_64` and `arm64`. Filter on the documented AWS account owner and a **name prefix** for the release channel (illustrative: `nixos/26.05*`) plus architecture—via Terraform/OpenTofu `aws_ami` or `ec2 describe-images`. Never pin a fixed AMI ID.
 
-Older images are expected to be deprecated and garbage-collected (the download page notes a ~90-day horizon). Hardcoding AMI IDs in Terraform or scripts will break; always resolve “latest matching filter” at apply time. An image searcher is linked from the download page for one-off lookups.
+Older images are expected to be deprecated and garbage-collected (~90-day horizon on the download page; verified 2026-08). An image searcher is linked from the download page for one-off lookups.
 
-Custom AMIs: build with `--image-variant amazon` (or the generators `amazon` format), upload/register in your account when you need modules or secrets baked in that the public image does not provide.
+Custom AMIs: build with `--image-variant amazon`, then upload/register in your account when you need modules or secrets the public image does not provide.
 
 ### Google Compute Engine
 
-There are **no** publicly maintained recent NixOS GCE images from the project. Old objects in community buckets (`gs://nixos-images`, `gs://nixos-cloud-images`) are stale. The [NixOS Wiki: Install NixOS on GCE](https://wiki.nixos.org/wiki/Install_NixOS_on_GCE) recipe is: build a google-compute image (nixpkgs `create-gce.sh` or `build-image` / generators `gce`), upload the `.raw.tar.gz` to a GCS bucket, register a GCE image, then launch VMs from it.
+There are **no** publicly maintained recent NixOS GCE images from the project. Old objects in community buckets (`gs://nixos-images`, `gs://nixos-cloud-images`) are stale.
 
-Treat ACL warnings seriously: the stock `create-gce.sh` path makes objects/images broadly readable—build custom configs with secrets using tighter upload permissions. After boot, OS Login / metadata expectations are documented on the wiki for that image family.
+Primary path: build `--image-variant google-compute` (produces a `.raw.tar.gz`), upload to a GCS bucket, register a GCE image, then launch VMs from it. Secondary recipe and upload helper: [Install NixOS on GCE](https://wiki.nixos.org/wiki/Install_NixOS_on_GCE) and nixpkgs `create-gce.sh`.
+
+Treat ACL warnings seriously: the stock `create-gce.sh` path makes objects/images broadly readable—build custom configs with secrets using tighter upload permissions. After boot, OS Login / metadata expectations are documented on that wiki page.
 
 ### Azure
 
-The NixOS project does **not** publish a maintained official Marketplace image. Historical in-tree AMI-style ID lists for Azure were dropped as years out of date. Practical paths:
+The NixOS project does **not** publish a maintained official Marketplace image. Historical in-tree ID lists were dropped as years out of date. Practical paths:
 
-1. Build a VHD with `--image-variant azure` (generators format `azure`: Generation 1 / VHD; Gen 2 via image options in nixpkgs) and upload it into your subscription as a managed image / gallery image.
+1. Build a VHD with `--image-variant azure` (Generation 1 / VHD; Gen 2 via image options in nixpkgs) and upload it into your subscription as a managed image or Shared Image Gallery image.
 2. Provision a generic Linux VM and install with [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md).
 3. Treat third-party Marketplace listings as unaudited community/vendor images, not project releases.
 
-### First boot and ongoing config
+### Ops split and first boot
 
-Cloud images typically consume **provider metadata** (and often **cloud-init**) for SSH keys, hostname, and similar first-boot glue. After that, prefer declarative NixOS config activated over SSH—same split as [Terraform + NixOS](../../12-deployment-and-infra/terraform-nixos.md): IaC owns instance + which image boots; Nix owns the system closure. Baking every package bump into a new AMI/GCE/Azure image is optional, not required.
+Cloud images typically consume **provider metadata** (and often **cloud-init**) for SSH keys, hostname, and similar first-boot glue. After that, prefer declarative NixOS config activated over SSH.
+
+Same ownership split as [Terraform + NixOS](../../12-deployment-and-infra/terraform-nixos.md): **IaC** (Terraform/OpenTofu/etc.) owns instance lifecycle and which image boots; **Nix** owns the system closure. Ongoing activation uses [remote deploy](../../09-nixos/operations/remote-deploy.md) / [nixos-rebuild](../frontends-and-ux/nixos-rebuild.md) (or [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md) for first install). Baking every package bump into a new AMI/GCE/Azure image is optional, not required.
 
 ### Image tooling
 
@@ -44,67 +68,37 @@ Cloud images typically consume **provider metadata** (and often **cloud-init**) 
 |------|------|
 | Official EC2 AMIs | Fastest start on AWS; query by owner + name filter |
 | `nixos-rebuild build-image --image-variant amazon\|google-compute\|azure` | Custom images from your `nixosConfigurations` (25.05+) |
-| [nixos-generators](nixos-generators.md) | Same formats historically (`amazon`, `gce`, `azure`); migrating to `build-image` |
+| [nixos-generators](nixos-generators.md) | Historical multi-format CLI; deprecated toward `build-image` |
 | nixpkgs scripts (`create-gce.sh`, Azure maintainer scripts) | Upload/register helpers around those builds |
-| [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md) | Skip custom images: install onto a throwaway cloud Linux |
+| [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md) | Skip custom images: install onto throwaway cloud Linux |
 
 ## Examples
 
-Resolve the latest official arm64 NixOS AMI in one region (from [nixos.org/download](https://nixos.org/download/); adjust release prefix and region; do not paste a fixed AMI id):
-
-```hcl
-provider "aws" {
-  region = "eu-central-1"
-}
-
-data "aws_ami" "nixos_arm64" {
-  owners      = ["427812963091"]
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["nixos/26.05*"]
-  }
-  filter {
-    name   = "architecture"
-    values = ["arm64"] # or "x86_64"
-  }
-}
-
-resource "aws_instance" "nixos_arm64" {
-  ami           = data.aws_ami.nixos_arm64.id
-  instance_type = "t4g.nano"
-}
-```
-
-Equivalent CLI shape (same filters):
+List variants, then build cloud images from a flake host (NixOS ≥ 25.05):
 
 ```bash
-aws ec2 describe-images \
-  --owners 427812963091 \
-  --filters 'Name=name,Values=nixos/26.05*' 'Name=architecture,Values=arm64' \
-  --query 'sort_by(Images, &CreationDate)'
+nixos-rebuild build-image
+# prints available --image-variant names for this config
+
+nixos-rebuild build-image --flake .#host --image-variant amazon
+nixos-rebuild build-image --flake .#host --image-variant google-compute
+nixos-rebuild build-image --flake .#host --image-variant azure
 ```
 
-Build a cloud disk image from a flake host (variant names: list with `nixos-rebuild build-image` with no args; amazon example from the NixOS manual):
-
-```bash
-nixos-rebuild build-image --flake .#myhost --image-variant amazon
-# then: google-compute | azure — upload/register per cloud docs
-```
-
-Typical Terraform pairing (conceptual): data source or custom image → `aws_instance` / `google_compute_instance` / `azurerm_linux_virtual_machine` → optional cloud-init user-data → later [nixos-rebuild](../frontends-and-ux/nixos-rebuild.md) / deploy tools. See [Terraform + NixOS](../../12-deployment-and-infra/terraform-nixos.md).
+Upload/register the resulting store path per cloud (AMI register, GCS → GCE image, Azure managed/gallery VHD). For AMI discovery filters (owner + `nixos/26.05*` name prefix, no hardcoded IDs), see [nixos.org/download](https://nixos.org/download/) and pair with [Terraform + NixOS](../../12-deployment-and-infra/terraform-nixos.md).
 
 ## References
 
-- [NixOS Download — Amazon AMIs](https://nixos.org/download/) — official AMI discovery; owner `427812963091`, name prefix `nixos/26.05*` (verified 2026-07)
-- [Building Images with nixos-rebuild build-image](https://nixos.org/manual/nixos/stable/#sec-image-nixos-rebuild-build-image) — upstream image variants (`amazon`, `google-compute`, `azure`, …)
-- [nix-community/nixos-generators](https://github.com/nix-community/nixos-generators) — historical multi-format builders; deprecation note toward `build-image` (NixOS ≥ 25.05)
-- [Install NixOS on GCE (NixOS Wiki)](https://wiki.nixos.org/wiki/Install_NixOS_on_GCE) — build/upload/register GCE images
+- [Building Images with nixos-rebuild build-image](https://nixos.org/manual/nixos/stable/#sec-image-nixos-rebuild-build-image) — `#sec-image-nixos-rebuild-build-image`; variants via `image.modules` / `system.build.images`
+- [NixOS Download — Amazon AMIs](https://nixos.org/download/) — official AMI discovery; owner `427812963091`; name prefix e.g. `nixos/26.05*`; ~90-day GC note (verified 2026-08)
+- [Install NixOS on GCE (NixOS Wiki)](https://wiki.nixos.org/wiki/Install_NixOS_on_GCE) — build/upload/register; ACL warning
 - [nixpkgs `create-gce.sh`](https://github.com/NixOS/nixpkgs/blob/master/nixos/maintainers/scripts/gce/create-gce.sh) — GCE image build + GCS upload helper
+- [nix-community/nixos-generators](https://github.com/nix-community/nixos-generators) — historical builders; deprecation toward `build-image` (NixOS ≥ 25.05)
 
 ## See also
 
 - [nixos-generators](nixos-generators.md)
 - [Terraform + NixOS](../../12-deployment-and-infra/terraform-nixos.md)
+- [Remote deploy](../../09-nixos/operations/remote-deploy.md)
 - [nixos-anywhere](../../09-nixos/installation/nixos-anywhere.md)
+- [nixos-rebuild](../frontends-and-ux/nixos-rebuild.md)

@@ -18,6 +18,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 - A working NixOS host (or VM) you can rebuild
 - Comfort with a shell and SSH; no need to write packages or modules yet
 - Optional: skim [Beginner](beginner.md) if store/flake vocabulary is new
+- Keep [Reading manuals and search](reading-manuals-and-search.md) handy for option lookups
 
 ## Reading order
 
@@ -83,6 +84,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 - Hub: [Store and Build](../04-store-and-build/README.md)
 - [Binary Caches](../04-store-and-build/binary-caches.md), [Substitutes and narinfo](../04-store-and-build/substitutes-and-narinfo.md)
+- [Store protocols](../04-store-and-build/store-protocols.md) — `--store` vs substituters vs remote builders
 - [Garbage Collection](../04-store-and-build/garbage-collection.md), [Remote Builders](../04-store-and-build/remote-builders.md)
 - Hosting your own: [Binary Cache Hosting](../12-deployment-and-infra/binary-cache-hosting.md)
 
@@ -90,7 +92,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 - Hub: [Deployment and Infra](../12-deployment-and-infra/README.md)
 - Tools: [Colmena](../12-deployment-and-infra/colmena.md), [deploy-rs](../12-deployment-and-infra/deploy-rs.md), [Morph / Nixinate](../12-deployment-and-infra/morph-nixinate.md)
-- Optional: [Terraform + NixOS](../12-deployment-and-infra/terraform-nixos.md), [Hydra](../12-deployment-and-infra/hydra.md)
+- Optional: [Terraform + NixOS](../12-deployment-and-infra/terraform-nixos.md), [Hydra](../12-deployment-and-infra/hydra.md), [Amazon / GCE / Azure](../13-implementations/cloud-and-images/amazon-gce-azure.md)
 - Optional deepeners: [Airgap and offline](../12-deployment-and-infra/airgap-and-offline.md), [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md), [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md)
 - Secrets on the wire: [agenix / sops-nix](../12-deployment-and-infra/agenix-sops-nix.md)
 
@@ -106,6 +108,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 - Keep [NixOS Operations](../09-nixos/operations/README.md) and [CLI cheatsheet](../cheatsheets/cli.md) bookmarked while you run systems
 - Stuck on a message: [FAQ: common errors](../cheatsheets/faq-common-errors.md) before deep-diving every leaf
+- Still stuck after FAQ/troubleshooting: [Getting help and community](../15-history-and-governance/getting-help-and-community.md)
 - Developers on Windows/WSL in the same org: [WSL and foreign OS](../10-home-and-user/wsl-and-foreign-os.md) (client Nix) plus this roadmap (NixOS servers)
 - When you need to change packages or modules upstream, switch to [Contributor](contributor.md)
 - Glossary fallback: [glossary.md](../glossary.md)
@@ -114,6 +117,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 - [Learning roadmaps](README.md) — path chooser
 - [Beginner](beginner.md) — first-pass philosophy, concepts, and a working system
+- [Reading manuals and search](reading-manuals-and-search.md) — manuals + search.nixos.org
 - [Contributor](contributor.md) — packaging and module authorship
 - [Security and Trust](../14-security-and-trust/README.md) — daemon trust, signing, secrets, inter-trust
 - [Machine mesh](../02-concepts/machine-mesh.md) — multi-machine reachability / build / deploy axes

@@ -80,11 +80,13 @@ Suggested reading order for packaging, NixOS modules, and upstream contribution.
 
 ### Scenario paths (pick one track)
 
-**First nixpkgs package PR** — [simple package](../06-nixpkgs/packaging/simple-package.md) + [example corpus](../meta/examples/simple-package.nix) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md) → [tests and passthru](../06-nixpkgs/packaging/tests-and-passthru.md) → [ofborg and CI](../06-nixpkgs/contribution/ofborg-and-ci.md) → [review process](../06-nixpkgs/contribution/review-process.md).
+**First nixpkgs package PR** — [simple package](../06-nixpkgs/packaging/simple-package.md) + [example corpus](../meta/examples/simple-package.nix) → [fetchers and pinning](../06-nixpkgs/packaging/fetchers-and-pinning.md) → language builders ([Python/Node/Rust/Go](../06-nixpkgs/packaging/python-node-rust-go.md), [Haskell](../06-nixpkgs/packaging/haskell-packaging.md), [JVM/PHP/others](../06-nixpkgs/packaging/jvm-php-and-others.md) as needed) → [tests and passthru](../06-nixpkgs/packaging/tests-and-passthru.md) → [ofborg and CI](../06-nixpkgs/contribution/ofborg-and-ci.md) → [review process](../06-nixpkgs/contribution/review-process.md).
 
-**NixOS module upstream** — [writing a module](../09-nixos/modules/writing-a-module.md) + [minimal-module.nix](../meta/examples/minimal-module.nix) → [custom options](../09-nixos/modules/custom-options.md) → [service patterns](../09-nixos/services/service-patterns.md) → [upstreaming modules](../09-nixos/modules/upstreaming-modules.md).
+**NixOS module upstream** — [writing a module](../09-nixos/modules/writing-a-module.md) + [minimal-module.nix](../meta/examples/minimal-module.nix) → [module system internals](../09-nixos/architecture/module-system-internals.md) when merge/`specialArgs` bite → [custom options](../09-nixos/modules/custom-options.md) → [service patterns](../09-nixos/services/service-patterns.md) → [upstreaming modules](../09-nixos/modules/upstreaming-modules.md).
 
 **Flake library / devShell** — [flake.nix schema](../07-flakes/anatomy/flake-nix-schema.md) + [hello-flake](../meta/examples/hello-flake/flake.nix) → [packages / apps / devShells](../07-flakes/workflows/packages-apps-devShells.md) → [checks and hydraJobs](../07-flakes/workflows/checks-and-hydraJobs.md) → [CI with Nix](../11-development/ci-with-nix.md).
+
+**Private inputs in CI** — [access tokens](../05-cli-and-tooling/config/access-tokens.md) → [private flakes and CI](../11-development/private-flakes-and-ci.md) → [config repo layout](../07-flakes/workflows/config-repo-layout.md) when the flake is a fleet mono-repo.
 
 **Debugging eval failures** — [scoping and shadowing](../03-language/semantics/scoping-and-shadowing.md) → [laziness](../03-language/semantics/laziness.md) → [purity boundaries](../03-language/semantics/purity-boundaries.md) → [pure eval and impure](../07-flakes/pure-eval-and-impure.md) → [debugging evaluation](../11-development/debugging-evaluation.md) → [FAQ: common errors](../cheatsheets/faq-common-errors.md).
 
@@ -101,6 +103,7 @@ Reusable snippets under [meta/examples/](../meta/examples/README.md) — cite fr
 - Pick one concrete contribution: a package bump/add, a module fix, or an RFC comment — then work the relevant **scenario path** above as a checklist
 - Shared snippets: [meta/examples](../meta/examples/README.md) (`hello-flake`, `overlay-snippet`, `minimal-module`, …)
 - Eval/build symptom shortcuts: [FAQ: common errors](../cheatsheets/faq-common-errors.md) (IFD, FOD hash mismatch, pure-eval failures)
+- Ask upstream after a minimal repro: [Getting help and community](../15-history-and-governance/getting-help-and-community.md)
 - Use [glossary](../glossary.md) when terms collide; track wiki gaps in [todo-coverage](../meta/todo-coverage.md)
 - Switch to [Operator](operator.md) only if you need install/rebuild/maintenance order, not for packaging or module design
 

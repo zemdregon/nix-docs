@@ -6,18 +6,18 @@ status: index
 
 Repo conventions and coverage tracking — not Nix subject matter.
 
-Next work: [EXPAND-PLAN.md](../EXPAND-PLAN.md) — Phase 1 quality deepen, then Phase 2+ deepen/expand. Ground truth checklist: [todo-coverage.md](todo-coverage.md).
+Next work: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7 (toward definitive). Ground truth checklist: [todo-coverage.md](todo-coverage.md).
 
 ## Contents
 
 - [conventions.md](conventions.md) — Naming, stubs, cross-links, growth rules
-- [obsidian.md](obsidian.md) — Open as Obsidian vault; plugins and link settings
-- [dashboard.md](dashboard.md) — Dataview status tables (Obsidian)
+- [site.md](site.md) — MkDocs Material + GitHub Pages build and deploy
 - [research-method.md](research-method.md) — Pack → write → verify loop for filling articles
 - [quality-checklist.md](quality-checklist.md) — Rubric before `status: complete`
 - [sources.md](sources.md) — Living canonical upstream URL table (intentional `draft`; never mark complete)
 - [todo-coverage.md](todo-coverage.md) — Status ground truth, remaining work, audit hook
+- [release-checklist.md](release-checklist.md) — Phase 5.1 operational refresh steps (Batch A)
 - [examples/](examples/README.md) — Shared illustrative `.nix` fixtures (not a second wiki)
-- [EXPAND-PLAN.md](../EXPAND-PLAN.md) — Current campaign (deepen, expand, cadence)
-- [ATTACK-PLAN.md](../ATTACK-PLAN.md) — Historical draft-campaign pointer
+- [EXPAND-PLAN.md](../EXPAND-PLAN.md) — Sole campaign plan (history + Phase 7)
+- [ATTACK-PLAN.md](../ATTACK-PLAN.md) — Redirect stub only
 

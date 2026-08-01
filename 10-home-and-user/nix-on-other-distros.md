@@ -66,6 +66,7 @@ WSL2 with systemd enabled uses the same `--daemon` line; without systemd, use `-
 
 - [WSL and foreign OS](wsl-and-foreign-os.md) — Nix on Ubuntu-WSL vs NixOS-WSL
 - [nix-darwin](nix-darwin.md)
+- [Installers and Nix variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md) — which Nix installer on a foreign OS
 - [Home Manager: standalone vs NixOS module](home-manager/standalone-vs-nixos-module.md)
 - [nix.conf](../05-cli-and-tooling/config/nix-conf.md)
 - [Profile](../02-concepts/profile.md)

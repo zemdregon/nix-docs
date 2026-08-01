@@ -1,0 +1,103 @@
+# MkDocs Material — GitHub Pages for this plain-Markdown wiki.
+# Source stays at repo root. Run meta/prepare-docs-dir.sh before build
+# to stage ./docs (gitignored).
+
+site_name: Nix Docs
+site_description: Plain-Markdown knowledge base for the full Nix stack
+site_url: https://zemdregon.github.io/nix-docs/
+
+repo_url: https://github.com/zemdregon/nix-docs
+repo_name: zemdregon/nix-docs
+edit_uri: edit/main/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.suggest
+    - content.action.edit
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search
+
+# Leaf pages stay reachable via folder Contents links and search; only domain
+# indexes appear in the global nav (matches the vault browsing model).
+validation:
+  omitted_files: ignore
+  absolute_links: info
+  unrecognized_links: ignore
+  anchors: ignore
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+# Explicit top-level order mirrors README.md domains + cross-cutting.
+nav:
+  - Home: README.md
+  - 00-roadmap: 00-roadmap/README.md
+  - 01-philosophy: 01-philosophy/README.md
+  - 02-concepts: 02-concepts/README.md
+  - 03-language: 03-language/README.md
+  - 04-store-and-build: 04-store-and-build/README.md
+  - 05-cli-and-tooling: 05-cli-and-tooling/README.md
+  - 06-nixpkgs: 06-nixpkgs/README.md
+  - 07-flakes: 07-flakes/README.md
+  - 08-experimental-features: 08-experimental-features/README.md
+  - 09-nixos: 09-nixos/README.md
+  - 10-home-and-user: 10-home-and-user/README.md
+  - 11-development: 11-development/README.md
+  - 12-deployment-and-infra: 12-deployment-and-infra/README.md
+  - 13-implementations: 13-implementations/README.md
+  - 14-security-and-trust: 14-security-and-trust/README.md
+  - 15-history-and-governance: 15-history-and-governance/README.md
+  - Glossary: glossary.md
+  - Comparisons: comparisons/README.md
+  - Cheatsheets: cheatsheets/README.md
+  - Meta: meta/README.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zemdregon/nix-docs

@@ -202,3 +202,6 @@ buildNpmPackage rec {
 - [mkDerivation](../architecture/mkDerivation.md) — escape hatch and shared attributes
 - [Simple package](simple-package.md) — Autotools/C-style packaging baseline
 - [callPackage](../../03-language/idioms/callPackage.md) — wiring function arguments from `pkgs`
+- [Haskell packaging](haskell-packaging.md) — `haskellPackages`, Cabal builder
+- [JVM / PHP and others](jvm-php-and-others.md) — Java/Gradle, Composer, Ruby/Perl survey
+- [Language toolchains](../../11-development/language-toolchains.md) — shells vs packaging entry points

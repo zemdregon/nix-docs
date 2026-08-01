@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Stage vault Markdown into ./docs for MkDocs (docs_dir cannot be repo root).
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+docs="$root/docs"
+
+rm -rf "$docs"
+mkdir -p "$docs"
+
+# Numbered domains + cross-cutting trees (meta handled separately)
+for d in \
+  00-roadmap \
+  01-philosophy \
+  02-concepts \
+  03-language \
+  04-store-and-build \
+  05-cli-and-tooling \
+  06-nixpkgs \
+  07-flakes \
+  08-experimental-features \
+  09-nixos \
+  10-home-and-user \
+  11-development \
+  12-deployment-and-infra \
+  13-implementations \
+  14-security-and-trust \
+  15-history-and-governance \
+  comparisons \
+  cheatsheets
+do
+  ln -s "$root/$d" "$docs/$d"
+done
+
+# Root articles / indexes (plans stay linkable from meta/)
+for f in README.md glossary.md EXPAND-PLAN.md ATTACK-PLAN.md; do
+  ln -s "$root/$f" "$docs/$f"
+done
+
+# meta/: publish files but skip audit tooling and attachments
+mkdir -p "$docs/meta"
+for item in "$root/meta"/*; do
+  base="$(basename "$item")"
+  case "$base" in
+    audit|attachments) continue ;;
+    *) ln -s "$item" "$docs/meta/$base" ;;
+  esac
+done
+
+echo "Prepared $docs (symlinks to vault source)"

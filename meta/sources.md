@@ -15,6 +15,7 @@ Prefer the stable/channel manuals unless documenting a version-specific feature;
 | nix.dev (ecosystem docs home) | https://nix.dev/ |
 | nixos.org | https://nixos.org/ |
 | NixOS Discourse | https://discourse.nixos.org/ |
+| NixOS Matrix space | https://matrix.to/#/#space:nixos.org |
 | NixOS org on GitHub | https://github.com/NixOS |
 
 ## Nix (evaluator, language, store, CLI)
@@ -22,6 +23,8 @@ Prefer the stable/channel manuals unless documenting a version-specific feature;
 | Source | URL |
 |--------|-----|
 | Nix reference manual (latest) | https://nix.dev/manual/nix/ |
+| Nix reference manual (stable) | https://nix.dev/manual/nix/stable/ |
+| nix.dev — Install Nix | https://nix.dev/install-nix |
 | Nix language | https://nix.dev/manual/nix/stable/language/ |
 | Nix language — syntax / constructs | https://nix.dev/manual/nix/stable/language/syntax.html |
 | Nix language — types | https://nix.dev/manual/nix/stable/language/types.html |
@@ -55,6 +58,7 @@ Prefer the stable/channel manuals unless documenting a version-specific feature;
 | NixOS options — `nix.buildMachines` | https://search.nixos.org/options?query=nix.buildMachines |
 | nix.dev — Add a binary cache | https://nix.dev/guides/recipes/add-binary-cache |
 | `nix.conf` | https://nix.dev/manual/nix/stable/command-ref/conf-file.html |
+| `access-tokens` (`nix.conf`) | https://nix.dev/manual/nix/stable/command-ref/conf-file.html#conf-access-tokens |
 | Verifying build reproducibility (`diff-hook` / `--check`) | https://nix.dev/manual/nix/stable/advanced-topics/diff-hook.html |
 | NixOS Reproducible Builds | https://reproducible.nixos.org/ |
 | Experimental features | https://nix.dev/manual/nix/stable/development/experimental-features.html |
@@ -113,6 +117,15 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Nixpkgs manual — `.overrideAttrs` | https://nixos.org/manual/nixpkgs/stable/#sec-pkg-overrideAttrs |
 | Nixpkgs manual — `packageOverrides` | https://nixos.org/manual/nixpkgs/stable/#sec-modify-via-packageOverrides |
 | Nixpkgs manual — Languages and frameworks | https://nixos.org/manual/nixpkgs/stable/#chap-language-support |
+| Nixpkgs manual — Haskell | https://nixos.org/manual/nixpkgs/stable/#haskell |
+| Nixpkgs manual — Java | https://nixos.org/manual/nixpkgs/stable/#sec-language-java |
+| Nixpkgs manual — Gradle | https://nixos.org/manual/nixpkgs/stable/#gradle |
+| Nixpkgs manual — Building a Gradle package | https://nixos.org/manual/nixpkgs/stable/#building-a-gradle-package |
+| Nixpkgs manual — PHP | https://nixos.org/manual/nixpkgs/stable/#sec-php |
+| Nixpkgs manual — Building PHP projects | https://nixos.org/manual/nixpkgs/stable/#ssec-building-php-projects |
+| Nixpkgs manual — Ruby | https://nixos.org/manual/nixpkgs/stable/#sec-language-ruby |
+| Nixpkgs manual — Perl | https://nixos.org/manual/nixpkgs/stable/#sec-language-perl |
+| Nixpkgs manual — OCaml | https://nixos.org/manual/nixpkgs/stable/#sec-language-ocaml |
 | Nixpkgs manual — CUDA (`#cuda`) | https://nixos.org/manual/nixpkgs/unstable/#cuda |
 | Nixpkgs manual — Configuring Nixpkgs for CUDA | https://nixos.org/manual/nixpkgs/unstable/#cuda-configuring-nixpkgs-for-cuda |
 | Nixpkgs manual — Using `pkgsCuda` | https://nixos.org/manual/nixpkgs/unstable/#cuda-using-pkgscuda |
@@ -266,7 +279,17 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Home Manager — Nix Flakes | https://nix-community.github.io/home-manager/index.xhtml#ch-nix-flakes |
 | Home Manager options | https://nix-community.github.io/home-manager/options.xhtml |
 | Home Manager source | https://github.com/nix-community/home-manager |
+| haskell.nix (IOG; incompatible with haskellPackages) | https://input-output-hk.github.io/haskell.nix/ |
 | nix-darwin | https://github.com/nix-darwin/nix-darwin |
+| nix-darwin site | https://nix-darwin.github.io/nix-darwin/ |
+| nix-darwin reference manual | https://nix-darwin.github.io/nix-darwin/manual/index.html |
+| Home Manager — nix-darwin flake module | https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-nix-darwin-module |
+| Lix | https://lix.systems/ |
+| Lix — Installing Lix | https://lix.systems/install/ |
+| Determinate docs (hub) | https://docs.determinate.systems/ |
+| Determinate Nix | https://docs.determinate.systems/determinate-nix/ |
+| Determinate — Migrating from upstream Nix | https://docs.determinate.systems/guides/migrating-from-upstream-nix/ |
+| Determinate — Advanced installation (NixOS) | https://docs.determinate.systems/guides/advanced-installation/ |
 | NixOS-WSL | https://github.com/nix-community/NixOS-WSL |
 | NixOS-WSL docs | https://nix-community.github.io/NixOS-WSL/ |
 | NixOS-WSL install | https://nix-community.github.io/NixOS-WSL/install.html |
@@ -291,6 +314,9 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Hydra wiki | https://wiki.nixos.org/wiki/Hydra |
 | nixos-hardware | https://github.com/NixOS/nixos-hardware |
 | nixos-generators | https://github.com/nix-community/nixos-generators |
+| Building Images with nixos-rebuild build-image | https://nixos.org/manual/nixos/stable/#sec-image-nixos-rebuild-build-image |
+| Install NixOS on GCE (NixOS Wiki) | https://wiki.nixos.org/wiki/Install_NixOS_on_GCE |
+| nixpkgs `create-gce.sh` | https://github.com/NixOS/nixpkgs/blob/master/nixos/maintainers/scripts/gce/create-gce.sh |
 | disko | https://github.com/nix-community/disko |
 | disko-templates | https://github.com/nix-community/disko-templates |
 | nixos-anywhere | https://github.com/nix-community/nixos-anywhere |
@@ -322,7 +348,6 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Attic | https://docs.attic.rs/ |
 | Harmonia | https://github.com/nix-community/harmonia |
 | Cachix docs | https://docs.cachix.org/ |
-| nix-darwin | https://github.com/nix-darwin/nix-darwin |
 | nh | https://github.com/nix-community/nh |
 | nvd | https://khumba.net/projects/nvd/ |
 | nix-index / comma | https://github.com/nix-community/nix-index |

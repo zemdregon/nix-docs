@@ -23,3 +23,4 @@ Each roadmap includes **scenario paths** — short ordered tracks for a specific
 - [Beginner](beginner.md) — First-pass path through philosophy, concepts, and basic NixOS
 - [Operator](operator.md) — Path for running and maintaining NixOS systems
 - [Contributor](contributor.md) — Path for packaging, modules, and upstream work
+- [Reading manuals and search](reading-manuals-and-search.md) — How to navigate the three manuals and channel-aware search
