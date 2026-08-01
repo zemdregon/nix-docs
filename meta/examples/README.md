@@ -4,7 +4,7 @@ status: index
 
 # Example corpus
 
-Tiny illustrative Nix snippets other wiki pages can cite. **Not** a second tutorial track or full project templates.
+Tiny illustrative Nix snippets other wiki pages can cite. **Not** a second tutorial track or full project templates. For multi-file “how it all fits” walkthroughs, see [16-configuration-examples](../../16-configuration-examples/README.md).
 
 Snippets are invented minimal fixtures—not copied host configs. They are **not evaluated** in this vault by default. Pins such as `nixos-26.05` and `system = "x86_64-linux"` are illustrative; adjust for your machine. Flake examples need experimental [`nix-command`](../../08-experimental-features/nix-command.md) and [`flakes`](../../08-experimental-features/flakes.md) (e.g. `experimental-features = nix-command flakes` in `nix.conf`).
 

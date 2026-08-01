@@ -6,7 +6,7 @@ status: active
 
 Living checklist. Sole campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phases 0–6 done; Phase 7 active). Draft weeks 0–11 history only — [ATTACK-PLAN.md](../ATTACK-PLAN.md) is a redirect.
 
-**Meta truth snapshot (2026-08-01):** ~259 leaf articles `status: complete`; intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~48 folder READMEs `status: index`. Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Active:** Phase 7 Batch D gated (Batches A–C done). Status lives in YAML frontmatter.
+**Meta truth snapshot (2026-08-01):** ~266 leaf articles `status: complete`; intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~49 folder READMEs `status: index` (includes [16-configuration-examples](../16-configuration-examples/README.md)). Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Site:** [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/). **Active:** Phase 7 Batches A–E done; Batch F (`16-configuration-examples`) landed; cadence ongoing. Status lives in YAML frontmatter.
 
 Weeks below are **historical** draft-campaign checkoffs. Track new work under [Phase 7](#phase-7--toward-definitive) and [Remaining work](#remaining-work).
 
@@ -187,9 +187,10 @@ Prefer [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7 for scope.
 
 ### Still open
 
-1. **Phase 7 Batch D** — optional site generator (gated). See [EXPAND-PLAN.md](../EXPAND-PLAN.md).
-2. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
-3. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release.
+1. **Phase 7 Batch F** — Hydra / CI / cross / packaging-builders cheatsheet (in progress).
+2. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release.
+3. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
+4. **Site** — live at [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/); ops in [site.md](site.md).
 
 ## Phase 7 — Toward definitive
 
@@ -218,9 +219,35 @@ Plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7.
 - [x] Deepen [faq-common-errors](../cheatsheets/faq-common-errors.md)
 - [x] Roadmaps → getting-help + FAQ (beginner / operator / contributor)
 
-### Batch D (queued)
+### Batch D — Site / GitHub Pages (2026-08-01)
 
-- [ ] Optional site generator (gated)
+- [x] MkDocs Material + [pages.yml](../.github/workflows/pages.yml) → [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/)
+- [x] [meta/site.md](site.md) ops notes
+
+### Batch E — Post-publish polish (2026-08-01)
+
+- [x] Glossary Phase 7 terms
+- [x] Deepen [language-toolchains](../11-development/language-toolchains.md)
+- [x] Deepen [package-sets](../06-nixpkgs/architecture/package-sets.md)
+- [x] Homepage / roadmap polish for web readers
+
+### Batch F — Configuration examples domain (2026-08-01)
+
+New top-level domain [16-configuration-examples](../16-configuration-examples/README.md) — multi-file walkthroughs that compose `00`–`15` (distinct from [meta/examples](examples/README.md) fixtures).
+
+- [x] Domain index + nav (`README.md`, root map, `mkdocs.yml`, `prepare-docs-dir.sh`, conventions)
+- [x] [minimal-flake-nixos-host](../16-configuration-examples/minimal-flake-nixos-host.md)
+- [x] [nixos-with-home-manager](../16-configuration-examples/nixos-with-home-manager.md)
+- [x] [project-devshell-and-direnv](../16-configuration-examples/project-devshell-and-direnv.md)
+- [x] [custom-package-overlay-flake](../16-configuration-examples/custom-package-overlay-flake.md)
+- [x] [homelab-proxy-secrets-services](../16-configuration-examples/homelab-proxy-secrets-services.md)
+- [x] [multi-host-config-repo](../16-configuration-examples/multi-host-config-repo.md)
+- [x] [nix-darwin-with-home-manager](../16-configuration-examples/nix-darwin-with-home-manager.md)
+- [x] Roadmaps + cousin See also inbound links
+
+### Batch D (queued) — superseded
+
+- [x] Batch D — site generator (live)
 - [ ] Batch D — optional site generator (gated)
 
 ## Phase 6 — Homelab and config-repo gaps (2026-08-01)

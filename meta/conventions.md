@@ -8,9 +8,10 @@ Rules for growing this wiki. Subject articles stay stubs until a dedicated conte
 
 ## Layout
 
-- Top-level dirs are **domains**, numbered for reading order (`00-` … `15-`).
+- Top-level dirs are **domains**, numbered for reading order (`00-` … `16-`).
 - Cross-cutting material sits at the root: `glossary.md`, `comparisons/`, `cheatsheets/`, `meta/`.
 - Each leaf topic is one `.md` file. Related topics share a folder with a short `README.md`.
+- `16-configuration-examples/` holds **worked, multi-file config walkthroughs** that compose teaching pages from `00`–`15`. Tiny parseable `.nix` fixtures stay under [examples/](examples/README.md)—do not duplicate that corpus as a second fixture tree.
 
 ## Stub style
 

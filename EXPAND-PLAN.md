@@ -18,8 +18,8 @@ Operating rules: [AGENTS.md](AGENTS.md), [meta/conventions.md](meta/conventions.
 | Intentional drafts | [self-healing-config-mesh.md](12-deployment-and-infra/self-healing-config-mesh.md); [meta/sources.md](meta/sources.md) |
 | Relative `.md` links | 0 broken (audit in coverage; skip generated `docs/` if present) |
 | Content campaign | Phases 0–4 + Phase 6 **done**; Phase 5.1 cadence **ongoing** |
-| Site generator | deferred / experimental (optional Phase 5.2 / Batch D) |
-| Active work | **Phase 7** — Batches A–C **done**; Batch D (site) gated |
+| Site generator | **live** — MkDocs Material → [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/) ([meta/site.md](meta/site.md)) |
+| Active work | **Phase 7** — Batch F in progress (A–E done) |
 
 **Verdict:** v1 wiki is stable (plain Markdown + MkDocs site). The tree *maps* the NixOS universe. Remaining work is freshness, depth on thin audiences, and navigation products—not inventing `16-*` domains.
 
@@ -110,13 +110,41 @@ Institutionalize living truth, then close the highest-leverage audience holes.
 
 **Exit C:** met — C1–C4 `complete`; roadmaps updated; coverage + sources updated.
 
-### Batch D — Discoverability (gate)
+### Batch D — Discoverability / site (**done 2026-08-01**)
 
-Only after Batch A landed and cadence checklist is in use:
+MkDocs Material + GitHub Actions Pages. Live: [https://zemdregon.github.io/nix-docs/](https://zemdregon.github.io/nix-docs/). Ops notes: [meta/site.md](meta/site.md). Nav = numbered domain indexes (no IA rewrite). Still synthesize, don’t mirror.
 
-- Evaluate mdBook vs MkDocs vs plain static (Phase 5.2)  
-- Nav = numbered domains (no IA rewrite)  
-- Still **synthesize, don’t mirror**
+**Exit D:** met — workflow green on `main`; `site_url` / repo URLs point at `zemdregon/nix-docs`.
+
+### Batch E — Post-publish polish (**done 2026-08-01**)
+
+Close the thin spots that public readers hit first after the site went live.
+
+| # | Path | Action |
+|---|------|--------|
+| E1 | [glossary.md](glossary.md) | Enrich Phase 7 terms |
+| E2 | [11-development/language-toolchains.md](11-development/language-toolchains.md) | Deepen — Haskell/JVM/PHP + failure modes |
+| E3 | [06-nixpkgs/architecture/package-sets.md](06-nixpkgs/architecture/package-sets.md) | Deepen — by-name, scopes, decision table |
+| E4 | [README.md](README.md) + roadmaps | Homepage clarity for web |
+
+**Exit E:** met — glossary/toolchains/package-sets deepened; README + roadmap index refreshed.
+
+### Batch F — CI / Hydra / cross (**in progress 2026-08-01**)
+
+Public-site readers hitting CI and packaging edges.
+
+| # | Path | Action |
+|---|------|--------|
+| F1 | [12-deployment-and-infra/hydra.md](12-deployment-and-infra/hydra.md) | **Deepen** — jobsets, flakes, when not to run Hydra |
+| F2 | [11-development/ci-with-nix.md](11-development/ci-with-nix.md) | **Deepen** — Complete+ matrices, caches, private inputs |
+| F3 | [06-nixpkgs/packaging/cross-compilation.md](06-nixpkgs/packaging/cross-compilation.md) | **Deepen** — pkgsCross chooser + failure modes |
+| F4 | [cheatsheets/packaging-builders.md](cheatsheets/packaging-builders.md) | **New** — dense language-builder → leaf table |
+
+**Exit F:** F1–F4 `complete`; cheatsheets README + contributor roadmap updated.
+
+### Batch C — Gold thicken + getting help (**done 2026-08-01**)
+
+*(Details under Done history / coverage checklist.)*
 
 ---
 
@@ -133,9 +161,9 @@ Operational steps live in [meta/release-checklist.md](meta/release-checklist.md)
 | Quarterly | Clan/mesh/overlay-network; evaluator landscape; adjacent tools |
 | As noticed | Renames/forks (Snix/Tvix/Lix); dead project warnings |
 
-### 5.2 Site generator (gate)
+### 5.2 Site generator (**done 2026-08-01**)
 
-Requires: Phase 0 done · complete-pass truthful · ≥1 Phase 3 slice drafted · Batch A cadence checklist in use · consensus on numbered-domain nav.
+Shipped as MkDocs Material + [`.github/workflows/pages.yml`](.github/workflows/pages.yml). See [meta/site.md](meta/site.md) and Batch D above.
 
 ---
 
@@ -194,7 +222,8 @@ machine-mesh, inter-machine-trust, clan-and-mesh, overlay-networks + cousin cros
 | **A** | Cadence checklist + manuals + installers + darwin/cloud deepen | **done 2026-08-01** |
 | **B** | Language ecosystems + org flakes | **done 2026-08-01** |
 | **C** | Gold thicken + getting-help | **done 2026-08-01** |
-| **D** | Optional site generator | gated |
+| **D** | MkDocs + GitHub Pages (`zemdregon.github.io/nix-docs`) | **done 2026-08-01** |
+| **E** | Post-publish: glossary + toolchains + package-sets + homepage | **done 2026-08-01** |
 
 Use **one subagent per leaf**; parent supplies research pack (3–8 facts, 1–3 URLs). After each batch: parent review, fix conflicts, update coverage + sources.
 

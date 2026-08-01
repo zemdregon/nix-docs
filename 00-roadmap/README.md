@@ -14,6 +14,8 @@ See [Nix Docs](../README.md) for the full domain list, and [conventions](../meta
 - **Operator** — Already using NixOS (or about to run it day-to-day); need install, config, rebuild, and maintenance order.
 - **Contributor** — Packaging, modules, or upstream work; need nixpkgs, flakes, and contribution-oriented order.
 
+Also: [Reading manuals and search](reading-manuals-and-search.md) · [Getting help and community](../15-history-and-governance/getting-help-and-community.md) · published site [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/).
+
 Paths can overlap. Switch when your goal changes.
 
 Each roadmap includes **scenario paths** — short ordered tracks for a specific task (risky rebuild, first package PR, airgap site, …). Use those when you know the job; use the full numbered sections for a first read-through.
@@ -24,3 +26,4 @@ Each roadmap includes **scenario paths** — short ordered tracks for a specific
 - [Operator](operator.md) — Path for running and maintaining NixOS systems
 - [Contributor](contributor.md) — Path for packaging, modules, and upstream work
 - [Reading manuals and search](reading-manuals-and-search.md) — How to navigate the three manuals and channel-aware search
+- Worked configs: [16-configuration-examples](../16-configuration-examples/README.md) — multi-file compositions of the teaching domains

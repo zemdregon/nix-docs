@@ -10,6 +10,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 **Activation (NixOS).** Applying a built system configuration to the running machine: switching services, users, files under `/etc`, and bootloader entries. Driven by the activation script produced with the system closure. See [activation script](09-nixos/architecture/activation-script.md) and [rebuild operations](09-nixos/operations/rebuild-switch-boot-test.md).
 
+**`access-tokens` (`nix.conf`).** Host→credential map so Nix can fetch private GitHub/GitLab (and similar) HTTPS sources—flake inputs, `fetchGit`, and related downloads. Keep tokens out of flakes and lockfiles; inject them via local `nix.conf` or CI secrets. See [access tokens](05-cli-and-tooling/config/access-tokens.md) and [private flakes and CI](11-development/private-flakes-and-ci.md).
+
 **Age plugin / sops-nix host keys.** [age](https://github.com/FiloSottile/age) can use SSH keys as identities; [agenix](https://github.com/ryantm/agenix) and [sops-nix](https://github.com/Mic92/sops-nix) typically encrypt secrets to each host’s SSH public key and decrypt with host private keys during activation—keep those keys on durable storage on impermanent hosts. See [SSH and age plugins](14-security-and-trust/ssh-and-age-plugins.md), [agenix / sops-nix](12-deployment-and-infra/agenix-sops-nix.md), and [secrets strategies](09-nixos/configuration/secrets-strategies.md).
 
 **AppArmor.** Linux mandatory access control (LSM). NixOS exposes profiles and loading via `security.apparmor.*`; maturity is partial—usable options, incomplete end-to-end coverage. SELinux has no proper stock NixOS integration. Distinct from the Nix [build sandbox](#sandbox). See [AppArmor and SELinux](14-security-and-trust/apparmor-selinux.md).
@@ -20,6 +22,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 **Build phase.** A named step in the stdenv build (unpack, patch, configure, build, check, install, fixup, …). Packages override or hook into phases rather than reimplementing the whole builder. See [build phases](04-store-and-build/build-phases.md) and [stdenv](06-nixpkgs/architecture/stdenv.md).
 
+**`build-image` (`nixos-rebuild`).** Upstream command (NixOS ≥ 25.05) that builds a configured system into a named image variant (`--image-variant amazon`, `google-compute`, `azure`, …). Preferred over deprecated [nixos-generators](13-implementations/cloud-and-images/nixos-generators.md) for new cloud/image work. See [Amazon / GCE / Azure](13-implementations/cloud-and-images/amazon-gce-azure.md).
+
 **CA store / content-addressed store.** Store model where an output’s path is derived from the hash of its contents (or a declared content hash), not solely from the derivation’s input hash. Enables better sharing when identical bytes are produced by different recipes. See [content-addressed store](02-concepts/content-addressed-store.md) and [CA derivations](08-experimental-features/ca-derivations.md).
 
 **Channel.** A named, periodically updated snapshot of nixpkgs (or another tree) that classic tooling pins via `nix-channel`. Still common on NixOS; flakes largely replace channels for reproducible pins. See [channel](02-concepts/channel.md), [nix-channel](05-cli-and-tooling/classic-cli/nix-channel.md), and [flakes vs channels](comparisons/flakes-vs-channels.md).
@@ -28,11 +32,15 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 **Closure.** The transitive set of store paths needed to use a given path at runtime (or to realize a derivation’s runtime graph). What you copy to another machine or what GC must keep if the root is live. See [closure](02-concepts/closure.md).
 
+**Community (getting help).** Where to ask Nix/NixOS questions (Discourse, Matrix, GitHub issues) and how to report bugs without dumping secrets. See [getting help and community](15-history-and-governance/getting-help-and-community.md).
+
 **Cross-compilation.** Building for a different system than the build host (e.g. `aarch64-linux` on `x86_64-linux`) via nixpkgs package sets and stdenv cross stubs. See [cross-compilation](06-nixpkgs/packaging/cross-compilation.md).
 
 **CppNix.** Community name for the reference C++ implementation ([NixOS/nix](https://github.com/NixOS/nix))—what most docs mean by “Nix,” and the default on NixOS. Distinct from [Lix](#lix), [Tvix](#tvix), and [Snix](#snix). See [CppNix](13-implementations/nix-evaluator/cpp-nix.md).
 
 **Derivation.** A build recipe: inputs (sources, dependencies, builder, env) map to one or more output [store paths](#store-path). Evaluation yields a derivation value and usually a `.drv` in the store; **realization** runs the builder. Default model is input-addressed. See [derivation](02-concepts/derivation.md) and [derivation builtins](03-language/builtins/derivation-builtins.md).
+
+**Determinate Nix.** Vendor distribution of [CppNix](#cppnix) from Determinate Systems (installer, defaults, and optional extras such as Determinate Nixd). Compare install paths and effective `nix.conf` with official CppNix and [Lix](#lix); do not assume identical experimental-feature defaults. See [installers and Nix variants](13-implementations/frontends-and-ux/installers-and-nix-variants.md).
 
 **devShell.** A flake (or `nix develop` / `nix-shell`) environment that puts compilers and tools on `PATH` without installing them into a user profile. See [packages, apps, and devShells](07-flakes/workflows/packages-apps-devShells.md) and [shells and direnv](11-development/shells-and-direnv.md).
 
@@ -61,6 +69,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 **GC root.** A registered reference that prevents GC from deleting a store path and its closure—user profiles, NixOS system generations, `result` links, and paths under `/nix/var/nix/gcroots`. See [garbage collection](04-store-and-build/garbage-collection.md).
 
 **Generation.** A numbered snapshot of a [profile](#profile) (user env or NixOS system) that you can roll back to. Each successful profile update or `nixos-rebuild` creates a new generation. See [generation](02-concepts/generation.md), [NixOS generations and boot](09-nixos/architecture/generations-and-boot.md), and [rollbacks](09-nixos/operations/rollbacks.md).
+
+**`haskellPackages`.** Default GHC-backed Haskell package set in nixpkgs (Hackage-facing attributes; alias of a `haskell.packages.*` set for the current compiler). One pinned version per name—not a Cabal solver. See [Haskell packaging](06-nixpkgs/packaging/haskell-packaging.md).
 
 **Hermetic build.** A build that sees only declared inputs: no ambient host packages, no undeclared network, sandbox-isolated filesystem and env. Closely related to [purity](#purity); hermeticity is the build-time isolation story. See [hermetic builds](01-philosophy/hermetic-builds.md) and [builders and sandboxes](04-store-and-build/builders-and-sandboxes.md).
 
@@ -91,6 +101,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 **Machine mesh.** A group of Nix(OS) devices that share builds, closures, secrets, and/or deploy authority over a shared reachability fabric—not a VPN brand, not [Digga / Hive](13-implementations/community-frameworks/digga-hive.md), and not “the mesh” by itself. Concept page: [machine mesh](02-concepts/machine-mesh.md). Contrast hub→host fleet tools ([Colmena](12-deployment-and-infra/colmena.md), [deploy-rs](12-deployment-and-infra/deploy-rs.md)) and peer inventory tooling ([Clan](#clan)).
 
 **Measured boot.** Binding LUKS (or similar) unlock to TPM PCR measurements of the boot chain—on NixOS usually via Lanzaboote + systemd-pcrlock. Experimental edges; LUKS2-oriented; not ZFS/Btrfs native encryption. See [TPM and measured boot](09-nixos/configuration/tpm-and-measured-boot.md).
+
+**`mitmCache` (Gradle).** nixpkgs Gradle helper (`gradle.fetchDeps`) that pins dependency downloads into a [FOD](#fixed-output-derivation-fod)-backed MITM cache (`deps.json`); refresh via the cache’s `updateScript` when deps change. See [JVM / PHP and others](06-nixpkgs/packaging/jvm-php-and-others.md).
 
 **`mkDerivation`.** The usual nixpkgs entry point for defining a package: `stdenv.mkDerivation { pname; version; src; ... }`. Wraps `builtins.derivation` with stdenv phases, setup hooks, and conventions. See [mkDerivation](06-nixpkgs/architecture/mkDerivation.md) and [stdenv](06-nixpkgs/architecture/stdenv.md).
 
@@ -138,6 +150,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 **Snix.** Modular Rust reimplementation of Nix components (evaluator, store, builders)—continuation of the [Tvix](#tvix) stack under independent hosting; early / research maturity, not a drop-in for [CppNix](#cppnix) or [Lix](#lix). See [Snix](13-implementations/nix-evaluator/snix.md).
 
+**`specialArgs` (module system).** Arguments passed into `lib.evalModules` that are available during **import resolution** and in module bodies—use for flake `inputs`, `modulesPath`, and anything referenced from `imports`. Contrast `_module.args` (module bodies only, after merge). See [module system internals](09-nixos/architecture/module-system-internals.md) and [config repo layout](07-flakes/workflows/config-repo-layout.md).
+
 **Specialisation (NixOS).** Named alternate system closure built alongside the parent configuration (`specialisation.<name>`), linked under `/run/current-system/specialisation/<name>/` and switchable via that child’s activation script. See [specialisations](09-nixos/configuration/specialisations.md).
 
 **stdenv.** The nixpkgs standard environment: compilers, core utilities, and the default builder/`mkDerivation` phase machinery for a platform. Almost every package builds inside some stdenv. See [stdenv](06-nixpkgs/architecture/stdenv.md).
@@ -153,6 +167,8 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 **Tvix.** Experimental Rust Nix reimplementation by TVL (modular evaluator/store/builder); not a production NixOS drop-in. Active modular continuation often tracked as [Snix](#snix). See [Tvix](13-implementations/nix-evaluator/tvix.md).
 
 ## U–Z
+
+**`vendorHash`.** Content hash pinning a language builder’s vendored dependency tree as a [FOD](#fixed-output-derivation-fod) (notably PHP Composer via `php.buildComposerProject2`; same idea as `cargoHash` / `npmDepsHash`). Mismatch means refresh the pin after lock/deps change. See [JVM / PHP and others](06-nixpkgs/packaging/jvm-php-and-others.md) and [fixed-output derivation](02-concepts/fixed-output-derivation.md).
 
 **XDG Desktop Portal.** Desktop integration bus for sandboxed and Wayland apps (file choosers, screenshare, …), configured on NixOS via `xdg.portal.*`. See [Wayland and compositors](09-nixos/desktop/wayland-and-compositors.md) and [Flatpak and FHS](09-nixos/desktop/flatpak-and-fhs.md).
 
