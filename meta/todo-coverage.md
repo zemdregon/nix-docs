@@ -242,7 +242,17 @@ Cadence / churn detail (same as item 2 above):
 
 ## Audit hook
 
-From repo root (needs `rg` + Node; no Python required):
+From repo root (needs Node; no Python required):
+
+```bash
+node meta/audit/broken-links.mjs
+node meta/audit/quality-audit.mjs
+node meta/examples/validate.mjs   # requires Nix; skips if absent
+```
+
+CI runs the same checks on push/PR via [.github/workflows/docs-audit.yml](../.github/workflows/docs-audit.yml).
+
+Legacy inline snippets (equivalent to `broken-links.mjs`):
 
 ```bash
 # Status histogram from YAML frontmatter (leaves + indexes + meta)
@@ -262,7 +272,7 @@ console.log(Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${String
 console.log(`missing_frontmatter_status=${missing}`);
 '
 
-# Broken relative .md links (should print broken=0)
+# Broken relative .md links (should print broken=0) — prefer: node meta/audit/broken-links.mjs
 node -e '
 const fs=require("fs"),path=require("path");
 const re=/\[([^\]]*)\]\(([^)]+\.md)(#[^)]*)?\)/g;
@@ -282,7 +292,7 @@ broken.forEach(b=>console.log(" ",b.join(" -> ")));
 
 Last run (2026-07-31, post installer/store/frontend gold): frontmatter `status` histogram — 247 `complete`, 2 `draft` (self-healing-config-mesh + `sources.md`), 48 `index`, meta `active`/`superseded`; relative `.md` links `broken=0`. Dataview view: [dashboard.md](dashboard.md).
 
-**Quality audit (Phase 6+):** `node meta/audit/quality-audit.mjs` — thin Examples (exempts roadmaps/cheatsheets), missing See also / Boundaries on concept+ops leaves, orphan inbound links, stale `last-checked`. Example corpus: `node meta/examples/validate.mjs` (requires Nix; skips if absent). See [quality-checklist.md](quality-checklist.md) Complete+ bar. Last quality audit run: 2026-08-01 — contributor scenario paths + audit heuristic fix + example validate script.
+**Quality audit (Phase 6+):** `node meta/audit/broken-links.mjs` · `node meta/audit/quality-audit.mjs` · `node meta/examples/validate.mjs` (Nix). CI: [.github/workflows/docs-audit.yml](../.github/workflows/docs-audit.yml). See [quality-checklist.md](quality-checklist.md) Complete+ bar.
 
 ## Definition of done (per article)
 

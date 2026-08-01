@@ -1,0 +1,41 @@
+name: Docs audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  markdown-audit:
+    name: Links and quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Broken relative .md links
+        run: node meta/audit/broken-links.mjs
+
+      - name: Quality audit
+        run: node meta/audit/quality-audit.mjs
+
+  example-corpus:
+    name: Example corpus (Nix)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Validate example .nix files
+        run: node meta/examples/validate.mjs
