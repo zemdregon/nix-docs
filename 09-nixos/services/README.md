@@ -14,3 +14,5 @@ Running services and containers.
 - [Libvirt and VMs](libvirt-and-vms.md) — libvirtd / QEMU vs `build-vm`
 - [MicroVMs](microvms.md) — MicroVM.nix lightweight guests
 - [Common Service Examples](common-service-examples.md) — Example service configs
+- [Homelab Patterns](homelab-patterns.md) — Reverse proxy, TLS, secrets, firewall composition
+- [Docker and Podman](docker-and-podman.md) — Host container runtimes

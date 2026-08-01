@@ -102,4 +102,5 @@ sudo nixos-rebuild switch --flake .#hostname
 - [Rebuild: switch, boot, test](../../09-nixos/operations/rebuild-switch-boot-test.md) — activation modes
 - [Remote deploy](../../09-nixos/operations/remote-deploy.md) — `--target-host` and related workflows
 - [homeConfigurations](home-configurations.md) — Home Manager as a flake output
+- [Config repo layout](config-repo-layout.md) — hosts/modules/users mono-repo conventions
 - [nixos-rebuild (frontend)](../../13-implementations/frontends-and-ux/nixos-rebuild.md) — CLI flags and flake default hostname lookup

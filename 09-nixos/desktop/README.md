@@ -14,3 +14,4 @@ Graphical desktop stacks on NixOS: compositors, audio, fonts, Flatpak/FHS, gamin
 - [Flatpak and FHS](flatpak-and-fhs.md) — Flatpak coexistence; `buildFHSEnv` / steam-run
 - [Gaming: Steam and Proton](gaming-steam-proton.md) — Steam, Proton, Gamescope
 - [Printing and scanning](printing-and-scanning.md) — CUPS and SANE
+- [nix-ld and foreign binaries](nix-ld-and-foreign-binaries.md) — Prebuilt vendor binaries on NixOS

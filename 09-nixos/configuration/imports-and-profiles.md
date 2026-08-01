@@ -83,6 +83,7 @@ For module structure and merge helpers, see [Writing a module](../modules/writin
 ## See also
 
 - [configuration.nix](configuration-nix.md)
+- [Config repo layout](../../07-flakes/workflows/config-repo-layout.md) — flake mono-repo folder conventions
 - [hardware-configuration.nix](hardware-configuration.md)
 - [Module system](../architecture/module-system.md)
 - [Profile (store profiles)](../../02-concepts/profile.md)

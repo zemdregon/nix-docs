@@ -191,6 +191,19 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 2. **Cadence (ongoing)** — re-run Phase 5.1 refresh each future Nix/NixOS release (experimental tracking, release-cited leaves, Clan APIs, adjacent tools). Site generator remains optional Phase 5.2.
 3. **Further quality (optional)** — more gold-page outliers beyond this batch if needed (e.g. thin philosophy leftovers, FAQ thicken, Phase 3 leaf polish).
 
+## Phase 6 — Homelab and config-repo gaps (2026-08-01)
+
+New leaves from gap analysis (homelab / daily-driver config patterns):
+
+- [x] [config-repo-layout](../07-flakes/workflows/config-repo-layout.md) — flake mono-repo `hosts/` / `modules/` / `users/` conventions (`complete`)
+- [x] [homelab-patterns](../09-nixos/services/homelab-patterns.md) — reverse proxy, ACME, secrets, firewall composition (`complete`)
+- [x] [backups-and-restore](../09-nixos/operations/backups-and-restore.md) — restic/borg vs generation rollback (`complete`)
+- [x] [docker-and-podman](../09-nixos/services/docker-and-podman.md) — host container runtimes (`complete`)
+- [x] [unfree-and-licenses](../06-nixpkgs/architecture/unfree-and-licenses.md) — `allowUnfree` policy hub (`complete`)
+- [x] [nix-ld-and-foreign-binaries](../09-nixos/desktop/nix-ld-and-foreign-binaries.md) — prebuilt vendor binaries (`complete`)
+
+Cross-links: operator + beginner roadmaps; `common-service-examples`, `nixos-configurations`, `imports-and-profiles`, `flatpak-and-fhs` See also updated.
+
 ### Landed (2026-07-31 installer/store/frontend gold)
 
 3i. **Installer / store / frontend gold (done 2026-07-31)** — graphical-installer, firmware-and-microcode, content-addressed-store, nixos-rebuild frontend; evaluator README maturity table (Snix ≠ Tvix).

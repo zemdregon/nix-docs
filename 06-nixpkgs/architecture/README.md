@@ -13,3 +13,4 @@ How nixpkgs is structured.
 - [Package Sets](package-sets.md) — pkgs structure
 - [lib](lib.md) — nixpkgs library
 - [Maintainers and Teams](maintainers-and-teams.md) — Ownership model
+- [Unfree and licenses](unfree-and-licenses.md) — `allowUnfree` and license policy

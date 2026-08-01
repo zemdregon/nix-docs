@@ -97,6 +97,7 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Source | URL |
 |--------|-----|
 | Nixpkgs manual (stable) | https://nixos.org/manual/nixpkgs/stable/ |
+| Nixpkgs manual — Configuring Nixpkgs (`allowUnfree`) | https://nixos.org/manual/nixpkgs/stable/#sec-configuring-nixpkgs |
 | Nixpkgs manual — Fetchers | https://nixos.org/manual/nixpkgs/stable/#chap-pkgs-fetchers |
 | Nixpkgs manual — Standard environment | https://nixos.org/manual/nixpkgs/stable/#chap-stdenv |
 | Nixpkgs manual — Using stdenv | https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv |
@@ -151,6 +152,14 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Option search — `services.pipewire` | https://search.nixos.org/options?query=services.pipewire |
 | Option search — `services.flatpak` | https://search.nixos.org/options?query=services.flatpak |
 | Option search — `programs.steam` | https://search.nixos.org/options?query=programs.steam |
+| Option search — `programs.nix-ld` | https://search.nixos.org/options?query=programs.nix-ld |
+| Option search — `services.restic` | https://search.nixos.org/options?query=services.restic |
+| Option search — `services.borgbackup` | https://search.nixos.org/options?query=services.borgbackup |
+| Option search — `virtualisation.docker` / `virtualisation.podman` | https://search.nixos.org/options?virtualisation.docker |
+| NixOS manual — BorgBackup module | https://nixos.org/manual/nixos/stable/index.html#module-services-borgbackup |
+| NixOS manual — ACME (`security.acme`) | https://nixos.org/manual/nixos/stable/#module-security-acme |
+| nix-community/nix-ld | https://github.com/nix-community/nix-ld |
+| NixOS Wiki — Nix-ld | https://wiki.nixos.org/wiki/Nix-ld |
 | Option search — `services.printing` / `hardware.sane` | https://search.nixos.org/options?query=services.printing |
 | Option search — `fonts.packages` / `fonts.fontconfig` | https://search.nixos.org/options?query=fonts.packages |
 | nixpkgs FHS environments (`buildFHSEnv`) | https://nixos.org/manual/nixpkgs/unstable/#sec-fhs-environments |
