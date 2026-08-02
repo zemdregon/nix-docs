@@ -10,8 +10,6 @@ Browse folders by number; each domain `README.md` lists its children. Convention
 
 **Published site:** [https://zemdregon.github.io/nix-docs/](https://zemdregon.github.io/nix-docs/) (MkDocs Material / GitHub Pages) — build notes in [meta/site.md](meta/site.md).
 
-Licensed under [CC BY 4.0](LICENSE). **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md).
-
 ## How to navigate
 
 Start with [00-roadmap](00-roadmap/README.md) (beginner / operator / contributor), or jump by domain below. Prefer relative links between topics. Want a full working config story? [16-configuration-examples](16-configuration-examples/README.md). Stuck? [FAQ: common errors](cheatsheets/faq-common-errors.md) then [Getting help and community](15-history-and-governance/getting-help-and-community.md). How to use upstream manuals: [Reading manuals and search](00-roadmap/reading-manuals-and-search.md).
