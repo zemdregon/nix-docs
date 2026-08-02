@@ -4,7 +4,7 @@ status: active
 
 # Release / freshness checklist
 
-Operational checklist for [EXPAND-PLAN.md](../EXPAND-PLAN.md) **Phase 5.1** (Batch A1). Run on each cadence trigger below so release facts, experimental flags, CLI stamps, mesh/Clan notes, and evaluator maturity do not rot.
+Operational checklist for ongoing freshness (Phase 5.1 cadence). Run on each cadence trigger below so release facts, experimental flags, CLI stamps, mesh/Clan notes, and evaluator maturity do not rot.
 
 This is a meta process doc, not a subject article. Pair with [research-method.md](research-method.md) when rewriting leaves and [quality-checklist.md](quality-checklist.md) when reaffirming `complete`.
 
@@ -55,7 +55,7 @@ Pick the matching section; always finish with [After every refresh](#after-every
 
 ## See also
 
-- [EXPAND-PLAN.md](../EXPAND-PLAN.md) — Phase 5.1 cadence table
+- [todo-coverage.md](todo-coverage.md) — remaining work and historical campaign checkoffs
 - [quality-checklist.md](quality-checklist.md) — complete-pass rubric (`last-checked`, examples, refs)
 - [research-method.md](research-method.md) — pack → write → verify loop
 - [conventions.md](conventions.md) — status values and linking rules

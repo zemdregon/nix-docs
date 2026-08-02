@@ -19,6 +19,7 @@ Chooser for three roles: **substitute** (client pulls prebuilts via `substituter
 | Populate object storage or a directory tree | `nix copy --to 's3://…?secret-key=…'` or `file:///…?secret-key=…` | [Binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) | Expecting a live builder store without an upload/serve step |
 | Create / place signing keys | `nix-store --generate-binary-cache-key`; secret only on signer/host | [Signing and caches](../14-security-and-trust/signing-and-caches.md) | Distributing the secret to every client |
 | CI / Hydra should feed a project cache | Build → push (`cachix` / `attic` / `nix copy`); clients only substitute | [CI with Nix](../11-development/ci-with-nix.md) · [Hydra](../12-deployment-and-infra/hydra.md) | Committing write tokens or signing secrets |
+| Several hosts share private caches (hub + builders + laptops) | Hub durable cache + edge Harmonia; wire `extra-substituters` / keys / `builders-use-substitutes` per role | [Private cache mesh](../12-deployment-and-infra/private-cache-mesh.md) | Treating VPN membership as binary trust, or relying only on live-store edges after GC |
 | Untrusted user / “just turn off sigs” | Keep `require-sigs = true`; use `trusted-substituters` + keys (or a trusted user) | [Trusted users and substituters](../05-cli-and-tooling/config/trusted-users-and-substituters.md) · [Signing and caches](../14-security-and-trust/signing-and-caches.md) | `require-sigs = false` / store `trusted=true` without understanding binary authenticity |
 
 Remote builders pulling their own caches: `builders-use-substitutes` — [Remote builders](../04-store-and-build/remote-builders.md). Binary authenticity vs daemon privilege: [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md).
@@ -39,6 +40,7 @@ Remote builders pulling their own caches: `builders-use-substitutes` — [Remote
 - [Binary caches](../04-store-and-build/binary-caches.md)
 - [Substitutes and NAR info](../04-store-and-build/substitutes-and-narinfo.md)
 - [Binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md)
+- [Private cache mesh](../12-deployment-and-infra/private-cache-mesh.md) — hub + edge + builder substituter topology
 - [Signing and caches](../14-security-and-trust/signing-and-caches.md)
 - [Trusted users and substituters](../05-cli-and-tooling/config/trusted-users-and-substituters.md)
 - [nix.conf knobs](nix-conf-knobs.md)

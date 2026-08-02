@@ -10,16 +10,18 @@ Guidance for AI agents working in this repository.
 
 Plain-Markdown knowledge base for the full Nix stack (philosophy → language → store → nixpkgs → NixOS → flakes → experimental features → tooling → implementations → configuration examples). MkDocs site: see [meta/site.md](meta/site.md).
 
-Campaign plan (single): [EXPAND-PLAN.md](EXPAND-PLAN.md)  
 Conventions: [meta/conventions.md](meta/conventions.md)  
 Sources: [meta/sources.md](meta/sources.md)  
-Coverage: [meta/todo-coverage.md](meta/todo-coverage.md)  
+Coverage / remaining work: [meta/todo-coverage.md](meta/todo-coverage.md)  
+Cadence: [meta/release-checklist.md](meta/release-checklist.md)  
 Nav map: [README.md](README.md)
+
+Campaign content batches are closed. Do not invent new top-level plan files; track work in coverage + release checklist.
 
 ## Before you write
 
-1. Read [meta/conventions.md](meta/conventions.md) and the relevant section of [EXPAND-PLAN.md](EXPAND-PLAN.md).
-2. Prefer the priority tiers in the expand plan and [meta/todo-coverage.md](meta/todo-coverage.md) over random stubs.
+1. Read [meta/conventions.md](meta/conventions.md) and [meta/todo-coverage.md](meta/todo-coverage.md) **Remaining work**.
+2. Prefer remaining-work items and [meta/release-checklist.md](meta/release-checklist.md) cadence triggers over random stubs.
 3. Build a **research pack** before filling a page: 3–8 facts, 1–3 canonical URLs, optional real-world config link.
 4. Verify relative link targets exist in this tree before linking.
 
@@ -50,7 +52,7 @@ Nav map: [README.md](README.md)
 - Invent Nix/NixOS APIs, options, or flags.
 - Expand scope beyond the files you were asked to edit.
 - Commit, push, or force-push unless the user explicitly asks.
-- Edit [EXPAND-PLAN.md](EXPAND-PLAN.md) (or create parallel plan files) unless the user asks to update the plan.
+- Create parallel campaign plan files (`*PLAN.md`, `.cursor/plans` checked into the tree); use [meta/todo-coverage.md](meta/todo-coverage.md) instead.
 
 ## Subagent pattern
 

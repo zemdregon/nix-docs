@@ -6,9 +6,9 @@ status: complete
 
 ## Overview
 
-An **overlay** is a function that composes modifications on top of a package set. In nixpkgs it has the shape `final: prev: { ... }`: it receives the final fixed-point package set and the result of previous layers, then returns attribute overrides and new packages to merge in.
+An **overlay** is a function `final: prev: { ... }` that returns attribute overrides and new packages to merge into nixpkgs's fixed-point package set.
 
-Overlays are how nixpkgs and NixOS apply set-wide customization without editing the upstream tree. They are the primary mechanism for extending the package graph functionally—see [Functional Package Management](../01-philosophy/functional-package-management.md). For fixed-point mechanics, stacking order, and `extends`, see [Overlays Pattern](../03-language/idioms/overlays-pattern.md). For install paths and longer how-tos, see [Writing Overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md). For package-level tweaks on a single derivation, see [Overlay vs Override](overlay-vs-override.md).
+For fixed-point mechanics, stacking order, and `extends`, see [Overlays Pattern](../03-language/idioms/overlays-pattern.md). For install paths and longer how-tos, see [Writing Overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md).
 
 ## Details
 
@@ -74,15 +74,11 @@ An overlay is **set-level**: it returns a fragment of `pkgs` that nixpkgs folds 
 
 Overlays often *call* `.override` / `.overrideAttrs` on `prev` packages to propagate a tweak set-wide (for example, swapping a BLAS provider or patching `hello` everywhere). See [Overlay vs Override](overlay-vs-override.md).
 
-### Boundaries (what this page is not)
-
-- **Not package-level overrides** — `.override` / `.overrideAttrs` scope is [overlay vs override](overlay-vs-override.md).
-- **Not fixed-point internals** — `extends` and composition theory are [overlays pattern](../03-language/idioms/overlays-pattern.md).
-- **Not nixpkgs contribution policy** — install paths and upstream conventions are [writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md).
+This page stays at the concept layer—overlay shape, naming, shallow merge, and common attachment points. Per-package overrides, fixed-point internals, and install-path how-tos are covered in the pages linked under **See also**.
 
 ## Examples
 
-**Pin Python across the set.**
+To pin Python across the set:
 
 ```nix
 final: prev: {
@@ -90,7 +86,7 @@ final: prev: {
 }
 ```
 
-**Override one package's arguments inside an overlay** (same shape as [../meta/examples/overlay-snippet.nix](../meta/examples/overlay-snippet.nix)):
+Patching one package inside an overlay (same shape as [../meta/examples/overlay-snippet.nix](../meta/examples/overlay-snippet.nix)):
 
 ```nix
 final: prev: {
@@ -100,7 +96,7 @@ final: prev: {
 }
 ```
 
-**Apply overlays when importing nixpkgs.**
+At import time, pass a list to `overlays`:
 
 ```nix
 import <nixpkgs> {
@@ -110,7 +106,7 @@ import <nixpkgs> {
 }
 ```
 
-**Add a package that depends on the composed set.**
+When a new package needs attrs from the composed set, pull them from `final`:
 
 ```nix
 final: prev: {

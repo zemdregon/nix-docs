@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-08
 ---
 
 # WSL and foreign OS
@@ -19,6 +20,8 @@ WSL2 is Linux from Nix’s point of view. Install Nix with the same official or 
 WSL2 often ships without systemd enabled. With **systemd enabled** in `/etc/wsl.conf` (`[boot] systemd=true`), prefer a **multi-user** install (`--daemon`). Without systemd, use **single-user** (`--no-daemon`). That split is documented on [Nix on other distros](nix-on-other-distros.md); do not repeat the full install matrix here.
 
 You still have an Ubuntu/Debian/etc. base: distro packages, `/etc` layout, and upgrades stay with that distribution. Nix adds `/nix`, profiles, and flakes on top—it does not turn the VM into NixOS.
+
+**Store location.** Keep the Nix store on WSL’s **Linux native filesystem** (the ext4 VHD that backs the distro—typically `/` with `/nix` at the root). Do **not** put `/nix` on `/mnt/c`, other DrvFS automounts, or a bind mount into the Windows NTFS side. DrvFS lacks reliable Unix semantics (symlinks, permissions, case sensitivity, locking); builds become slow and can fail in subtle ways. If you need more space, grow the WSL virtual disk or move the **entire distro** to another drive—not just the store onto `C:`.
 
 ### NixOS-WSL (NixOS as the WSL distro)
 
@@ -66,6 +69,21 @@ Import the module from your flake or channel (for example `inputs.nixos-wsl.nixo
 | **Typical use** | Nix alongside apt; minimal change to existing WSL setup | Declarative NixOS desktop/server-in-WSL; closest to bare NixOS on Windows |
 
 Neither path is “Nix on Windows” natively—both run inside WSL’s Linux VM. For declarative macOS system config outside WSL, see [nix-darwin](nix-darwin.md).
+
+### Common failure modes
+
+| Symptom or mistake | Likely cause | What to do |
+|--------------------|--------------|------------|
+| Multi-user Nix daemon fails to start or hangs | WSL2 without systemd but Nix installed with `--daemon` | Enable `[boot] systemd=true` in `/etc/wsl.conf` (or via `wsl.wslConf.boot.systemd` on NixOS-WSL), restart WSL, or reinstall Nix with `--no-daemon` for single-user mode |
+| Very slow builds, flaky store paths, permission errors | `/nix` or `nix-daemon` temp dirs on `/mnt/c` or other **DrvFS** | Move store back to the Linux VFS root; never bind `/nix` to Windows drives. See store guidance above |
+| `sudo nixos-rebuild switch` “should” work on Ubuntu WSL | **NixOS-WSL vs Nix-in-Ubuntu** confusion—foreign distro is not NixOS | On plain WSL distros use [Home Manager standalone](home-manager/standalone-vs-nixos-module.md); reserve `nixos-rebuild` for NixOS-WSL or bare NixOS |
+| GUI apps crash on OpenGL / no GPU acceleration | Stock WSL **ldconfig automount** path (`wsl.wslConf.automount.ldconfig`) does not work with NixOS | On NixOS-WSL set `wsl.useWindowsDriver = true` so host drivers are wired the NixOS-WSL way; do not rely on WSL’s default ldconfig hook for NixOS |
+| Unexpected passwordless `sudo`, open `wheel` | NixOS-WSL default user **`nixos`** in `wheel` with passwordless sudo | Run `passwd` for a login password; set `security.sudo.wheelNeedsPassword = true` when you want sudo to prompt |
+| Windows `.exe` not found, wrong PATH, broken interop | Interop or PATH merge disabled or overridden | Check `wsl.wslConf.interop.enabled`, `wsl.wslConf.interop.appendWindowsPath`, and `wsl.interop.includePath` / `wsl.interop.register` per [options.html](https://nix-community.github.io/NixOS-WSL/options.html) |
+| GUI apps do not appear (WSLg) | WSLg unavailable, wrong distro, or interop/GUI wiring | Requires a WSLg-capable Windows build and a GUI stack in your config; NixOS-WSL can expose Start Menu entries via `wsl.startMenuLaunchers`. Tune interop through `wsl.wslConf` ([Microsoft wsl.conf](https://learn.microsoft.com/en-us/windows/wsl/wsl-config)) |
+| Following NixOS module docs on a foreign WSL host | Plain WSL has **no `nixos-rebuild` for the host**—only profiles and HM | Treat the host like any foreign Linux: Nix installer + HM standalone; system modules apply only after importing NixOS-WSL or moving to bare NixOS |
+
+For the same “foreign host, not full NixOS” story on macOS or stock Linux, see [nix-darwin](nix-darwin.md) and [Nix on other distros](nix-on-other-distros.md).
 
 ## Examples
 

@@ -128,6 +128,7 @@ attic push my-cache ./result
 - [Signing and caches](../14-security-and-trust/signing-and-caches.md) — signatures, `require-sigs`, trust
 - [CI with Nix](../11-development/ci-with-nix.md) — forge CI that often pushes to a project cache
 - [Hydra](hydra.md) — CI that often feeds a private cache
+- [Private cache mesh](private-cache-mesh.md) — multi-host substituter topology (hub + edge + builders)
 - [Machine mesh](../02-concepts/machine-mesh.md) — private caches as mesh binary sharing
 - [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md) — binary authenticity axis
 - [Trusted users and substituters](../05-cli-and-tooling/config/trusted-users-and-substituters.md) — who may add caches

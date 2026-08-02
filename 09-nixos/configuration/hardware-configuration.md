@@ -10,21 +10,17 @@ status: complete
 
 ## Details
 
-**How it is produced.** Run `nixos-generate-config` during installation with `--root /mnt` (after mounting the target filesystems under `/mnt`), or on an existing system without `--root` to refresh hardware facts under `/etc/nixos`. The tool always rewrites `hardware-configuration.nix`. On a fresh install it also writes a starter `configuration.nix` that imports the hardware file; an existing `configuration.nix` is left alone unless you pass `--force`. Use `--show-hardware-config` to print the hardware module to stdout without writing files.
+Run `nixos-generate-config` during installation with `--root /mnt` (after mounting the target filesystems under `/mnt`), or on an existing system without `--root` to refresh hardware facts under `/etc/nixos`. The tool always rewrites `hardware-configuration.nix`. On a fresh install it also writes a starter `configuration.nix` that imports the hardware file; an existing `configuration.nix` is left alone unless you pass `--force`. Use `--show-hardware-config` to print the hardware module to stdout without writing files.
 
 **What it usually contains.** The scan reflects mount points active when the command runs: root and other `fileSystems` entries, `swapDevices`, and boot-related lists such as `boot.initrd.availableKernelModules`, `boot.initrd.kernelModules`, `boot.kernelModules`, and `boot.extraModulePackages`. On bare metal it typically imports `(modulesPath + "/installer/scan/not-detected.nix")` and may set CPU microcode options; under QEMU/KVM it may import `qemu-guest.nix`. Other detections can enable guest helpers (for example VirtualBox or Hyper-V). These values must be correct for the system to mount `/` in early boot—see the NixOS manual’s installation chapter. If initrd modules are still wrong after generation, the manual’s recovery path is to fix options in `configuration.nix` and rerun `nixos-install`.
 
-**Do not treat it as the main config.** Generated files open with a warning that future `nixos-generate-config` runs will overwrite them; the NixOS manual says you generally should not modify the file for lasting customizations. Put stable overrides in [configuration.nix](configuration-nix.md) instead (module merge / `lib.mkForce` when needed). Regenerating wipes hand-edited lines in the hardware file.
+Generated files open with a warning that future `nixos-generate-config` runs will overwrite them; the NixOS manual says you generally should not modify the file for lasting customizations. Put stable overrides in [configuration.nix](configuration-nix.md) instead (module merge / `lib.mkForce` when needed). Regenerating wipes hand-edited lines in the hardware file.
 
 **ESP mount points on UEFI.** Both systemd-boot and GRUB on NixOS expect the EFI System Partition on `/boot` by default. The generator derives `fileSystems` from whatever is mounted when you run it; if the live environment mounted the ESP elsewhere (for example `/boot/efi`), the generated entry may not match NixOS bootloader conventions. Remount the ESP on `/boot` before generating, or adjust the mount point in `hardware-configuration.nix` before the first build—see [Partitioning and bootloaders](partitioning-and-bootloaders.md). That ESP check is one of the few cases where the manuals explicitly call for editing the generated file.
 
 **Not the same as nixos-hardware.** [nixos-hardware](nixos-hardware.md) is a separate collection of optional NixOS modules for specific machines. It is not what `nixos-generate-config` writes; you import a profile yourself when you want vendor- or model-specific tweaks, alongside this generated file.
 
-### Boundaries (what this page is not)
-
-- [nixos-hardware](nixos-hardware.md) optional modules—community profiles you import separately.
-- [Partitioning recipes](disko-recipes.md) or declarative disk layouts.
-- A [configuration.nix](configuration-nix.md) tutorial—the main host config entry point.
+This page documents the generated hardware module only—not [partitioning recipes](disko-recipes.md) or a [configuration.nix](configuration-nix.md) tutorial.
 
 ## Examples
 

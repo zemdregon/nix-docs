@@ -29,39 +29,39 @@ Rebuild commands that activate or change the boot default must run as root: use 
 | `dry-activate` | yes | no | dry-run | Preview unit/activation changes |
 | `dry-build` | eval/plan | no | no | Show what would be built (no build) |
 
-Semantics below follow the NixOS manual ([Changing the Configuration](https://nixos.org/manual/nixos/stable/index.html#sec-changing-config)) and `nixos-rebuild(8)`.
+Semantics follow the NixOS manual ([Changing the Configuration](https://nixos.org/manual/nixos/stable/index.html#sec-changing-config)) and `nixos-rebuild(8)`. Matrix columns are authoritative for build / boot / activate; notes below add mechanics not shown in the table.
 
-**`switch`.** Build the new configuration, make it the boot default, and activate it now (restart system services as needed). This is the usual day-to-day apply. Internally: build `config.system.build.toplevel`, register a new system-profile generation, then run `switch-to-configuration switch`.
+**`switch`.** Internally: build `config.system.build.toplevel`, register a new system-profile generation, then run `switch-to-configuration switch`.
 
-**`test`.** Build and activate now, but do **not** set the boot default. A reboot returns to the previous default generation—useful for risky changes you might want to walk away from by rebooting.
+**`test`.** Reboot restores the previous boot default.
 
-**`boot`.** Build and set the boot default, but do **not** activate now. The new generation takes effect on the next reboot. Handy when you want the next boot to pick up kernel/initrd changes without flipping the live system mid-session.
+**`boot`.** Live system unchanged until reboot.
 
-**`build`.** Build only; no activation and no boot-entry change. Leaves a `result` symlink to the system closure. A compile/eval check that the config closes cleanly; may be run as a normal user.
+**`build`.** Leaves a `result` symlink to the system closure; may run as a normal user.
 
-**`dry-activate`.** Build the new configuration, then ask `switch-to-configuration` what it would do under `test`—for example which systemd units would restart—without applying those changes. The printed list is **not** guaranteed complete (`nixos-rebuild(8)`). Useful before a disruptive `switch`.
+**`dry-activate`.** Asks `switch-to-configuration` what it would do under `test` (e.g. which systemd units would restart). The printed list is **not** guaranteed complete (`nixos-rebuild(8)`).
 
-**`dry-build`.** Show which store paths would be built or substituted without performing the build (planning / dry-run of realization). Complements `dry-activate`, which focuses on activation effects after a successful build.
+**`dry-build`.** Pair with `dry-activate` when you want both build planning and activation preview.
 
-**`build-vm`.** Build a QEMU VM that contains the desired configuration for sandboxed testing (`./result/bin/run-*-vm` after the build). The VM has no host data: existing user accounts and home directories are unavailable unless you configure users for the VM (for example `mutableUsers = false`, or temporary `initialHashedPassword` values—delete the `*.qcow2` disk image after such changes so they take effect).
+**`build-vm`.** Builds a QEMU VM for sandboxed testing (`./result/bin/run-*-vm`). The VM has no host data—configure users explicitly (e.g. `mutableUsers = false`, temporary `initialHashedPassword`); delete `*.qcow2` after such changes so they take effect.
 
-**`repl`.** Open a Nix REPL with your system configuration loaded into the `config` variable (tab completion; `:r` to reload). Useful for inspecting option values before rebuilding; see also [Troubleshooting](troubleshooting.md) for eval failures.
+**`repl`.** Nix REPL with system `config` loaded (tab completion; `:r` to reload). See [Troubleshooting](troubleshooting.md) for eval failures.
 
-**`list-generations`.** List available system generations (generation number, build time, NixOS/kernel versions, and related metadata; optional `--json`). Complements inspecting `/nix/var/nix/profiles/system-*-link` as described in [Rollbacks](rollbacks.md).
+**`list-generations`.** Generation number, build time, NixOS/kernel versions, optional `--json`. Complements `/nix/var/nix/profiles/system-*-link` in [Rollbacks](rollbacks.md).
 
 ### Generations and activation
 
-Each successful `switch` or `boot` that updates the system profile creates a new generation under `/nix/var/nix/profiles`. The running system is `/run/current-system`. Previous generations remain until garbage-collected, which is what makes [rollbacks](rollbacks.md) and the bootloader submenu possible.
+`switch` and `boot` that update the system profile add a generation under `/nix/var/nix/profiles`; the running system is `/run/current-system`. Older generations remain until GC—see [Rollbacks](rollbacks.md).
 
-For `switch` / `test`, activation roughly: update bootloader when the action requires it → stop units → run `$out/activate` → reload/restart systemd as needed → start units. Details and ordering live in [Activation script](../architecture/activation-script.md) and the NixOS manual chapter *What happens during a system switch?*.
+For `switch` / `test`, activation: bootloader update (when required) → stop units → `$out/activate` → reload/restart systemd → start units. See [Activation script](../architecture/activation-script.md) and *What happens during a system switch?* in the NixOS manual.
 
 ### Named profiles, specialisations, flakes
 
-**Named profiles.** `nixos-rebuild switch -p test` installs the generation under a separate profile so GRUB shows a submenu like “NixOS - Profile 'test'”, keeping experimental generations apart from the main system profile.
+**Named profiles.** `nixos-rebuild switch -p test` installs under a separate profile (GRUB submenu “NixOS - Profile 'test'”).
 
-**Specialisations.** Without `--specialisation`, `switch` and `test` activate the unspecialised base system (even if you were previously in a specialisation). Pass `--specialisation NAME` (or `-c`) to activate a named one. See [Specialisations](../configuration/specialisations.md).
+**Specialisations.** Without `--specialisation`, `switch` and `test` activate the unspecialised base system. Pass `--specialisation NAME` (or `-c`) for a named one—see [Specialisations](../configuration/specialisations.md).
 
-**Flakes (brief).** With a flake-based host, the same actions apply via `nixos-rebuild switch --flake …` (and the other subcommands with `--flake`). Activation and boot semantics above are unchanged; refreshing flake inputs before rebuild is [Upgrades](upgrades.md).
+**Flakes.** Same actions via `--flake …`; input refresh before rebuild is [Upgrades](upgrades.md).
 
 ### Boundaries (what this page is not)
 
@@ -71,17 +71,17 @@ For `switch` / `test`, activation roughly: update bootloader when the action req
 
 ## Examples
 
-Commands below match the NixOS manual and `nixos-rebuild(8)`. They require a NixOS host (or a built system closure) to run; comments note expected side effects.
+Commands below match the NixOS manual and `nixos-rebuild(8)`. They require a NixOS host (or a built system closure) to run.
 
 ```bash
 # sudo -i
-# nixos-rebuild switch          # build, boot default, activate now
-# nixos-rebuild test            # build + activate; reboot undoes boot default
-# nixos-rebuild boot            # build + boot default; activate on next reboot
-# nixos-rebuild build           # build only (as user is fine)
-# nixos-rebuild dry-activate    # build; print planned activation (incomplete list OK)
-# nixos-rebuild dry-build       # show what would be built/fetched; do not build
-# nixos-rebuild switch -p test  # GRUB submenu “NixOS - Profile 'test'”
+# nixos-rebuild switch
+# nixos-rebuild test
+# nixos-rebuild boot
+# nixos-rebuild build           # may run as normal user
+# nixos-rebuild dry-activate
+# nixos-rebuild dry-build
+# nixos-rebuild switch -p test
 # nixos-rebuild list-generations
 ```
 

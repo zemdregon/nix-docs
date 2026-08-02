@@ -4,7 +4,7 @@ status: active
 
 # Quality checklist (complete pass)
 
-Short verify rubric before setting frontmatter `status: complete`. See also [research-method.md](research-method.md) and [EXPAND-PLAN.md](../EXPAND-PLAN.md).
+Short verify rubric before setting frontmatter `status: complete`. See also [research-method.md](research-method.md) and [todo-coverage.md](todo-coverage.md).
 
 ## Must pass
 
@@ -19,7 +19,7 @@ Short verify rubric before setting frontmatter `status: complete`. See also [res
 
 ## Complete+ (optional deepen bar)
 
-Use after a leaf is already `complete` when calibrating toward runbook-grade density (EXPAND-PLAN Phase 6+). Not required for v1 `complete` status.
+Use after a leaf is already `complete` when calibrating toward runbook-grade density. Not required for baseline `complete` status.
 
 - [ ] **Lifecycle or decision artifact** — mermaid diagram, comparison table, or decision tree where the topic has stages or choices
 - [ ] **Boundaries** — short “what this page is not” (or equivalent scope note) on concept and operator leaves

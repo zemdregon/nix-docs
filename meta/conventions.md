@@ -37,7 +37,7 @@ status: stub
 - Folder `README.md` files are **indexes**, not articles: use `status: index` (not `stub`/`draft`/`complete`). One-line purpose plus a **Contents** list of children (title + one-line purpose). No deep teaching in READMEs.
 - Optional `## See also` with relative links only.
 - Empty outline headings are fine; do not invent tutorial body in the structure phase.
-- Allowed `status` values: `stub`, `draft`, `complete`, `index`, `active` (meta/plan docs), `superseded` (retired plans).
+- Allowed `status` values: `stub`, `draft`, `complete`, `index`, `active` (meta process docs), `superseded` (retired meta docs).
 
 ## Naming
 

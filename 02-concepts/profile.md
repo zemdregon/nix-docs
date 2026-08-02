@@ -10,13 +10,15 @@ A **profile** is a named, mutable view into the [Nix store](store-path.md): a di
 
 Each install, upgrade, or remove appends a numbered [generation](generation.md). The profile name points at `profile-N-link`, which points at that generation’s store path; older generations stay on disk for rollback. Active and historical profile links are [GC roots](../04-store-and-build/garbage-collection.md), keeping their closures reachable until you delete those generations or collect garbage.
 
+This page covers on-disk profile layout, types, and GC roots. Rollback semantics are in [Generation](generation.md); store path identity in [Store path](store-path.md); NixOS boot and system rebuilds in [Generations and boot](../09-nixos/architecture/generations-and-boot.md).
+
 ## Details
 
 ### Layout
 
-**Profiles directory.** Nix keeps profile metadata under the state directory. With default paths, user profiles sit in `/nix/var/nix/profiles/per-user/<user>/`; root’s profile uses `/nix/var/nix/profiles/per-user/root/profile`. With XDG base directories, a regular user’s profiles are under `$XDG_STATE_HOME/nix/profiles/` instead.
+Nix keeps profile metadata under the state directory. With default paths, user profiles sit in `/nix/var/nix/profiles/per-user/<user>/`; root’s profile uses `/nix/var/nix/profiles/per-user/root/profile`. With XDG base directories, a regular user’s profiles are under `$XDG_STATE_HOME/nix/profiles/` instead.
 
-**Name → link → store path.** For a profile named `profile`, the layout is:
+For a profile named `profile`, the name symlink, generation link, and store path chain like this:
 
 ```text
 …/profiles/profile          → profile-7-link
@@ -25,13 +27,13 @@ Each install, upgrade, or remove appends a numbered [generation](generation.md).
 
 Each `profile-N-link` symlink is itself a GC root. The store path it targets is a **symlink farm**: `bin/`, `share/`, and other trees contain symlinks into installed packages—not copies of store content.
 
-**User profile link.** The installer typically creates `~/.nix-profile` pointing at the active user profile (or `$XDG_STATE_HOME/nix/profile` when XDG mode is on). Activation scripts and shell profiles add its `bin/` to `PATH`; other outputs (man pages, `.desktop` files) are exposed the same way.
+The installer typically creates `~/.nix-profile` pointing at the active user profile (or `$XDG_STATE_HOME/nix/profile` when XDG mode is on). Activation scripts and shell profiles add its `bin/` to `PATH`; other outputs (man pages, `.desktop` files) are exposed the same way.
 
 ### Generations
 
-**Numbered snapshots.** Every mutation creates generation *N + 1*: a new store path and a new `profile-(N+1)-link`. The profile name symlink is rewired to the new link; generation *N*’s store path remains until nothing references it. Rolling back means switching the name symlink to an older `profile-M-link`—see [Generation](generation.md) and [Immutability and rollback](../01-philosophy/immutability-and-rollback.md).
+Every mutation creates generation *N + 1*: a new store path and a new `profile-(N+1)-link`. The profile name symlink is rewired to the new link; generation *N*’s store path remains until nothing references it. Rolling back means switching the name symlink to an older `profile-M-link`—see [Generation](generation.md) and [Immutability and rollback](../01-philosophy/immutability-and-rollback.md).
 
-**Manifests.** Each generation’s store path includes a manifest of installed packages:
+Each generation’s store path includes a manifest of installed packages:
 
 | CLI | Manifest file | Notes |
 |-----|---------------|-------|
@@ -54,19 +56,13 @@ User, channels, and system profiles evolve independently. Updating a channel gen
 
 ### GC roots
 
-**Why profiles matter for GC.** Each `profile-N-link` symlink registered with the store is a GC root. So are the user profile link (`~/.nix-profile`) and, on NixOS, the system profile. Garbage collection deletes only store paths with no remaining roots—historical generations stay reachable until you remove them (`nix-env --delete-generations`, `nix profile wipe-history`, `nix-collect-garbage`, etc.). See [Garbage collection](../04-store-and-build/garbage-collection.md).
+Each `profile-N-link` symlink registered with the store is a GC root. So are the user profile link (`~/.nix-profile`) and, on NixOS, the system profile. Garbage collection deletes only store paths with no remaining roots—historical generations stay reachable until you remove them (`nix-env --delete-generations`, `nix profile wipe-history`, `nix-collect-garbage`, etc.). See [Garbage collection](../04-store-and-build/garbage-collection.md).
 
 ### Classic vs modern CLI
 
-**Same storage, different front ends.** [`nix-env`](../05-cli-and-tooling/classic-cli/nix-env.md) and [`nix profile`](../05-cli-and-tooling/modern-cli/nix-profile.md) both mutate the default user profile through the generation machinery above. `nix-env -i` / `-u` / `-e` and `nix profile install` / `remove` each produce a new generation and rewrite the profile symlink.
+[`nix-env`](../05-cli-and-tooling/classic-cli/nix-env.md) and [`nix profile`](../05-cli-and-tooling/modern-cli/nix-profile.md) both mutate the default user profile through the generation machinery above. `nix-env -i` / `-u` / `-e` and `nix profile install` / `remove` each produce a new generation and rewrite the profile symlink.
 
 Prefer `nix profile` for flake-friendly installs and JSON-oriented tooling; `nix-env` remains common on older workflows and in docs that assume channels. Neither edits store paths in place—both only advance or rewind the profile pointer.
-
-### Boundaries (what this page is not)
-
-- **Not generation mechanics** — numbered snapshots and rollback semantics are [generation](generation.md).
-- **Not the store model** — path identity and immutability are [store path](store-path.md).
-- **Not NixOS system profiles** — boot entries and `nixos-rebuild` are [generations and boot](../09-nixos/architecture/generations-and-boot.md).
 
 ## Examples
 

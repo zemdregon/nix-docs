@@ -16,6 +16,7 @@ Deploy tools, disk, secrets, Hydra, and caches. Tool pick: [Fleet deploy](../che
 - [agenix / sops-nix](agenix-sops-nix.md) — Secrets deployment
 - [Hydra](hydra.md) — CI/CD for Nix
 - [Binary Cache Hosting](binary-cache-hosting.md) — Hosting substituters
+- [Private cache mesh](private-cache-mesh.md) — Multi-host private substituter topology
 - [Clan and mesh](clan-and-mesh.md) — Clan multi-machine / mesh-oriented management (vs hub deploy)
 - [Nix copy and bundles](nix-copy-and-bundles.md) — Closure shipping (`nix copy`) and `nix bundle`
 - [Airgap and offline](airgap-and-offline.md) — Offline install/update; USB / file:// substituters

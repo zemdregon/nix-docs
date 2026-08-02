@@ -18,17 +18,18 @@ theme:
   logo: assets/nixos-logomark.svg
   favicon: assets/nixos-logomark.svg
   palette:
+    # Black header: indigo/blue primary washes out the NixOS logomark.
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      primary: black
+      accent: blue
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: black
+      accent: blue
       toggle:
         icon: material/brightness-4
         name: Switch to light mode

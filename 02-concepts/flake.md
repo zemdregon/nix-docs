@@ -19,23 +19,17 @@ Flakes are an **experimental** feature (enable `nix-command` and `flakes` in `ni
 
 ## Details
 
-**Entry file.** `flake.nix` must provide `outputs` (a function of the realized inputs). Optional top-level attributes include `description`, `inputs`, and `nixConfig`. Inputs are named references such as `nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05"`; `outputs` returns the artifacts this flake provides (often keyed by system, e.g. `packages.x86_64-linux.default`).
+A flake directory is anchored by `flake.nix`, which must provide `outputs` as a function of the realized inputs. Optional top-level attributes include `description`, `inputs`, and `nixConfig`. Inputs are named references such as `nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05"`; `outputs` returns the artifacts this flake provides (often keyed by system, e.g. `packages.x86_64-linux.default`).
 
-**Lockfile.** Unlocked URLs in `flake.nix` are resolved to concrete Git revisions (or tarball hashes) in [flake.lock](../07-flakes/anatomy/lockfile.md). Commit the lockfile so CI and collaborators share the same pins; run `nix flake update` when you intentionally bump inputs. That is the main reproducibility advantage over [channels](channel.md), which only track a moving release URL.
+Unlocked URLs in `flake.nix` resolve to concrete Git revisions (or tarball hashes) in [flake.lock](../07-flakes/anatomy/lockfile.md). Commit the lockfile so CI and collaborators share the same pins; run `nix flake update` when you intentionally bump inputs. A [channel](channel.md) subscription points at a moving release URL—`nix-channel --update` pulls whatever commit that branch currently names, so two machines can diverge until each updates. `flake.lock` pins exact input commits in version control, independent of upstream branch motion.
 
-**Discovery and CLI.** Flakes integrate with the Nix 3 commands: `nix build`, `nix run`, `nix develop`, and `nix flake show` accept flake references like `.`, `github:owner/repo`, or `nixpkgs#hello`. A [flake registry](../07-flakes/registries-and-refs.md) maps symbolic names to default URLs.
+The Nix 3 CLI treats flake references—`.`, `github:owner/repo`, or `nixpkgs#hello`—as first-class targets for `nix build`, `nix run`, `nix develop`, and `nix flake show`. A [flake registry](../07-flakes/registries-and-refs.md) maps symbolic names to default URLs.
 
-**Pure evaluation.** Flake evaluation is **restricted**: no arbitrary access to the filesystem or environment unless declared as inputs. That supports hermetic, cache-friendly builds and makes “what went into this evaluation?” auditable. Impure escape hatches and flags are documented under [pure eval and impure](../07-flakes/pure-eval-and-impure.md).
+When evaluating a flake, Nix restricts filesystem and environment access unless declared as inputs. That supports hermetic, cache-friendly builds and makes “what went into this evaluation?” auditable. Impure escape hatches and flags are documented under [pure eval and impure](../07-flakes/pure-eval-and-impure.md).
 
-**Implementations.** [CppNix](../13-implementations/nix-evaluator/cpp-nix.md) and [Lix](../13-implementations/nix-evaluator/lix.md) both expose flake evaluation and the flake CLI under the same experimental feature flags; treat flag availability and exact CLI surface as implementation- and version-dependent. Other evaluators may lack or partially implement flakes—check that evaluator’s docs before assuming parity.
+[CppNix](../13-implementations/nix-evaluator/cpp-nix.md) and [Lix](../13-implementations/nix-evaluator/lix.md) both expose flake evaluation and the flake CLI under the same experimental feature flags; treat flag availability and exact CLI surface as implementation- and version-dependent. Other evaluators may lack or partially implement flakes—check that evaluator’s docs before assuming parity.
 
-**Not a tutorial surface.** Defining outputs, composing NixOS configurations, and publishing flakes belong in the [07-flakes](../07-flakes/README.md) domain and CLI docs—not here. Treat this page as vocabulary before reading those guides.
-
-### Boundaries (what this page is not)
-
-- **Not pure-eval rules** — path restrictions, `--impure`, and Git staging gotchas are [pure eval and impure](../07-flakes/pure-eval-and-impure.md).
-- **Not lockfile mechanics** — JSON structure and update semantics are [lockfile](../07-flakes/anatomy/lockfile.md).
-- **Not NixOS system config** — wiring `nixosConfigurations` is [nixos-configurations](../07-flakes/workflows/nixos-configurations.md).
+**Scope.** This page defines vocabulary only. Output schemas, NixOS composition, publishing workflows, lockfile JSON, pure-eval path rules, and `nixosConfigurations` wiring belong in [07-flakes](../07-flakes/README.md) and linked pages ([lockfile](../07-flakes/anatomy/lockfile.md), [pure eval and impure](../07-flakes/pure-eval-and-impure.md), [nixos-configurations](../07-flakes/workflows/nixos-configurations.md)).
 
 ## Examples
 

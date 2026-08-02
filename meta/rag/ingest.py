@@ -39,6 +39,9 @@ def ingest(*, reset: bool = False, root: Path | None = None) -> int:
 
     for fi, path in enumerate(files, start=1):
         rel = path.relative_to(root).as_posix()
+        if not path.is_file():
+            print(f"[{fi}/{len(files)}] {rel}: skipped (missing)", file=sys.stderr)
+            continue
         chunks = chunk_file(path, root)
         if not reset:
             delete_by_path(collection, rel)

@@ -4,11 +4,11 @@ status: active
 
 # Research method
 
-Repeatable loop for filling stubs and complete passes. Matches [EXPAND-PLAN.md](../EXPAND-PLAN.md) and [AGENTS.md](../AGENTS.md).
+Repeatable loop for filling stubs and complete passes. Matches [AGENTS.md](../AGENTS.md) and [todo-coverage.md](todo-coverage.md).
 
 ## Loop
 
-1. **Pick** — next item from [todo-coverage.md](todo-coverage.md) **Remaining work** or the active phase in [EXPAND-PLAN.md](../EXPAND-PLAN.md) (not historical week lists; those are done).
+1. **Pick** — next item from [todo-coverage.md](todo-coverage.md) **Remaining work** or a [release-checklist.md](release-checklist.md) cadence trigger (not historical week lists; those are done).
 2. **Research pack** (before writing) — collect into notes (chat or scratch):
    - 3–8 factual bullets (what / why / main behaviors)
    - 1–3 canonical URLs from [sources.md](sources.md) or manuals found via that list

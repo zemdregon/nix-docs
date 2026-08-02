@@ -159,7 +159,9 @@ def iter_markdown_files(root: Path | None = None) -> list[Path]:
         rel_parts = path.relative_to(root).parts
         if any(part in SKIP_DIR_NAMES for part in rel_parts):
             continue
-        # Skip this tooling directory's README only if under .chroma (already skipped).
+        # Skip broken symlinks / vanished paths (TOCTOU during long ingests).
+        if not path.is_file():
+            continue
         files.append(path)
     files.sort()
     return files
@@ -168,5 +170,8 @@ def iter_markdown_files(root: Path | None = None) -> list[Path]:
 def chunk_file(path: Path, root: Path | None = None) -> list[Chunk]:
     root = root or REPO_ROOT
     rel = path.relative_to(root).as_posix()
-    raw = path.read_text(encoding="utf-8")
+    try:
+        raw = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return []
     return chunk_markdown(rel, raw)

@@ -120,7 +120,7 @@ Deploy trust is whoever can run `nixos-rebuild --target-host`, `colmena apply`, 
 - [Sandbox escape surface](sandbox-escape-surface.md) — hermeticity (local, not fleet)
 - [Remote builders](../04-store-and-build/remote-builders.md) — build-trust axis
 - [Store protocols](../04-store-and-build/store-protocols.md) — reachability URI forms
-- [Binary caches](../04-store-and-build/binary-caches.md) / [Binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md)
+- [Binary caches](../04-store-and-build/binary-caches.md) / [Binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) / [Private cache mesh](../12-deployment-and-infra/private-cache-mesh.md)
 - [agenix / sops-nix](../12-deployment-and-infra/agenix-sops-nix.md) — recipient secret trust
 - [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) — hub deploy trust
 - [Remote deploy](../09-nixos/operations/remote-deploy.md)

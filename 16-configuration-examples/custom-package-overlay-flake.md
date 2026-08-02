@@ -17,20 +17,6 @@ For the concept layer see [Overlay](../02-concepts/overlay.md) and [callPackage]
 
 One repository with a recipe under `pkgs/`, an overlay file, a root `flake.nix` that exposes `packages.<system>.default` and `overlays.default`, and an optional NixOS module that applies the overlay from the flake input. After `nix flake lock`, `nix build` produces the custom wrapper; `nixos-rebuild` on a configured host sees both the new attr and the patched `hello` everywhere `pkgs` is used.
 
-### Domains composed
-
-| Domain | Role in this example |
-|--------|----------------------|
-| [Overlay](../02-concepts/overlay.md) | `final: prev:` layer that adds attrs to the fixed point |
-| [Overlay vs override](../02-concepts/overlay-vs-override.md) | Overlay reshapes `pkgs`; `.overrideAttrs` inside it tweaks one derivation set-wide |
-| [callPackage](../03-language/idioms/callPackage.md) | Recipe function whose arguments are filled from the package set |
-| [Hashing and inputs](../04-store-and-build/hashing-and-inputs.md) | Input-addressed builds here; tarball fetches would need [FOD](../02-concepts/fixed-output-derivation.md) hashes from a real build |
-| [Simple package](../06-nixpkgs/packaging/simple-package.md) | `stdenv.mkDerivation` recipe shape (this example skips upstream fetch) |
-| [Writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md) | `final` / `prev`, NixOS `nixpkgs.overlays` |
-| [Packages, apps, devShells](../07-flakes/workflows/packages-apps-devShells.md) | `packages.${system}.default`, exporting `overlays` |
-| [NixOS configurations](../07-flakes/workflows/nixos-configurations.md) | `nixosConfigurations` + `specialArgs` for flake inputs |
-| [configuration.nix](../09-nixos/configuration/configuration-nix.md) | Host module that sets `nixpkgs.overlays` and `environment.systemPackages` |
-
 **Overlay vs override:** the overlay returns a fragment of `pkgs` merged into the fixed point—anything resolving `pkgs.hello` or `pkgs.hello-wrapper` sees your versions. A bare `.override` on one value outside an overlay only affects that binding. This example uses `.overrideAttrs` *inside* the overlay so the patched `hello` is set-wide; see [Overlay vs override](../02-concepts/overlay-vs-override.md).
 
 **When you need fetch:** recipes that download upstream sources use fixed-output fetchers (`fetchurl`, `fetchFromGitHub`, …). Those are [fixed-output derivations](../02-concepts/fixed-output-derivation.md); you obtain the `hash` from a failed build or `nix-prefetch-url`, not by guessing. The corpus fixture [fod-fetchurl.nix](../meta/examples/fod-fetchurl.nix) shows the shape with an obviously invalid hash. This walkthrough avoids FOD entirely by wrapping `hello` from nixpkgs.
@@ -51,7 +37,7 @@ Larger config repos split `hosts/` and `overlays/` the same way; see [Config rep
 
 ### Annotated pieces
 
-**`pkgs/hello-wrapper.nix`** — same idea as the vault fixture [simple-package.nix](../meta/examples/simple-package.nix): a function `{ lib, stdenv, hello }: …` built with `stdenv.mkDerivation`, depending on nixpkgs' `hello` instead of fetching upstream:
+Local recipe (`pkgs/hello-wrapper.nix`), modeled on the corpus [simple-package.nix](../meta/examples/simple-package.nix). Arguments are filled by [callPackage](../03-language/idioms/callPackage.md); the wrapper depends on nixpkgs' `hello` rather than fetching upstream:
 
 ```nix
 { lib, stdenv, hello }:
@@ -76,7 +62,7 @@ stdenv.mkDerivation {
 }
 ```
 
-**`overlay.nix`** — matches the corpus [overlay-snippet.nix](../meta/examples/overlay-snippet.nix): add the local package via `prev.callPackage`, patch `hello` with `prev.hello.overrideAttrs`:
+The overlay (see [overlay-snippet.nix](../meta/examples/overlay-snippet.nix)) registers that recipe and patches upstream `hello`. Use **`prev`** for replacements and `callPackage`; reserve **`final`** when a new package must see attrs already merged into the fixed point:
 
 ```nix
 final: prev: {
@@ -88,9 +74,7 @@ final: prev: {
 }
 ```
 
-Use **`prev`** for the package you replace and for `callPackage`; use **`final`** when a new package's dependencies must see the composed set (not needed in this minimal overlay).
-
-**`flake.nix`** — pin nixpkgs, export the overlay, build `hello-wrapper` under an overlaid import, expose `packages.<system>.default`, optionally define `nixosConfigurations`:
+Root `flake.nix` pins nixpkgs, re-exports the overlay as `overlays.default`, and imports nixpkgs **with** that overlay when building `packages.<system>.default`. Downstream flakes can reuse `overlays.default` without copying the file; optional `nixosConfigurations` wires the same overlay into a host module:
 
 ```nix
 {
@@ -121,9 +105,7 @@ Use **`prev`** for the package you replace and for `callPackage`; use **`final`*
 }
 ```
 
-Import nixpkgs **with** `overlays = [ self.overlays.default ]` when defining `packages` so `pkgs.hello-wrapper` exists—the overlay adds that attr. Flakes can also expose `overlays.default` for downstream consumers without copying the file.
-
-**NixOS host** — pass flake `inputs` through `specialArgs`, then reference the overlay output (same pattern as importing `./overlays.nix` in [Writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md)):
+`configuration.nix` applies the overlay from flake inputs via `specialArgs` (same `nixpkgs.overlays` pattern as [Writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md)):
 
 ```nix
 { inputs, pkgs, ... }: {
@@ -168,81 +150,15 @@ sudo nixos-rebuild build --flake .#demo
 
 ## Examples
 
-Full tree (illustrative pin; adapt `system` and `stateVersion`):
+Copy the [File layout](#file-layout) tree and the four blocks under [Annotated pieces](#annotated-pieces). Adapt `system`, the nixpkgs pin, and `system.stateVersion` for your host.
 
-**`pkgs/hello-wrapper.nix`** — identical to the Annotated pieces block above (corpus: [simple-package.nix](../meta/examples/simple-package.nix)).
-
-**`overlay.nix`**
+Downstream flake consuming only the overlay:
 
 ```nix
-final: prev: {
-  hello-wrapper = prev.callPackage ./pkgs/hello-wrapper.nix { };
-
-  hello = prev.hello.overrideAttrs (old: {
-    pname = old.pname + "-patched";
-  });
-}
+nixpkgs.overlays = [ inputs.myPkg.overlays.default ];
 ```
 
-**`flake.nix`**
-
-```nix
-{
-  description = "Local callPackage recipe + overlay + flake packages";
-
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-
-  outputs = { self, nixpkgs, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ self.overlays.default ];
-      };
-    in {
-      overlays.default = import ./overlay.nix;
-
-      packages.${system} = {
-        default = pkgs.hello-wrapper;
-        hello-wrapper = pkgs.hello-wrapper;
-      };
-
-      nixosConfigurations.demo = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [ ./configuration.nix ];
-      };
-    };
-}
-```
-
-**`configuration.nix`**
-
-```nix
-{ inputs, pkgs, ... }: {
-  nixpkgs.overlays = [ inputs.self.overlays.default ];
-
-  networking.hostName = "demo";
-
-  environment.systemPackages = with pkgs; [
-    hello-wrapper
-    hello
-  ];
-
-  system.stateVersion = "26.05";
-}
-```
-
-**Operator sequence**
-
-```bash
-nix flake lock
-nix build
-./result/bin/hello-demo
-nix flake check
-sudo nixos-rebuild build --flake .#demo   # optional
-```
-
-To consume only the overlay from another flake, add this repo as an input and set `nixpkgs.overlays = [ inputs.myPkg.overlays.default ];` in that flake's NixOS modules—the same option as `inputs.self` above.
+Operator sequence: see [Activate / verify](#activate--verify).
 
 ## References
 
@@ -256,10 +172,12 @@ To consume only the overlay from another flake, add this repo as an input and se
 - [Overlay](../02-concepts/overlay.md)
 - [Overlay vs override](../02-concepts/overlay-vs-override.md)
 - [callPackage](../03-language/idioms/callPackage.md)
+- [Hashing and inputs](../04-store-and-build/hashing-and-inputs.md)
 - [Fixed-output derivation](../02-concepts/fixed-output-derivation.md)
 - [Simple package](../06-nixpkgs/packaging/simple-package.md)
 - [Writing overlays](../06-nixpkgs/overlays-and-overrides/writing-overlays.md)
 - [Packages, apps, devShells](../07-flakes/workflows/packages-apps-devShells.md)
 - [Config repo layout](../07-flakes/workflows/config-repo-layout.md)
 - [NixOS configurations in flakes](../07-flakes/workflows/nixos-configurations.md)
+- [configuration.nix](../09-nixos/configuration/configuration-nix.md)
 - [Example corpus](../meta/examples/README.md) — [simple-package.nix](../meta/examples/simple-package.nix), [overlay-snippet.nix](../meta/examples/overlay-snippet.nix)

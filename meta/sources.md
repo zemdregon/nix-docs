@@ -4,7 +4,7 @@ status: draft
 
 # Sources
 
-This is the wiki’s canonical upstream URL table, not a finished article: append/revise rows as content work needs them (see EXPAND-PLAN / coverage). Links only — no mirrored content here.
+This is the wiki’s canonical upstream URL table, not a finished article: append/revise rows as content work needs them (see [todo-coverage.md](todo-coverage.md)). Links only — no mirrored content here.
 
 Prefer the stable/channel manuals unless documenting a version-specific feature; then pin the versioned manual URL and note the Nix / Nixpkgs / NixOS release.
 
@@ -348,6 +348,8 @@ Use a versioned path (e.g. `/manual/nix/2.34/`) when the fact depends on a speci
 | Determinate Nix Action | https://github.com/DeterminateSystems/determinate-nix-action |
 | Attic | https://github.com/zhaofengli/attic |
 | Harmonia | https://github.com/nix-community/harmonia |
+| nix.dev — Setting up an HTTP binary cache | https://nix.dev/tutorials/nixos/binary-cache-setup |
+| NixOS wiki — Building Images (ARM) | https://wiki.nixos.org/wiki/NixOS_on_ARM/Building_Images |
 | Colmena docs | https://colmena.cli.rs/ |
 | Clan site | https://clan.lol/ |
 | Clan docs (26.05) | https://clan.lol/docs/26.05 |

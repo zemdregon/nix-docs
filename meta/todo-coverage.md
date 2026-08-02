@@ -4,9 +4,9 @@ status: active
 
 # Coverage TODO
 
-Living checklist. Sole campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phases 0–4, 6, 7 done; Phase 5.1 cadence ongoing). Draft weeks 0–11 history only — [ATTACK-PLAN.md](../ATTACK-PLAN.md) is a redirect.
+Living checklist and remaining-work ground truth. Historical campaign phases (0–4, 6, 7) are closed; ongoing work is Phase 5.1 cadence via [release-checklist.md](release-checklist.md).
 
-**Meta truth snapshot (2026-08-01 — Phase 7 closed):** ~274 leaf articles `status: complete` (quality audit); intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~49 folder READMEs `status: index` (includes [16-configuration-examples](../16-configuration-examples/README.md)). Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Site:** [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/). **Active:** Phase 5.1 cadence only ([release-checklist.md](release-checklist.md)). Status lives in YAML frontmatter.
+**Meta truth snapshot (2026-08-01 — post gold-thicken):** leaf articles mostly `status: complete` (quality audit); intentional drafts: [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md) + living [sources.md](sources.md); ~49 folder READMEs `status: index` (includes [16-configuration-examples](../16-configuration-examples/README.md)). Relative `.md` links: 0 broken in repo root (see [Audit hook](#audit-hook)). **Site:** [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/). **Active:** Phase 5.1 cadence ([release-checklist.md](release-checklist.md)). Status lives in YAML frontmatter.
 
 Weeks below are **historical** draft-campaign checkoffs. Phase 7 batches A–L are **closed** (see below). Track ongoing work under [Remaining work](#remaining-work).
 
@@ -111,9 +111,9 @@ Mental model domain to **draft**.
 - [x] Roadmap link audit ([00-roadmap/](../00-roadmap/README.md)) — tree-wide relative `.md` links: 0 broken (2026-07-29)
 - [x] Complete-pass on high-traffic pages (beginner path + core concepts) — 2026-07-29: why-nix, core concepts (derivation/store-path/closure/generation/profile/flake), glossary, configuration-nix, module-system, rebuild/rollbacks, graphical-installer, flake-nix-schema, cli/language cheatsheets → `complete`
 
-## Complete pass (EXPAND-PLAN Phase 1) — status checkoff
+## Complete pass (Phase 1) — status checkoff
 
-Rubric: [quality-checklist.md](quality-checklist.md). Checked = leaf has frontmatter `status: complete` (2026-07-30 tree scan). A later Phase 1 **quality** pass (examples, version stamps, See also mesh) is separate — see [Remaining work](#remaining-work).
+Rubric: [quality-checklist.md](quality-checklist.md). Checked = leaf has frontmatter `status: complete` (2026-07-30 tree scan). Historical quality deepenings are recorded under [Remaining work](#remaining-work) and closed Phase sections below.
 
 ### Tier A — Beginner path
 
@@ -173,7 +173,7 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 - [x] [14-security-and-trust/inter-machine-trust.md](../14-security-and-trust/inter-machine-trust.md) (complete)
 - [x] [12-deployment-and-infra/clan-and-mesh.md](../12-deployment-and-infra/clan-and-mesh.md) (complete)
 - [x] [09-nixos/configuration/overlay-networks.md](../09-nixos/configuration/overlay-networks.md) (complete)
-- [ ] Optional private-cache-mesh if needed — deferred (binary-cache-hosting sufficient)
+- [x] [private-cache-mesh](../12-deployment-and-infra/private-cache-mesh.md) — multi-host substituter topology (landed 2026-08-01)
 
 ### M.3 Exit
 
@@ -183,18 +183,26 @@ Leaves below are `complete` and now carry cousin links to [machine-mesh](../02-c
 
 ## Remaining work
 
-Prefer [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7 for scope.
-
 ### Still open
 
 1. **Cadence (ongoing)** — use [release-checklist.md](release-checklist.md) each Nix/NixOS release and on quarterly triggers.
 2. **Intentional drafts** — [self-healing-config-mesh](../12-deployment-and-infra/self-healing-config-mesh.md); living [sources.md](sources.md).
 3. **Site** — live at [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-docs/); ops in [site.md](site.md).
-4. **Optional** — gold thicken thin audiences scored by [EXPAND-PLAN.md](../EXPAND-PLAN.md) priority rubric (not a numbered Phase 7 batch).
+4. **Optional further gold** — more thin-audience deepenings (language packaging hubs remain candidates). Score by audience pain, uniqueness, link leverage, churn risk, and source quality.
+
+### Gold thicken thin audiences (2026-08-01)
+
+Closed rubric batch:
+
+- [x] [private-cache-mesh](../12-deployment-and-infra/private-cache-mesh.md) — **new** multi-host private substituter topology
+- [x] Deepen [nix-on-other-distros](../10-home-and-user/nix-on-other-distros.md) — distro matrix + failure modes
+- [x] Deepen [installers-and-nix-variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md) — migration/uninstall failure modes
+- [x] Deepen [nixos-generators](../13-implementations/cloud-and-images/nixos-generators.md) — build-image variants beyond amazon/gce/azure + failure modes
+- [x] Deepen [wsl-and-foreign-os](../10-home-and-user/wsl-and-foreign-os.md) — WSL failure modes table
 
 ## Phase 7 — Toward definitive (**closed 2026-08-01**)
 
-Plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) Phase 7. Batches A–L complete; closeout verify + audits 2026-08-01.
+Batches A–L complete; closeout verify + audits 2026-08-01.
 
 ### Batch A — Cadence + first audience gaps (2026-08-01)
 
@@ -293,7 +301,7 @@ Second wave under [16-configuration-examples](../16-configuration-examples/READM
 ### Closeout (2026-08-01)
 
 - [x] Subagent quality verify on new G–L leaves (5 cheatsheets + 4 worked configs)
-- [x] Parent review: sources rows, EXPAND-PLAN Batch L + Phase 7 exit, coverage sync
+- [x] Parent review: sources rows, Batch L + Phase 7 exit, coverage sync
 - [x] Audits: `broken-links.mjs` → `broken=0`; `quality-audit.mjs` green
 
 ### Batch D (historical note)

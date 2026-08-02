@@ -92,9 +92,7 @@ for (const file of files) {
 
   const isLeaf =
     !file.endsWith("/README.md") &&
-    !["glossary.md", "EXPAND-PLAN.md", "ATTACK-PLAN.md", "AGENTS.md"].includes(
-      path.basename(file)
-    ) &&
+    !["glossary.md", "AGENTS.md"].includes(path.basename(file)) &&
     !file.startsWith(path.join(ROOT, "meta") + path.sep);
   if (!isLeaf) continue;
 

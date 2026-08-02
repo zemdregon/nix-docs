@@ -56,7 +56,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 
 **Pin bump (channel or flake)** — [upgrades](../09-nixos/operations/upgrades.md) → [flake lockfile](../07-flakes/anatomy/lockfile.md) or [channel](../02-concepts/channel.md) → [specialisations](../09-nixos/configuration/specialisations.md) if you maintain boot variants on the same host.
 
-**Fleet / multi-host** — [Fleet deploy](../cheatsheets/fleet-deploy.md) chooser → [remote deploy](../09-nixos/operations/remote-deploy.md) → [machine mesh](../02-concepts/machine-mesh.md) + [inter-machine trust](../14-security-and-trust/inter-machine-trust.md) → tool pick: [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) / [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) when SSH/store URIs need VPN.
+**Fleet / multi-host** — [Fleet deploy](../cheatsheets/fleet-deploy.md) chooser → [remote deploy](../09-nixos/operations/remote-deploy.md) → [machine mesh](../02-concepts/machine-mesh.md) + [inter-machine trust](../14-security-and-trust/inter-machine-trust.md) → tool pick: [Colmena](../12-deployment-and-infra/colmena.md) / [deploy-rs](../12-deployment-and-infra/deploy-rs.md) / [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) → [overlay networks](../09-nixos/configuration/overlay-networks.md) when SSH/store URIs need VPN → [private cache mesh](../12-deployment-and-infra/private-cache-mesh.md) when several hosts share private substituters.
 
 **Disconnected or lab site** — [airgap and offline](../12-deployment-and-infra/airgap-and-offline.md) → [nix copy and bundles](../12-deployment-and-infra/nix-copy-and-bundles.md) → [binary cache hosting](../12-deployment-and-infra/binary-cache-hosting.md) → [netboot and PXE](../09-nixos/installation/netboot-and-pxe.md) for LAN imaging.
 
@@ -92,7 +92,7 @@ Path for people who run and maintain NixOS systems: rebuilds, upgrades, rollback
 - [Binary caches (cheatsheet)](../cheatsheets/binary-caches.md) → [Binary Caches](../04-store-and-build/binary-caches.md), [Substitutes and narinfo](../04-store-and-build/substitutes-and-narinfo.md)
 - [Store protocols](../04-store-and-build/store-protocols.md) — `--store` vs substituters vs remote builders
 - [Garbage Collection](../04-store-and-build/garbage-collection.md), [Remote Builders](../04-store-and-build/remote-builders.md)
-- Hosting your own: [Binary Cache Hosting](../12-deployment-and-infra/binary-cache-hosting.md)
+- Hosting your own: [Binary Cache Hosting](../12-deployment-and-infra/binary-cache-hosting.md); multi-host wiring: [Private cache mesh](../12-deployment-and-infra/private-cache-mesh.md)
 
 ### Deploy and infra
 

@@ -1,5 +1,6 @@
 ---
 status: complete
+last-checked: 2026-08
 ---
 
 # Nix on Other Distros
@@ -23,21 +24,45 @@ Nix runs on ordinary Linux distributions and macOS without replacing the host OS
 
 Multi-user creates build users and a daemon (systemd unit on Linux). Single-user has fewer prerequisites but weaker sharing and isolation. Official guidance: prefer multi-user when the platform supports it.
 
+**Distro notes (high level).**
+
+These are orientation notes, not distro-specific install recipes. The official installer is the same script everywhere; differences are host policy, init, and where you put `/nix`.
+
+| Distro family | Typical fit | Watch for |
+|---------------|-------------|-----------|
+| **Debian / Ubuntu** | Multi-user (`--daemon`) when systemd is present; common dev and CI base | Small root volumes; cloud images with tiny `/` need a separate durable `/nix` mount. Mixing Nix with apt is normal—distro owns `/usr`, Nix owns the store. |
+| **Fedora / RHEL / Alma / Rocky** | Multi-user when systemd works and SELinux allows store/daemon writes | **SELinux enforcing** often blocks the daemon or store until policy is adjusted or the host is permissive for Nix paths. Confirm MAC before blaming Nix itself. |
+| **Arch / Manjaro** | Multi-user on a typical systemd desktop or server | Rolling host + fixed Nix version: upgrade Nix with the installer’s documented path, not by layering a second install. Same `/nix` durability rules as everywhere else. |
+
+**`/nix` must be durable and sized.** The store is the long-lived artifact cache: profiles, GC roots, and downloaded substitutes all live under `/nix`. Putting it on tmpfs, a small root partition, or a volume wiped on reboot causes data loss, failed builds, and constant GC pressure. Plan headroom (tens of GB for active dev; more for heavy language stacks or many projects). Bind-mount or partition `/nix` onto a persistent volume on cloud VMs and containers—see below.
+
+**Home Manager (standalone).** Without NixOS modules, run Home Manager as a [standalone](home-manager/standalone-vs-nixos-module.md) tool against your user profile. That is the default user-env path on Ubuntu, Fedora, Arch, and similar: Nix installs packages and HM manages dotfiles, shells, and user services declaratively. You do not need NixOS or a system module; `home-manager switch` (or equivalent) updates the user generation. See [dotfiles patterns](home-manager/dotfiles-patterns.md) for layout conventions.
+
+**Containers and CI.** Ephemeral dev or CI containers lose `/nix` on every run unless you persist it. Common patterns:
+
+- **Bind-mount a host or named volume at `/nix`** so the store survives container recreation.
+- **Official `nixos/nix` images** for a known-good Nix base; still mount `/nix` when jobs must reuse substitutes and profiles across runs.
+- **Single-user (`--no-daemon`)** inside minimal containers without systemd is valid when isolation matters more than shared multi-user builds.
+
+**Reinstall and upgrades.** Do not pipe a second installer over an existing daemon without following that installer’s documented uninstall first. Overlapping installs leave conflicting units, users, and store ownership. Use one installer family (official or Determinate) and its upgrade/uninstall docs; see [Installers and Nix variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md).
+
 **Platform notes (high level).**
 
-- **WSL2:** With systemd enabled, use multi-user (`--daemon`); otherwise single-user (`--no-daemon`)—same guidance as nix.dev.
-- **Containers / Docker:** Official images (`nixos/nix`) or a bind-mounted store; ephemeral containers lose `/nix` unless you persist it.
+- **WSL2:** With systemd enabled, use multi-user (`--daemon`); otherwise single-user (`--no-daemon`)—same guidance as nix.dev. More WSL-specific context: [WSL and foreign OS](wsl-and-foreign-os.md).
 - **macOS:** Multi-user via the official script; for whole-system declarative config see [nix-darwin](nix-darwin.md).
 
-**Pitfalls.**
+**Config.** Daemon and client settings live in [`nix.conf`](../05-cli-and-tooling/config/nix-conf.md) (and drop-ins). Foreign-distro setups often enable flakes and adjust substituters there after install—post-install tuning is normal on hosts that are not NixOS.
 
-- **SELinux / AppArmor:** Multi-user install expects SELinux disabled or a working policy; MAC frameworks can block store writes or the daemon—check host policy before debugging Nix itself.
-- **systemd:** The daemon unit needs a working systemd; without it, use single-user or fix the host init story first.
-- **`/nix` on temp or tiny disks:** Putting `/nix` on tmpfs, a small root, or a volume that is wiped on reboot loses the store or fills the disk under GC pressure. Prefer a durable, sized partition or volume for `/nix`.
+### Failure modes
 
-**Config.** Daemon and client settings live in [`nix.conf`](../05-cli-and-tooling/config/nix-conf.md) (and drop-ins). Foreign-distro setups often enable flakes and adjust substituters there after install.
-
-**Home Manager.** Without NixOS modules, run Home Manager as a [standalone](home-manager/standalone-vs-nixos-module.md) tool against your user profile—this is the common pattern on Ubuntu, Fedora, Arch, and similar.
+| Symptom | Likely cause | What to check |
+|---------|--------------|---------------|
+| `nix` works once, store empty after reboot | `/nix` on tmpfs or ephemeral disk | Mount table: is `/nix` persistent? Size and filesystem type. |
+| Permission denied writing to `/nix/store` | SELinux/AppArmor, wrong ownership, or single-user vs multi-user mismatch | Host MAC status; daemon running as expected user; install mode matches host (multi-user needs build users + daemon). |
+| Daemon fails to start | No working systemd, or unit conflict from partial reinstall | `systemctl status nix-daemon` (or equivalent); only one install path; uninstall before re-running installer. |
+| Builds succeed but are slow every time | No substituters, or fresh `/nix` each CI run | `nix.conf` substituters; bind-mount `/nix` in containers; check cache configuration. |
+| `curl \| sh` installer errors mid-run | Existing Nix install, insufficient disk, or MAC blocking writes | Free space on `/nix` volume; documented uninstall; SELinux audit logs on Fedora/RHEL. |
+| Profile tools missing in new shell | Hook not sourced in login shell | Installer’s `profile.d` snippet; open a new login shell or source as documented. |
 
 ## Examples
 
@@ -56,6 +81,17 @@ nix --version
 
 WSL2 with systemd enabled uses the same `--daemon` line; without systemd, use `--no-daemon`.
 
+**Container: bind-mount a persistent store** (illustrative Docker pattern):
+
+```bash
+docker run --rm -it \
+  -v nix-store:/nix \
+  -v "$PWD:/work" -w /work \
+  nixos/nix
+```
+
+The named volume `nix-store` keeps substitutes and profiles across container runs; without it, every run starts with an empty store.
+
 ## References
 
 - [Download Nix](https://nixos.org/download/) — official installer commands (Linux, macOS, WSL, Docker)
@@ -68,6 +104,7 @@ WSL2 with systemd enabled uses the same `--daemon` line; without systemd, use `-
 - [nix-darwin](nix-darwin.md)
 - [Installers and Nix variants](../13-implementations/frontends-and-ux/installers-and-nix-variants.md) — which Nix installer on a foreign OS
 - [Home Manager: standalone vs NixOS module](home-manager/standalone-vs-nixos-module.md)
+- [Home Manager dotfiles patterns](home-manager/dotfiles-patterns.md)
 - [nix.conf](../05-cli-and-tooling/config/nix-conf.md)
 - [Profile](../02-concepts/profile.md)
 - [Nix store layout](../04-store-and-build/nix-store-layout.md)

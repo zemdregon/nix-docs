@@ -33,8 +33,8 @@ do
   ln -s "$root/$d" "$docs/$d"
 done
 
-# Root articles / indexes (plans stay linkable from meta/)
-for f in README.md glossary.md EXPAND-PLAN.md ATTACK-PLAN.md; do
+# Root articles / indexes
+for f in README.md glossary.md; do
   ln -s "$root/$f" "$docs/$f"
 done
 

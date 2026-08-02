@@ -18,7 +18,7 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 **Attribute set (attrset).** The Nix language’s primary structured value: a map from names to values, written `{ key = value; ... }`. Packages, modules, and flake outputs are almost always attrsets. See [lists and attrsets](03-language/syntax/lists-and-attrsets.md).
 
-**Binary cache.** A remote store of pre-built NAR archives (plus `.narinfo` metadata) that a [substituter](#substituter) can fetch instead of building locally. Public caches (e.g. `cache.nixos.org`) and private ones share the same protocol. See [binary caches](04-store-and-build/binary-caches.md) and [hosting](12-deployment-and-infra/binary-cache-hosting.md).
+**Binary cache.** A remote store of pre-built NAR archives (plus `.narinfo` metadata) that a [substituter](#substituter) can fetch instead of building locally. Public caches (e.g. `cache.nixos.org`) and private ones share the same protocol. See [binary caches](04-store-and-build/binary-caches.md), [hosting](12-deployment-and-infra/binary-cache-hosting.md), and [private cache mesh](12-deployment-and-infra/private-cache-mesh.md) for multi-host wiring.
 
 **Build phase.** A named step in the stdenv build (unpack, patch, configure, build, check, install, fixup, …). Packages override or hook into phases rather than reimplementing the whole builder. See [build phases](04-store-and-build/build-phases.md) and [stdenv](06-nixpkgs/architecture/stdenv.md).
 
@@ -98,7 +98,7 @@ Dense term index for the Nix stack. Each entry is a short definition; follow the
 
 ## M–P
 
-**Machine mesh.** A group of Nix(OS) devices that share builds, closures, secrets, and/or deploy authority over a shared reachability fabric—not a VPN brand, not [Digga / Hive](13-implementations/community-frameworks/digga-hive.md), and not “the mesh” by itself. Concept page: [machine mesh](02-concepts/machine-mesh.md). Contrast hub→host fleet tools ([Colmena](12-deployment-and-infra/colmena.md), [deploy-rs](12-deployment-and-infra/deploy-rs.md)) and peer inventory tooling ([Clan](#clan)).
+**Machine mesh.** A group of Nix(OS) devices that share builds, closures, secrets, and/or deploy authority over a shared reachability fabric—not a VPN brand, not [Digga / Hive](13-implementations/community-frameworks/digga-hive.md), and not “the mesh” by itself. Concept page: [machine mesh](02-concepts/machine-mesh.md). For private substituter topology across that fabric, see [private cache mesh](12-deployment-and-infra/private-cache-mesh.md). Contrast hub→host fleet tools ([Colmena](12-deployment-and-infra/colmena.md), [deploy-rs](12-deployment-and-infra/deploy-rs.md)) and peer inventory tooling ([Clan](#clan)).
 
 **Measured boot.** Binding LUKS (or similar) unlock to TPM PCR measurements of the boot chain—on NixOS usually via Lanzaboote + systemd-pcrlock. Experimental edges; LUKS2-oriented; not ZFS/Btrfs native encryption. See [TPM and measured boot](09-nixos/configuration/tpm-and-measured-boot.md).
 

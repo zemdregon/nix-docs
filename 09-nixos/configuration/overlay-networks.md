@@ -132,4 +132,5 @@ ssh://nix@10.100.0.1 x86_64-linux /root/.ssh/id_builder 4 1 kvm
 - [Remote deploy](../operations/remote-deploy.md) — hub SSH activate over fabric
 - [Colmena](../../12-deployment-and-infra/colmena.md) / [deploy-rs](../../12-deployment-and-infra/deploy-rs.md) — hub deploy needing reachability
 - [Binary cache hosting](../../12-deployment-and-infra/binary-cache-hosting.md) — private caches on overlay addresses
+- [Private cache mesh](../../12-deployment-and-infra/private-cache-mesh.md) — substituter URLs over overlay DNS
 - [Secrets strategies](secrets-strategies.md) — keys/auth material out of the store

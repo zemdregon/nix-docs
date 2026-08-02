@@ -10,7 +10,7 @@ A **machine mesh** is a mental model for a *group* of Nix / NixOS devices that s
 
 That is distinct from **single-host** Nix trust. [`trusted-users`](../14-security-and-trust/trusted-users.md) is daemon privilege on one install; putting an account there does not enroll a machine in a mesh, and mesh membership does not require (or justify) `trusted-users = *`.
 
-Fleet deploy tools such as [Colmena](../12-deployment-and-infra/colmena.md) and [deploy-rs](../12-deployment-and-infra/deploy-rs.md) usually implement a **hub → hosts** push over SSH. Peer-oriented frameworks such as [Clan](../12-deployment-and-infra/clan-and-mesh.md) aim at managing fleets of machines **without a central controller**—a different topology, still built on NixOS ([Clan docs 26.05](https://clan.lol/docs/26.05)). Both can participate in the same interconnect story; neither is “the mesh” by itself.
+Fleet deploy tools such as [Colmena](../12-deployment-and-infra/colmena.md) and [deploy-rs](../12-deployment-and-infra/deploy-rs.md) usually implement a **hub → hosts** push over SSH. Peer-oriented frameworks such as [Clan](../12-deployment-and-infra/clan-and-mesh.md) aim at managing fleets of machines **without a central controller**—a different topology, still built on NixOS ([Clan docs 26.05](https://clan.lol/docs/26.05)). Either pattern can share the same builders, caches, and secret recipients; what changes is the **deploy graph** (who evaluates and activates on whom), not whether build, binary, and secret trust edges exist.
 
 **Last checked:** 2026-07-31 — vocabulary / topology only; Clan API and inventory options live on [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md).
 
@@ -34,23 +34,28 @@ It is **not** a synonym for overlay networking alone, and it is **not** a flake 
 | **Hub → hosts** | One deployer evaluates, builds/copies, activates on SSH targets. Hosts do not form a control plane among themselves. | [Colmena](../12-deployment-and-infra/colmena.md), [deploy-rs](../12-deployment-and-infra/deploy-rs.md), [remote deploy](../09-nixos/operations/remote-deploy.md) |
 | **Peer / no central controller** | Multi-machine management framed as peer infrastructure on NixOS (inventory, services, networking, secrets)—verify current Clan docs for capabilities. | [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) / [Clan 26.05 docs](https://clan.lol/docs/26.05) (declarative fleets without a central controller; integrates with sops-nix, nixos-anywhere, disko) |
 
-A hub fleet still needs the same trust axes (builders, caches, secrets); peer tooling changes *who coordinates*, not whether those axes exist.
+Hub fleets and peer tooling differ in *who coordinates*; both still need explicit policy on builders, caches, secrets, and deploy authority.
 
 ### Name collisions (not a network mesh)
 
-- **[Digga / Hive](../13-implementations/community-frameworks/digga-hive.md)** — flake organization / std collectors for hosts and modules. Repository layout, not inter-machine interconnect.
+- **[Digga / Hive](../13-implementations/community-frameworks/digga-hive.md)** — flake organization / std collectors for hosts and modules. Repository layout, not a deploy graph or trust topology.
 - **Colmena “hive”** — an attrset of deployable NixOS nodes for hub deploy. Unrelated to Digga/Hive and not a host-to-host mesh.
 
 ### Six trust axes (link out)
 
 Treat each axis separately; least privilege on one does not imply the others.
 
-1. **Reachability** — LAN or overlay so SSH and store URIs work between members (and to builders/caches).
-2. **Build trust** — [remote builders](../04-store-and-build/remote-builders.md), SSH identities, and remote daemon [`trusted-users`](../14-security-and-trust/trusted-users.md) policy.
-3. **Binary trust** — who signs, who is in `trusted-public-keys` / substituters ([binary caches](../04-store-and-build/binary-caches.md), [signing and caches](../14-security-and-trust/signing-and-caches.md)).
-4. **Deploy trust** — who may copy closures and activate generations on whom (Colmena / deploy-rs / remote rebuild vs peer mesh tools).
-5. **Secret trust** — age/sops recipients and host identities ([agenix / sops-nix](../12-deployment-and-infra/agenix-sops-nix.md), [secrets management](../14-security-and-trust/secrets-management.md)).
-6. **Supply-chain boundary** — flake inputs and public caches still matter inside a friendly group ([supply chain](../14-security-and-trust/supply-chain.md)).
+**Reachability** comes first: LAN or overlay paths so SSH and store URIs work between members and to builders/caches.
+
+For **build trust**, see [remote builders](../04-store-and-build/remote-builders.md), SSH identities, and remote daemon [`trusted-users`](../14-security-and-trust/trusted-users.md) policy.
+
+**Binary trust** covers who signs artifacts and who lists which keys in `trusted-public-keys` / substituters ([binary caches](../04-store-and-build/binary-caches.md), [signing and caches](../14-security-and-trust/signing-and-caches.md)).
+
+**Deploy trust** is who may copy closures and activate generations on whom—hub tools (Colmena, deploy-rs, remote rebuild) versus peer mesh coordinators.
+
+Host-scoped **secret trust** means age/sops recipients and host identities ([agenix / sops-nix](../12-deployment-and-infra/agenix-sops-nix.md), [secrets management](../14-security-and-trust/secrets-management.md)).
+
+Even inside a friendly group, **supply-chain boundaries** still apply: flake inputs and public caches remain part of the threat model ([supply chain](../14-security-and-trust/supply-chain.md)).
 
 ### Anti-patterns
 
@@ -58,11 +63,7 @@ Treat each axis separately; least privilege on one does not imply the others.
 - Equating Digga/Hive flake layout or Colmena’s hive attrset with a network mesh.
 - Assuming shared VPN membership implies shared deploy, cache-signing, or secret-decrypt rights.
 
-### Boundaries (what this page is not)
-
-- **Not inter-trust policy detail** — SSH keys, substituters, and signing are [inter-machine trust](../14-security-and-trust/inter-machine-trust.md).
-- **Not a Clan or Colmena tutorial** — tool-specific flows are [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md), [Colmena](../12-deployment-and-infra/colmena.md), [deploy-rs](../12-deployment-and-infra/deploy-rs.md).
-- **Not overlay networking alone** — VPN reachability is [overlay networks](../09-nixos/configuration/overlay-networks.md); mesh adds build/deploy/secret axes.
+This page maps topology and the six axes above. Policy detail (SSH keys, substituters, signing) lives on [inter-machine trust](../14-security-and-trust/inter-machine-trust.md); tool walkthroughs on [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md), [Colmena](../12-deployment-and-infra/colmena.md), and [deploy-rs](../12-deployment-and-infra/deploy-rs.md); reachability without deploy rights on [overlay networks](../09-nixos/configuration/overlay-networks.md).
 
 ## Examples
 
@@ -81,7 +82,7 @@ server-2
         = host identities          (secret trust)
 ```
 
-Hub tools express the deploy edge; builders and caches express build/binary edges. Peer frameworks may rearrange coordination, but the edges remain the checklist.
+Hub tools express the deploy edge; builders and caches express build/binary edges. Peer frameworks may rearrange coordination, but the same trust edges still apply.
 
 ## References
 
@@ -92,17 +93,9 @@ Hub tools express the deploy edge; builders and caches express build/binary edge
 ## See also
 
 - [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md) — six axes in depth
-- [Clan and mesh](../12-deployment-and-infra/clan-and-mesh.md) — peer fleet tooling + Clan mesh VPN
-- [Overlay networks](../09-nixos/configuration/overlay-networks.md) — reachability fabric (WG/Tailscale/ZeroTier)
-- [Trusted users](../14-security-and-trust/trusted-users.md) — single-host daemon privilege ≠ inter-trust
-- [Remote builders](../04-store-and-build/remote-builders.md) — build-trust axis
-- [Binary caches](../04-store-and-build/binary-caches.md) — binary-trust axis
+- [Private cache mesh](../12-deployment-and-infra/private-cache-mesh.md) — fleet substituter topology
 - [Store protocols](../04-store-and-build/store-protocols.md) — `ssh://` / store URI forms peers use
-- [Colmena](../12-deployment-and-infra/colmena.md) — hub deploy; “hive” ≠ mesh
-- [deploy-rs](../12-deployment-and-infra/deploy-rs.md) — hub deploy peer to Colmena
+- [Overlay networks](../09-nixos/configuration/overlay-networks.md) — reachability fabric (WG/Tailscale/ZeroTier)
+- [Closure](closure.md) — store paths members share and substitute
 - [Remote deploy](../09-nixos/operations/remote-deploy.md) — hub `nixos-rebuild --target-host`
-- [agenix / sops-nix](../12-deployment-and-infra/agenix-sops-nix.md) — secret-trust axis
 - [Signing and caches](../14-security-and-trust/signing-and-caches.md) — binary-trust signatures
-- [Secrets management](../14-security-and-trust/secrets-management.md) — secrets vs store
-- [Digga / Hive](../13-implementations/community-frameworks/digga-hive.md) — flake “Hive”, not network mesh
-- [Supply chain](../14-security-and-trust/supply-chain.md) — inputs/caches inside a friendly group

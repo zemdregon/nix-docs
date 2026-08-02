@@ -18,13 +18,9 @@ Each template is a small record: a `path` to copy, a one-line `description`, and
 
 **Default template.** `templates.default` is what `nix flake init` picks when you pass no `-t` flag. You can alias it to another entry, e.g. `templates.default = self.templates.rust`, instead of duplicating the record.
 
-**Init vs new.** `nix flake init` copies a template into the **current** directory and does not overwrite files that already exist. `nix flake new <dir>` creates a **new** directory and fills it from the template. Both accept `-t` / `--template` for a flake reference and template name.
+**Using init and new.** `nix flake init` copies a template into the **current** directory and does not overwrite files that already exist; `nix flake new <dir>` creates a **new** directory and fills it from the template. Both accept `-t` / `--template` for a flake reference and template name. With no `-t`, init uses the registry flake `templates#templates.default`. To pick by name: `nix flake init -t templates#simpleContainer`. For a local flake: `nix flake init -t ./#mytemplate` (or `nix flake new myproj -t ./#mytemplate`).
 
-**Selecting a template.** With no `-t`, init uses the registry flake `templates#templates.default`. To pick by name: `nix flake init -t templates#simpleContainer`. For a local flake: `nix flake init -t ./#mytemplate` (or `nix flake new myproj -t ./#mytemplate`).
-
-**Discovery.** `nix flake show templates` lists outputs of the built-in templates flake, including available template names and descriptions.
-
-**Validation.** `nix flake check` evaluates template definitions and requires that `templates.default` and each `templates.<name>` you declare are well-formed (valid `path`, required attributes present).
+**Inspecting templates.** `nix flake show templates` lists outputs of the built-in templates flake, including available template names and descriptions. `nix flake check` evaluates template definitions and requires that `templates.default` and each `templates.<name>` you declare are well-formed (valid `path`, required attributes present).
 
 **Migration.** Older flakes used a top-level `defaultTemplate` attribute; that name was renamed to `templates.default`. Nix emits a warning if the old name is still present.
 
