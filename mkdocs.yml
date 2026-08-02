@@ -16,7 +16,7 @@ site_dir: site
 theme:
   name: material
   logo: assets/nixos-logomark.svg
-  favicon: assets/nixos-logomark.svg
+  favicon: assets/nixos-favicon.svg
   palette:
     # Black header: indigo/blue primary washes out the NixOS logomark.
     - media: "(prefers-color-scheme: light)"
@@ -100,6 +100,9 @@ nav:
   - Comparisons: comparisons/README.md
   - Cheatsheets: cheatsheets/README.md
   - Meta: meta/README.md
+
+extra_css:
+  - assets/extra.css
 
 extra:
   social:

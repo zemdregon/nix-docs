@@ -12,7 +12,7 @@ Published docs site for this wiki via [MkDocs](https://www.mkdocs.org/) + [Mater
 
 - **Source = repo root** — plain Markdown tree; no checked-in `docs/` mirror.
 - **Stage step** — [prepare-docs-dir.sh](prepare-docs-dir.sh) symlinks wiki paths into gitignored `docs/` (MkDocs requires `docs_dir` to be a child of the config directory).
-- **Logo / favicon** — [assets/nixos-logomark.svg](../assets/nixos-logomark.svg) (official NixOS logomark; staged into `docs/assets/`).
+- **Logo / favicon** — [assets/nixos-logomark.svg](../assets/nixos-logomark.svg) (`minimal` crop) and [assets/nixos-favicon.svg](../assets/nixos-favicon.svg) (same tight crop as nixos.org); [assets/extra.css](../assets/extra.css) enlarges the Material header logo. Staged into `docs/assets/`.
 - **Theme palette** — Material `primary: black` + `accent: blue` (avoids indigo header clash with the blue logomark).
 - **Nav** — numbered domain `README.md` indexes + glossary / comparisons / cheatsheets / meta (leaves via in-page Contents and search).
 - **Excluded** — `AGENTS.md`, `.github/`, `meta/audit/`, `meta/attachments/`.

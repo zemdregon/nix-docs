@@ -1,0 +1,8 @@
+/* Material defaults logo height to ~1.2rem; the branding "recommended"
+   logomark also has large viewBox padding, which reads as a tiny snowflake.
+   We ship the "minimal" crop + a slightly taller header logo. */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 1.8rem;
+  width: auto;
+}
