@@ -14,7 +14,7 @@ Campaign plan: [EXPAND-PLAN.md](../EXPAND-PLAN.md) (Phase 7 closed; cadence ongo
 - [site.md](site.md) — MkDocs Material + GitHub Pages build and deploy
 - [research-method.md](research-method.md) — Pack → write → verify loop for filling articles
 - [quality-checklist.md](quality-checklist.md) — Rubric before `status: complete`
-- [sources.md](sources.md) — Living canonical upstream URL table (intentional `draft`; never mark complete)
+- [sources.md](sources.md) — Living canonical upstream URL table
 - [todo-coverage.md](todo-coverage.md) — Status ground truth, remaining work, audit hook
 - [release-checklist.md](release-checklist.md) — Phase 5.1 operational refresh steps (Batch A)
 - [rag/](rag/README.md) — Local Ollama embeddings + Chroma vector search over the wiki

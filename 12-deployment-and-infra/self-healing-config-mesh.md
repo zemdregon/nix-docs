@@ -6,7 +6,7 @@ status: draft
 
 ## Overview
 
-**Intentional `draft` — out of the v1 complete set.** This page is design analysis only (fleet gossip / self-upgrade config shapes). It is **not** a shipped Nix, NixOS, or Clan tool, and it stays `status: draft` on purpose. For shipped vocabulary and tooling, start with [Machine mesh](../02-concepts/machine-mesh.md) and [Clan and mesh](clan-and-mesh.md); related trust and offline context: [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md), [Airgap and offline](airgap-and-offline.md).
+This page is design analysis only (fleet gossip / self-upgrade config shapes). It is **not** a shipped Nix, NixOS, or Clan tool. For shipped vocabulary and tooling, start with [Machine mesh](../02-concepts/machine-mesh.md) and [Clan and mesh](clan-and-mesh.md); related trust and offline context: [Inter-machine trust](../14-security-and-trust/inter-machine-trust.md), [Airgap and offline](airgap-and-offline.md).
 
 A **self-healing config mesh** is a fleet of mutually trusted devices that distribute and activate **versioned configuration** among themselves, without depending on anything outside the mesh for day-to-day updates: no GitHub, no central CI, no out-of-mesh build farm as a hard requirement.
 
@@ -18,7 +18,7 @@ The core loop:
 4. Peers verify trust + version, adopt, and continue the epidemic until the mesh converges.
 5. If two peers meet on different versions, the newer one **refuses operational traffic** (or refuses “same-generation” assumptions) and **hands the older peer the upgrade** so it can rebuild/switch before continuing.
 
-Scope of this draft: shapes, trust models, propagation protocols, what “config” actually is (especially under Nix), failure modes, and compensations. Contrast with hub push ([Colmena](colmena.md), [deploy-rs](deploy-rs.md)) and with inventory/peer fleets ([Clan and mesh](clan-and-mesh.md)).
+Covers shapes, trust models, propagation protocols, what “config” actually is (especially under Nix), failure modes, and compensations. Contrast with hub push ([Colmena](colmena.md), [deploy-rs](deploy-rs.md)) and with inventory/peer fleets ([Clan and mesh](clan-and-mesh.md)).
 
 ## Problem being solved
 

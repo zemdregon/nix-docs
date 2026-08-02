@@ -4,7 +4,7 @@ status: draft
 
 # Sources
 
-**Living `draft` forever by design — do not mark `complete`.** This is the wiki’s canonical upstream URL table, not a finished article: append/revise rows as content work needs them (see EXPAND-PLAN / coverage). Links only — no mirrored content here.
+This is the wiki’s canonical upstream URL table, not a finished article: append/revise rows as content work needs them (see EXPAND-PLAN / coverage). Links only — no mirrored content here.
 
 Prefer the stable/channel manuals unless documenting a version-specific feature; then pin the versioned manual URL and note the Nix / Nixpkgs / NixOS release.
 
