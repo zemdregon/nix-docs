@@ -8,3 +8,6 @@
 # MkDocs staged source + build output (see meta/site.md)
 docs/
 site/
+
+# Local Ollama + Chroma wiki index (see meta/rag/README.md)
+meta/rag/.chroma/

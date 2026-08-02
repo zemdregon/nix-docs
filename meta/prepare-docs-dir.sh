@@ -41,12 +41,17 @@ done
 # Site chrome (favicon / header logo)
 ln -s "$root/assets" "$docs/assets"
 
-# meta/: publish files but skip audit tooling and attachments
+# meta/: publish files but skip audit tooling, attachments, and local RAG store
 mkdir -p "$docs/meta"
 for item in "$root/meta"/*; do
   base="$(basename "$item")"
   case "$base" in
     audit|attachments) continue ;;
+    rag)
+      # Publish the howto only — never stage .chroma / Python env artifacts.
+      mkdir -p "$docs/meta/rag"
+      ln -s "$item/README.md" "$docs/meta/rag/README.md"
+      ;;
     *) ln -s "$item" "$docs/meta/$base" ;;
   esac
 done
