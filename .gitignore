@@ -11,3 +11,8 @@ site/
 
 # Local Ollama + Chroma wiki index (see meta/rag/README.md)
 meta/rag/.chroma/
+
+# Python bytecode from local RAG tooling
+meta/rag/__pycache__/
+**/__pycache__/
+*.py[cod]
