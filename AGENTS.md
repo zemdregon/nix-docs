@@ -80,3 +80,15 @@ When parallelizing content fills:
 **Draft:** accurate Overview + main Details; ≥1 wiki-relative link; ≥1 upstream Reference; frontmatter `status: draft`.
 
 **Complete:** verified minimal example (or version-noted); no uncited absolute claims; coverage TODO updated; frontmatter `status: complete`.
+
+## Cursor Cloud specific instructions
+
+This repo is a plain-Markdown knowledge base. The "app" is the MkDocs Material site; lint/tests are Node audit scripts. Standard commands live in [meta/site.md](meta/site.md) and [CONTRIBUTING.md](CONTRIBUTING.md); non-obvious caveats are below.
+
+- **Python lives in a venv.** The startup update script creates `.venv/` and installs [requirements-docs.txt](requirements-docs.txt) into it. Use `.venv/bin/mkdocs` (or activate `.venv`); there is no global MkDocs. `.venv/` is gitignored.
+- **Stage `docs/` before every build/serve.** Run `bash meta/prepare-docs-dir.sh` first — it symlinks the vault into the gitignored `docs/` tree (MkDocs `docs_dir` cannot be the repo root). Building/serving without it is wrong/empty.
+- **Serve URL has a base path.** `site_url` includes `/nix-docs/`, so `.venv/bin/mkdocs serve` serves at `http://127.0.0.1:8000/nix-docs/` — the root `/` returns a 302 redirect there.
+- **Build link warnings are expected.** Warnings about repo-only targets (`mkdocs.yml`, `AGENTS.md`, `.github/workflows/*`, `.py`/`.nix` files) are normal; CI does not use `--strict` (see [meta/site.md](meta/site.md)).
+- **Lint/tests need no install.** `node meta/audit/broken-links.mjs` and `node meta/audit/quality-audit.mjs` are pure Node (stdlib). `broken-links.mjs` may exit 1 on pre-existing missing link targets in content — that is a content issue, not an environment problem.
+- **Optional tooling is gated.** `node meta/examples/validate.mjs` skips (exit 0) unless Nix with flakes is installed; the RAG tools in [meta/rag/](meta/rag/README.md) need Nix + a running Ollama. Neither is set up by default.
+- Do not commit generated `docs/` or `site/`.

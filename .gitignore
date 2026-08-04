@@ -9,6 +9,9 @@
 docs/
 site/
 
+# Python virtualenv for MkDocs deps (see AGENTS.md Cursor Cloud specific instructions)
+.venv/
+
 # Local Ollama + Chroma wiki index (see meta/rag/README.md)
 meta/rag/.chroma/
 
