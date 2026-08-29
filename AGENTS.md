@@ -18,6 +18,10 @@ Nav map: [README.md](README.md)
 
 Campaign content batches are closed. Do not invent new top-level plan files; track work in coverage + release checklist.
 
+## Retrieval (MCP)
+
+When answering factual Nix/NixOS questions from this corpus, call MCP **nix-docs-rag** → `search_wiki` before inventing options or flags. See [meta/rag/README.md](meta/rag/README.md).
+
 ## Before you write
 
 1. Read [meta/conventions.md](meta/conventions.md) and [meta/todo-coverage.md](meta/todo-coverage.md) **Remaining work**.

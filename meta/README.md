@@ -14,8 +14,6 @@ Published site: [zemdregon.github.io/nix-docs](https://zemdregon.github.io/nix-d
 - [site.md](site.md) — MkDocs Material + GitHub Pages build and deploy
 - [research-method.md](research-method.md) — Pack → write → verify loop for filling articles
 - [quality-checklist.md](quality-checklist.md) — Rubric before `status: complete`
-- [ai-voice-audit.md](ai-voice-audit.md) — Cumulative AI-voice scan report (277 leaves)
-- [ai-voice-audit-prompt.md](ai-voice-audit-prompt.md) — Per-leaf read-only auditor prompt
 - [sources.md](sources.md) — Living canonical upstream URL table
 - [todo-coverage.md](todo-coverage.md) — Status ground truth, remaining work, audit hook
 - [release-checklist.md](release-checklist.md) — Phase 5.1 operational refresh steps

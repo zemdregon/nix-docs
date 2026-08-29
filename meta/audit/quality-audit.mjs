@@ -7,7 +7,7 @@ import fs from "fs";
 import path from "path";
 
 const ROOT = process.cwd();
-const SKIP_DIRS = new Set([".git", "node_modules", ".cursor"]);
+const SKIP_DIRS = new Set([".git", "node_modules", ".cursor", "docs", "site"]);
 
 /** Leaves intentionally without runnable ## Examples (roadmaps, cheatsheets, …). */
 const THIN_EXAMPLES_EXEMPT = [

@@ -91,7 +91,7 @@ Treat `--impure` as a temporary escape hatch, not a project default. Long-term f
 
 ### Failing `<nixpkgs>` inside a flake
 
-Corpus fixtures: [broken-flake.nix](../../meta/examples/impure-vs-pure-flake/broken-flake.nix) (fails) and [fixed-flake.nix](../../meta/examples/impure-vs-pure-flake/fixed-flake.nix) (locked input).
+Corpus fixtures: [broken-flake.nix](../meta/examples/impure-vs-pure-flake/broken-flake.nix) (fails) and [fixed-flake.nix](../meta/examples/impure-vs-pure-flake/fixed-flake.nix) (locked input).
 
 ```nix
 # flake.nix (broken under flake pure eval)

@@ -29,7 +29,13 @@ def build_context(hits: list[dict]) -> str:
     return "\n\n".join(blocks)
 
 
-def ask(question: str, *, k: int = DEFAULT_TOP_K, stream: bool = True) -> str:
+def ask(
+    question: str,
+    *,
+    k: int = DEFAULT_TOP_K,
+    stream: bool = True,
+    quiet: bool = False,
+) -> str:
     hits = search(question, k=k)
     context = build_context(hits)
     user = (
@@ -42,12 +48,13 @@ def ask(question: str, *, k: int = DEFAULT_TOP_K, stream: bool = True) -> str:
         {"role": "user", "content": user},
     ]
 
-    print(f"# model: {CHAT_MODEL}", file=sys.stderr)
-    print(f"# retrieved {len(hits)} chunks", file=sys.stderr)
-    for h in hits:
-        score = f"{h['score']:.3f}" if h["score"] is not None else "?"
-        print(f"#  - {score} {h['path']} · {h['heading']}", file=sys.stderr)
-    print(file=sys.stderr)
+    if not quiet:
+        print(f"# model: {CHAT_MODEL}", file=sys.stderr)
+        print(f"# retrieved {len(hits)} chunks", file=sys.stderr)
+        for h in hits:
+            score = f"{h['score']:.3f}" if h["score"] is not None else "?"
+            print(f"#  - {score} {h['path']} · {h['heading']}", file=sys.stderr)
+        print(file=sys.stderr)
 
     if not stream:
         from ollama_client import chat
